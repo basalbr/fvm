@@ -71,8 +71,13 @@
                             </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
+                            @if(Auth::user())
+                            <li><a href="" target="" id="login-link"><b>Olá {{Auth::user()->nome}}</b></a></li>
+                            <li><a href="{{route('sair')}}" target="" id="register-link"><b>Sair</b></a></li>
+                            @else
                             <li><a href="" target="" id="login-link"><b>Entrar</b></a></li>
                             <li><a href="" target="" id="register-link"><b>Registrar</b></a></li>
+                            @endif
                         </ul>
                     </div>
                 </div>

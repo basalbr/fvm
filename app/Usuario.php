@@ -36,4 +36,9 @@ class Usuario extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['senha', 'remember_token'];
+    
+    public function getAuthPassword()
+{
+     return $this->attributes['senha'];//change the 'passwordFieldinYourTable' with the name of your field in the table
+}
 }
