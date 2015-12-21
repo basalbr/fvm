@@ -12,5 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
+Route::get('/acessar', ['as'=>'acessar','uses' => 'HomeController@acessar']);
+Route::post('/acessar', ['as'=>'acessar','uses' => 'HomeController@checkEmail']);
+Route::get('/register', ['as'=>'register','uses' => 'HomeController@register']);

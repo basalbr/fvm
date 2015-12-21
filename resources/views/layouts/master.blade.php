@@ -1,122 +1,85 @@
 <html>
     <head>
-        <title>MTCloud - @yield('header_title')</title>
+        <title>FVM - @yield('header_title')</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         @section('css')
-        {!! HTML::style('public/css/font-awesome.min.css') !!}
-        {!! HTML::style('public/css/bootstrap.min.css') !!}
-        {!! HTML::style('public/css/custom.css') !!}
+        <link rel="stylesheet" type="text/css" href="{{url('public/css/font-awesome.min.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url('public/css/bootstrap.min.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url('public/css/custom.css')}}" />
+        @show
+        @section('js')
+        <script type="text/javascript" src="{{url('public/js/jquery-2.1.4.min.js')}}"></script>
+        <script type="text/javascript" src="{{url('public/js/bootstrap.min.js')}}"></script>
         @show
     </head>
     <body>
-        <div id='page-container'>
-            @if(Auth::check())
-            @section('sidebar-left')
-            <nav id='sidebar-left' class='open'>
-                <div id='sidebar-left-content'>
-                    <ul class="nav-main">
-                        <li>
-                            <a class="active" href="{{route('index')}}">
-                                <i class="fa fa-dashboard"></i><span class="sidebar-mini-hide">Dashboard</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="" href="">
-                                <i class="fa fa-users"></i><span class="sidebar-mini-hide">Contatos</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="" href="">
-                                <i class="fa fa-key"></i><span class="sidebar-mini-hide">Licenças</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="" href="{{route('logout')}}">
-                                <i class="fa fa-key"></i><span class="sidebar-mini-hide">Sair</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-            @show
-            @endif
-            @section('navbar-top')
-            <header id='navbar-top'>
-                @if(Auth::check())
-                <a class="btn btn-icon-toggle">
-                    <i class="fa fa-bars"></i>
-                </a>
-                @endif
-                <a href='{{route('index')}}' class='navbar-logo'>
-                    <img src="{{url('public/images/navbar-logo.png')}}" style="max-width: 100%"/>
-                </a>
-            </header>
-            @show
-
-            <main id='main-container' class="container-fluid">
-                @yield('main-content')
-                <div class='clearfix'></div>
-                @section('footer')
-
-                <footer id='page-footer'>
-                    <div class='container text-center'>
-                        <div class='hidden-xs hidden-sm col-md-4'>
-                            <h3>Outros produtos</h3>
-                            <ul class='list-unstyled'>
-                                <li>
-                                    <a href=''>MTReports</a>
-                                </li>
-                                <li>
-                                    <a href=''>MTRoteiriza</a>
-                                </li>
-                                <li>
-                                    <a href=''>MTSonar</a>
-
-                                </li>
-                                <li>
-                                    <a href=''>MTVendors</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class='hidden-xs hidden-sm col-md-4'>
-                            <h3>MTCloud</h3>
-                            <ul class='list-unstyled'> 
-                                <li>
-                                    <a href=''>Contato</a>
-                                </li>
-                                <li>
-                                    <a href=''>Criar nova conta</a>
-                                </li>
-                                <li>
-                                    <a href=''>Sobre</a>
-                                </li>
-                                <li>
-                                    <a href=''>Termos de uso</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class='hidden-xs hidden-sm col-md-4'>
-                            <h3>Microton</h3>
-                            <ul class='list-unstyled'>
-                                <li>
-                                    <a href=''>Acesse nosso site</a>
-                                </li>
-                                <li>
-                                    <a href=''>Fale conosco</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class='clearfix'></div>
+        <section id="navbar">
+            <div class="navbar navbar-default navbar-fixed-top">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a href="" class="navbar-brand"><img src="{{url('public/images/navbar-logo.png')}}" style="max-width: 100%"/></a>
+                        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
                     </div>
-                    <div class='clearfix'></div>
-                </footer>
-                @show
-            </main>
-        </div>
+                    <div class="navbar-collapse collapse" id="navbar-main">
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Themes <span class="caret"></span></a>
+                                <ul class="dropdown-menu" aria-labelledby="themes">
+                                    <li><a href="../default/">Default</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="../cerulean/">Cerulean</a></li>
+                                    <li><a href="../cosmo/">Cosmo</a></li>
+                                    <li><a href="../cyborg/">Cyborg</a></li>
+                                    <li><a href="../darkly/">Darkly</a></li>
+                                    <li><a href="../flatly/">Flatly</a></li>
+                                    <li><a href="../journal/">Journal</a></li>
+                                    <li><a href="../lumen/">Lumen</a></li>
+                                    <li><a href="../paper/">Paper</a></li>
+                                    <li><a href="../readable/">Readable</a></li>
+                                    <li><a href="../sandstone/">Sandstone</a></li>
+                                    <li><a href="../simplex/">Simplex</a></li>
+                                    <li><a href="../slate/">Slate</a></li>
+                                    <li><a href="../spacelab/">Spacelab</a></li>
+                                    <li><a href="../superhero/">Superhero</a></li>
+                                    <li><a href="../united/">United</a></li>
+                                    <li><a href="../yeti/">Yeti</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="../help/">Help</a>
+                            </li>
+                            <li>
+                                <a href="http://news.bootswatch.com">Blog</a>
+                            </li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="download">Default <span class="caret"></span></a>
+                                <ul class="dropdown-menu" aria-labelledby="download">
+                                    <li><a href="http://jsfiddle.net/bootswatch/mLascy62/">Open Sandbox</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="../bower_components/bootstrap/dist/css/bootstrap.min.css">bootstrap.min.css</a></li>
+                                    <li><a href="../bower_components/bootstrap/dist/css/bootstrap.css">bootstrap.css</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="../bower_components/bootstrap/less/variables.less">variables.less</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/_variables.scss">_variables.scss</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="" target="" id="login-link"><b>Entrar</b></a></li>
+                            <li><a href="" target="" id="register-link"><b>Registrar</b></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        @yield('content')
+       
     </body>
-    @section('js')
-    {!! HTML::script('public/js/jquery-2.1.4.min.js') !!}
-    {!! HTML::script('public/js/bootstrap.min.js') !!}
-    @show
+
 </html>
