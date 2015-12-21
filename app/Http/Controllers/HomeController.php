@@ -30,6 +30,7 @@ class HomeController extends Controller {
     public function acessar() {
         return view('acessar.index');
     }
+    
     public function register() {
         return view('register.index');
     }
@@ -39,8 +40,11 @@ class HomeController extends Controller {
         if($usuario instanceof \App\Usuario){
             return redirect(route('login'))->with('email', $request->input('email'));
         }else{
-            return redirect(route('register'));
+            return redirect(route('registrar'));
         }
+    }
+    
+    public function registerForm(){
         
     }
 

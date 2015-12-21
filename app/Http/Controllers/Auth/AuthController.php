@@ -2,35 +2,47 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Usuario;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
-class AuthController extends Controller
-{
+class AuthController extends Controller {
     /*
-    |--------------------------------------------------------------------------
-    | Registration & Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
-    |
-    */
+      |--------------------------------------------------------------------------
+      | Registration & Login Controller
+      |--------------------------------------------------------------------------
+      |
+      | This controller handles the registration of new users, as well as the
+      | authentication of existing users. By default, this controller uses
+      | a simple trait to add these behaviors. Why don't you explore it?
+      |
+     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+use AuthenticatesAndRegistersUsers,
+    ThrottlesLogins;
+
+    private $redirectTo = '/';
+    private $maxLoginAttempts = 10;
+    protected $loginPath = '/login';
+    protected $registerPath = '/register';
 
     /**
      * Create a new authentication controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('guest', ['except' => 'getLogout']);
+    }
+
+    public function getRegister() {
+        return view('register.index');
+    }
+
+    public function getLogin() {
+        return view('login.index');
     }
 
     /**
@@ -39,12 +51,12 @@ class AuthController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
-    {
+    protected function validator(array $data) {
         return Validator::make($data, [
-            'nome' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:usuario',
-            'senha' => 'required|confirmed|min:6',
+                    'nome' => 'required|max:255',
+                    'email' => 'required|email|max:255|unique:usuario',
+                    'senha' => 'required|confirmed|min:6',
+                    'senha_confirmation' => 'required|min:6',
         ]);
     }
 
@@ -52,14 +64,14 @@ class AuthController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return User
+     * @return Usuario
      */
-    protected function create(array $data)
-    {
-        return User::create([
-            'nome' => $data['name'],
-            'email' => $data['email'],
-            'senha' => bcrypt($data['password']),
+    protected function create(array $data) {
+        return Usuario::create([
+                    'nome' => $data['name'],
+                    'email' => $data['email'],
+                    'senha' => bcrypt($data['password']),
         ]);
     }
+
 }
