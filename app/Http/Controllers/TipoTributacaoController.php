@@ -3,33 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\TipoTributacao;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
-class EmpresaController extends Controller {
+
+class TipoTributacaoController extends Controller {
 
     public function index() {
-      return view('empresa.index');
+        $tipo_tributacao = TipoTributacao::orderBy('descricao', 'asc')->get();
+        return view('admin.tipo_tributacao.index', ['tipo_tributacao' => $tipo_tributacao]);
     }
 
     public function create() {
-        return view('empresa.cadastrar');
+        return view('admin.tipo_tributacao.cadastrar');
     }
-    
-    public function register() {
-        return view('register.index');
-    }
-    
-    public function checkEmail(Request $request) {
-        $usuario = \App\Usuario::where('email','=',$request->input('email'))->first();
-        if($usuario instanceof \App\Usuario){
-            return redirect(route('login'))->with('email', $request->input('email'));
-        }else{
-            return redirect(route('registrar'));
+
+    public function store(Request $request) {
+        $tbn = new TipoTributacao;
+        if ($tbn->validate($request->only('descricao', 'has_tabela'))) {
+            $tbn->create($request->only('descricao', 'has_tabela'));
+            return redirect(route('listar-tipo-tributacao'));
+        } else {
+            return redirect(route('cadastrar-tipo-tributacao'))->withInput()->withErrors($tbn->errors());
         }
     }
-    
-    public function registerForm(){
-        
+
+    public function edit($id) {
+        $tabela = TipoTributacao::where('id', '=', $id)->first();
+        return view('admin.tipo_tributacao.editar', ['tabela' => $tabela]);
+    }
+
+    public function update($id, Request $request) {
+        $tipo_tributacao = TipoTributacao::where('id', '=', $id)->first();
+        if ($tipo_tributacao->validate($request->only('descricao','has_tabela'))) {
+            $tipo_tributacao->update($request->only('descricao','has_tabela'));
+            return redirect(route('listar-tipo-tributacao'));
+        } else {
+            return redirect(route('editar-tipo-tributacao'))->withInput()->withErrors($tipo_tributacao->errors());
+        }
     }
 
 }

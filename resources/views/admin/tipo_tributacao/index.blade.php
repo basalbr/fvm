@@ -3,13 +3,34 @@
 @section('content')
 <section id='page-header' style="margin-top: 55px" class="page-header">
     <div class='container'>
-        <h1>Sistema</h1>
+        <h1>Tipo de Tributação</h1>
     </div>
 </section>
 <section>
     <div class="container">
-        <p>Você não possui nenhuma empresa cadastrada, você precisa possuir pelo menos uma empresa cadastrada para poder utilizar nosso sistema.<br />
-            <a href='{{route('cadastrar-empresa')}}'>Clique aqui para cadastrar uma empresa agora mesmo!</a></p>
+        <table class='table'>
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if($tipo_tributacao->count())
+                @foreach($tipo_tributacao as $tipo)
+                <tr>
+                    <td>{{$tipo->descricao}}</td>
+                    <td><a href="{{route('editar-tipo-tributacao', ['id' => $tipo->id])}}">Editar</a> | <a href="{{$tipo->id}}">Remover</a></td>
+                </tr>
+                @endforeach
+                @else
+                <tr>
+                    <td colspan="2">Nenhum registro cadastrado</td>
+                </tr>
+                @endif
+            </tbody>
+        </table>
+        <a href='{{route('cadastrar-tipo-tributacao')}}'>Cadastrar um tipo de tributação</a><br />
     </div>
 </section>
 @stop
