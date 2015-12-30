@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
-class DashboardController extends Controller {
+class AdminController extends Controller {
 
     public function index() {
-      return view('dashboard.index');
+      return view('admin.index');
     }
 
     public function acessar() {
@@ -21,6 +21,7 @@ class DashboardController extends Controller {
     
     public function checkEmail(Request $request) {
         $usuario = \App\Usuario::where('email','=',$request->input('email'))->first();
+        
         if($usuario instanceof \App\Usuario){
             return redirect(route('login'))->with('email', $request->input('email'));
         }else{
@@ -28,8 +29,4 @@ class DashboardController extends Controller {
         }
     }
     
-    public function registerForm(){
-        
-    }
-
 }
