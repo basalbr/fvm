@@ -25,7 +25,7 @@
             </div>
             <div class='form-group'>
                 <label>Código</label>
-                <input type='text' class='form-control' name='codigo' value="{{Input::old('codigo')}}"/>
+                <input type='text' class='form-control cnae-mask' name='codigo' value="{{Input::old('codigo')}}"/>
             </div>
             <div class='form-group'>
                 <label>Tabela do Simples Nacional</label>

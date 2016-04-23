@@ -3,7 +3,7 @@
 @section('content')
 <section id='page-header' style="margin-top: 55px" class="page-header">
     <div class='container'>
-        <h1>Empresas</h1>
+        <h1>Chamados</h1>
     </div>
 </section>
 <section>
@@ -11,18 +11,20 @@
         <table class='table'>
             <thead>
                 <tr>
-                    <th>Nome Fantasia</th>
-                    <th>CPF/CNPJ</th>
+                    <th>Data</th>
+                    <th>Título</th>
+                    <th>Usuário</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @if($empresas->count())
-                @foreach($empresas as $empresa)
+                @if($chamados->count())
+                @foreach($chamados as $chamado)
                 <tr>
-                    <td>{{$empresa->nome_fantasia}}</td>
-                    <td>{{$empresa->cpf_cnpj}}</td>
-                    <td><a href="{{route('editar-cnae', ['id' => $empresa->id])}}">Editar</a> | <a href="{{$empresa->id}}">Remover</a></td>
+                    <td>{{$chamado->updated_at}}</td>
+                    <td>{{$chamado->titulo}}</td>
+                    <td>{{$chamado->usuario->nome}}</td>
+                    <td><a href="{{route('visualizar-chamados', ['id' => $chamado->id])}}">Responder</a></td>
                 </tr>
                 @endforeach
                 @else
@@ -32,7 +34,6 @@
                 @endif
             </tbody>
         </table>
-        <a href='{{route('cadastrar-cnae')}}'>Cadastrar um CNAE</a><br />
     </div>
 </section>
 @stop

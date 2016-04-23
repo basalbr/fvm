@@ -37,3 +37,18 @@ and open the template in the editor.
 #header img{
     width: 100%; position: absolute; left: 0px; top: 0px; z-index: 0
 }
+
+.cnae-search-box{
+    background-color: #fff;
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 60px;
+    z-index: 50;
+    border: 1px black solid;
+    display: none;
+}
+
+.form-group{
+    position: relative;
+}

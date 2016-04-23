@@ -14,6 +14,7 @@ class VerifyCsrfToken extends BaseVerifier
     protected $except = [
         'acessar',
         'registrar',
-        'login'
+        'login',
+        'ajax*'
     ];
 }

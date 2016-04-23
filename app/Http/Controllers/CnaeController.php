@@ -43,5 +43,10 @@ class CnaeController extends Controller {
             return redirect(route('editar-cnae'))->withInput()->withErrors($cnae->errors());
         }
     }
+    
+    public function ajax(Request $request){
+        $lista = Cnae::where('descricao','ilike','%'.$request->get('search').'%')->orWhere('codigo','ilike','%'.$request->get('search').'%')->orderBy('descricao')->take(5)->get(['descricao','codigo','id']);
+        return response()->json($lista);
+    }
 
 }

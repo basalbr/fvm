@@ -3,7 +3,7 @@
 @section('content')
 <section id='page-header' style="margin-top: 55px" class="page-header">
     <div class='container'>
-        <h1>Empresas</h1>
+        <h1>Imposto</h1>
     </div>
 </section>
 <section>
@@ -11,18 +11,16 @@
         <table class='table'>
             <thead>
                 <tr>
-                    <th>Nome Fantasia</th>
-                    <th>CPF/CNPJ</th>
+                    <th>Nome</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @if($empresas->count())
-                @foreach($empresas as $empresa)
+                @if($impostos->count())
+                @foreach($impostos as $imposto)
                 <tr>
-                    <td>{{$empresa->nome_fantasia}}</td>
-                    <td>{{$empresa->cpf_cnpj}}</td>
-                    <td><a href="{{route('editar-cnae', ['id' => $empresa->id])}}">Editar</a> | <a href="{{$empresa->id}}">Remover</a></td>
+                    <td>{{$imposto->nome}}</td>
+                    <td><a href="{{route('editar-imposto', ['id' => $imposto->id])}}">Editar</a> | <a href="{{$imposto->id}}">Remover</a></td>
                 </tr>
                 @endforeach
                 @else
@@ -32,7 +30,7 @@
                 @endif
             </tbody>
         </table>
-        <a href='{{route('cadastrar-cnae')}}'>Cadastrar um CNAE</a><br />
+        <a href='{{route('cadastrar-simples-nacional')}}'>Cadastrar uma imposto do simples nacional</a><br />
     </div>
 </section>
 @stop

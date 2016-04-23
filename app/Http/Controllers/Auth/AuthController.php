@@ -43,7 +43,7 @@ use AuthenticatesAndRegistersUsers,
         return view('register.index');
     }
 
-    public function getLogin() {
+    public function getLogin() {        
         return view('login.index');
     }
     

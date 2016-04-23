@@ -42,5 +42,13 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
     public function getAuthPassword() {
         return $this->attributes['senha']; //change the 'passwordFieldinYourTable' with the name of your field in the table
     }
+    
+    public function chamados(){
+        return $this->hasMany('App\Chamado', 'id_chamado');
+    }
+    
+    public function pessoas(){
+        return $this->hasMany('App\Pessoa', 'id_usuario');
+    }
 
 }
