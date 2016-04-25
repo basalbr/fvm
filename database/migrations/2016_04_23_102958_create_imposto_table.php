@@ -15,7 +15,7 @@ class CreateImpostoTable extends Migration {
             $table->increments('id');
             $table->string('nome');
             $table->integer('vencimento')->unsigned();
-            $table->boolean('antecipa_posterga');
+            $table->string('antecipa_posterga');
             $table->boolean('recebe_documento');
             $table->timestamps();
             $table->softDeletes();

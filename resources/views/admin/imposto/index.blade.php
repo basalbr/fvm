@@ -30,7 +30,7 @@
                 @endif
             </tbody>
         </table>
-        <a href='{{route('cadastrar-simples-nacional')}}'>Cadastrar uma imposto do simples nacional</a><br />
+        <a href='{{route('cadastrar-imposto')}}'>Cadastrar um imposto</a><br />
     </div>
 </section>
 @stop

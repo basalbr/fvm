@@ -7,7 +7,7 @@
         <h1>Acesso ao sistema</h1>
     </div>
 </section>
-<section>
+<section id="inicio">
 
     <div class="container">
 
@@ -22,6 +22,7 @@
             </div>
         </form>
     </div>
-</div>
 </section>
+
+
 @stop

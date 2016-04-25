@@ -10,10 +10,9 @@ class Imposto extends Model {
 
     use SoftDeletes;
 
-    protected $rules = ['nome' => 'required', 'vencimento' => 'required'];
+    protected $rules = ['nome' => 'required', 'vencimento' => 'required|integer', 'antecipa_posterga' => 'required', 'recebe_documento'=>'required'];
     protected $errors;
-    protected $niceNames = ['nome' => 'Nome', 'vencimento' => 'Vencimento'];
-
+    protected $niceNames = ['nome' => 'Nome', 'vencimento' => 'Dia do Vencimento', 'antecipa_posterga'=>'Antecipa ou posterga', 'recebe_documento'=>'Receber documentos'];
     /**
      * The database table used by the model.
      *
@@ -48,7 +47,7 @@ class Imposto extends Model {
     }
 
     public function meses() {
-        $this->hasMany('App\ImpostoMes', 'id_imposto');
+        return $this->hasMany('App\ImpostoMes', 'id_imposto');
     }
 
 }

@@ -13,6 +13,9 @@
         <h2>CNAE</h2>
         <a href='{{route('cadastrar-cnae')}}'>Cadastrar um CNAE</a><br />
         <a href='{{route('listar-cnae')}}'>Listar os CNAEs</a><br />
+        <h2>Impostos</h2>
+        <a href='{{route('cadastrar-imposto')}}'>Cadastrar um imposto</a><br />
+        <a href='{{route('listar-imposto')}}'>Listar os impostos</a><br />
         <h2>Natureza Jurídica</h2>
         <a href='{{route('cadastrar-natureza-juridica')}}'>Cadastrar uma natureza jurídica</a><br />
         <a href='{{route('listar-natureza-juridica')}}'>Listar as naturezas jurídicas</a><br />
