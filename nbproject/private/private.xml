@@ -3,12 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Projetos/fvm/app/Pessoa.php</file>
-            <file>file:/D:/Projetos/fvm/resources/views/empresa/index.blade.php</file>
-            <file>file:/D:/Projetos/fvm/resources/views/layouts/master.blade.php</file>
+            <file>file:/D:/Projetos/fvm/app/Imposto.php</file>
+            <file>file:/D:/Projetos/fvm/resources/views/login/index.blade.php</file>
+            <file>file:/D:/Projetos/fvm/resources/views/admin/imposto/instrucoes/editar.blade.php</file>
+            <file>file:/D:/Projetos/fvm/resources/views/admin/imposto/index.blade.php</file>
+            <file>file:/D:/Projetos/fvm/resources/views/index.blade.php</file>
+            <file>file:/D:/Projetos/fvm/app/Http/Controllers/ImpostoController.php</file>
+            <file>file:/D:/Projetos/fvm/database/migrations/2016_04_23_104103_create_imposto_mes_table.php</file>
+            <file>file:/D:/Projetos/fvm/app/Http/Controllers/Auth/AuthController.php</file>
+            <file>file:/D:/Projetos/fvm/app/Instrucao.php</file>
+            <file>file:/D:/Projetos/fvm/app/Http/Controllers/InstrucaoController.php</file>
+            <file>file:/D:/Projetos/fvm/resources/views/admin/imposto/instrucoes/index.blade.php</file>
+            <file>file:/D:/Projetos/fvm/app/Http/Middleware/Authenticate.php</file>
+            <file>file:/D:/Projetos/fvm/app/Http/Controllers/HomeController.php</file>
+            <file>file:/D:/Projetos/fvm/resources/views/admin/imposto/instrucoes/cadastrar.blade.php</file>
             <file>file:/D:/Projetos/fvm/resources/views/dashboard/index.blade.php</file>
-            <file>file:/D:/Projetos/fvm/app/Http/Controllers/ChamadosController.php</file>
-            <file>file:/D:/Projetos/fvm/app/Http/Controllers/EmpresaController.php</file>
+            <file>file:/D:/Projetos/fvm/app/Http/routes.php</file>
+            <file>file:/D:/Projetos/fvm/config/session.php</file>
         </group>
     </open-files>
 </project-private>

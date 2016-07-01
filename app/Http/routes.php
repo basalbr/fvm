@@ -23,6 +23,12 @@ Route::post('/admin/imposto/cadastrar', ['as' => 'cadastrar-imposto', 'uses' => 
 Route::get('/admin/imposto/editar/{id}', ['as' => 'editar-imposto', 'uses' => 'ImpostoController@edit','middleware'=>'admin']);
 Route::post('/admin/imposto/editar/{id}', ['as' => 'editar-imposto', 'uses' => 'ImpostoController@update','middleware'=>'admin']);
 
+Route::get('/admin/imposto/{id_imposto}/instrucoes', ['as' => 'listar-instrucao', 'uses' => 'InstrucaoController@index','middleware'=>'admin']);
+Route::get('/admin/imposto/{id_imposto}/instrucoes/cadastrar', ['as' => 'cadastrar-instrucao', 'uses' => 'InstrucaoController@create','middleware'=>'admin']);
+Route::post('/admin/imposto/{id_imposto}/instrucoes/cadastrar', ['as' => 'cadastrar-instrucao', 'uses' => 'InstrucaoController@store','middleware'=>'admin']);
+Route::get('/admin/imposto/{id_imposto}/instrucoes/editar/{id_instrucao}', ['as' => 'editar-instrucao', 'uses' => 'InstrucaoController@edit','middleware'=>'admin']);
+Route::post('/admin/imposto/{id_imposto}/instrucoes/editar/{id_instrucao}', ['as' => 'editar-instrucao', 'uses' => 'InstrucaoController@update','middleware'=>'admin']);
+
 Route::get('/admin/simples-nacional/', ['as' => 'listar-simples-nacional', 'uses' => 'SimplesNacionalController@index','middleware'=>'admin']);
 Route::get('/admin/simples-nacional/cadastrar', ['as' => 'cadastrar-simples-nacional', 'uses' => 'SimplesNacionalController@create','middleware'=>'admin']);
 Route::post('/admin/simples-nacional/cadastrar', ['as' => 'cadastrar-simples-nacional', 'uses' => 'SimplesNacionalController@store','middleware'=>'admin']);
@@ -60,6 +66,7 @@ Route::post('/chamados/responder/{id}', ['as' => 'responder-chamado-usuario', 'u
 Route::get('/acessar', ['as' => 'acessar', 'uses' => 'HomeController@acessar','middleware'=>'guest']);
 Route::post('/acessar', ['as' => 'acessar', 'uses' => 'HomeController@checkEmail']);
 Route::get('/register', ['as' => 'register', 'uses' => 'HomeController@register']);
+
 
 // Empresa routes...
 Route::get('/empresas', ['as' => 'empresas', 'uses' => 'EmpresaController@index','middleware'=>'auth']);

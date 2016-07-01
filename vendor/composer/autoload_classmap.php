@@ -6,14 +6,19 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'CreateCnaeTable' => $baseDir . '/database/migrations/2015_12_14_085008_create_cnae_table.php',
+    'AddIdChamadoChamadoRespostaTable' => $baseDir . '/database/migrations/2016_04_08_194400_add_id_chamado_chamado_resposta_table.php',
+    'CreateChamadoRespostaTable' => $baseDir . '/database/migrations/2016_04_08_192840_create_chamado_resposta_table.php',
+    'CreateChamadoTable' => $baseDir . '/database/migrations/2016_04_08_192632_create_chamado_table.php',
+    'CreateCnaeTable' => $baseDir . '/database/migrations/2015_12_14_085408_create_cnae_table.php',
+    'CreateImpostoMesTable' => $baseDir . '/database/migrations/2016_04_23_104103_create_imposto_mes_table.php',
+    'CreateImpostoTable' => $baseDir . '/database/migrations/2016_04_23_102958_create_imposto_table.php',
     'CreateNaturezaJuridicaTable' => $baseDir . '/database/migrations/2015_12_14_085031_create_natureza_juridica_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
-    'CreatePessoaCnaeTable' => $baseDir . '/database/migrations/2015_12_14_085234_create_pessoa_cnae_table.php',
-    'CreatePessoaTable' => $baseDir . '/database/migrations/2015_12_14_085214_create_pessoa_table.php',
+    'CreatePessoaCnaeTable' => $baseDir . '/database/migrations/2015_12_14_085434_create_pessoa_cnae_table.php',
+    'CreatePessoaTable' => $baseDir . '/database/migrations/2015_12_14_085414_create_pessoa_table.php',
     'CreateTabelaSimplesNacionalTable' => $baseDir . '/database/migrations/2015_12_14_085259_create_tabela_simples_nacional_table.php',
     'CreateTabelaTipoTributacaoTable' => $baseDir . '/database/migrations/2015_12_14_085317_create_tabela_tipo_tributacao_table.php',
-    'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',
+    'CreateTutorialTable' => $baseDir . '/database/migrations/2016_06_18_153541_create_tutorial_table.php',
     'CreateUsuarioTable' => $baseDir . '/database/migrations/2015_11_25_114553_create_usuario_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',

@@ -1,13 +1,8 @@
-@extends('layouts.master')
-@section('header_title', 'Home')
-@section('content')
-<section id='page-header' style="margin-top: 55px" class="page-header">
-    <div class='container'>
-        <h1>Empresas</h1>
-    </div>
-</section>
-<section>
-    <div class="container">
+@extends('layouts.dashboard')
+@section('header_title', 'Empresas')
+@section('main')
+<h1>Empresas</h1>
+<hr class="dash-title">
         <table class='table'>
             <thead>
                 <tr>
@@ -32,7 +27,5 @@
                 @endif
             </tbody>
         </table>
-        <a href='{{route('cadastrar-cnae')}}'>Cadastrar um CNAE</a><br />
-    </div>
-</section>
+        <a href='{{route('cadastrar-empresa')}}'>Cadastrar uma empresa</a><br />
 @stop

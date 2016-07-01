@@ -1,13 +1,8 @@
-@extends('layouts.master')
-@section('header_title', 'Home')
-@section('content')
-<section id='page-header' style="margin-top: 55px" class="page-header">
-    <div class='container'>
-        <h1>CNAE</h1>
-    </div>
-</section>
-<section>
-    <div class="container">
+@extends('layouts.dashboard')
+@section('header_title', 'Chamados')
+@section('main')
+<h1>Abrir Chamado</h1>
+<hr class="dash-title">
 
         @if($errors->has())
         <div class="alert alert-warning shake">
@@ -28,10 +23,7 @@
                 <textarea class="form-control" name='mensagem'></textarea>
             </div>
             <div class='form-group'>
-                <input type='submit' value="Salvar alterações" class='btn btn-primary' />
+                <input type='submit' value="Abrir chamado" class='btn btn-primary' />
             </div>
         </form>
-    </div>
-</div>
-</section>
 @stop

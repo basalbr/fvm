@@ -20,7 +20,7 @@
                 @foreach($impostos as $imposto)
                 <tr>
                     <td>{{$imposto->nome}}</td>
-                    <td><a href="{{route('editar-imposto', ['id' => $imposto->id])}}">Editar</a> | <a href="{{$imposto->id}}">Remover</a></td>
+                    <td><a href="{{route('listar-instrucao', ['id' => $imposto->id])}}">Instruções</a> | <a href="{{route('editar-imposto', ['id' => $imposto->id])}}">Editar</a> | <a href="{{$imposto->id}}">Remover</a></td>
                 </tr>
                 @endforeach
                 @else

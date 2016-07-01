@@ -38,14 +38,11 @@ class HomeController extends Controller {
     public function checkEmail(Request $request) {
         $usuario = \App\Usuario::where('email','=',$request->input('email'))->first();
         if($usuario instanceof \App\Usuario){
-            return redirect(route('login'))->with('email', $request->input('email'));
+            return redirect(route('login'))->withInput(['email' => $request->input('email'), 'nome'=>$usuario->nome]);
         }else{
-            return redirect(route('registrar'));
+            return redirect(route('registrar'))->with('email', $request->input('email'));
         }
     }
-    
-    public function registerForm(){
-        
-    }
+   
 
 }

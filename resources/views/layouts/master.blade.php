@@ -103,10 +103,10 @@ $(function () {
         </script>
         @show
     </head>
-    <body data-spy="scroll" data-target=".navbar" data-offset="400">
+    <body data-spy="scroll" data-target=".navbar" data-offset="400" class="{{Request::is('/') ? '' : 'bg-ltblue'}}">
         <section id="navbar">
             <div class="navbar navbar-default navbar-fixed-top">
-                <div class="container">
+                <div class="{{Request::is('/') ? 'container' : 'container-fluid'}}">
                     <div class="navbar-header">
                         <a href="" class="navbar-brand">F.V.M</a>
                         <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
@@ -117,6 +117,7 @@ $(function () {
                     </div>
                     <div class="navbar-collapse collapse" id="navbar-main">
                         <ul class="nav navbar-nav navbar-right">
+                            @if(Request::is('/'))
                             <li class="dropdown">
                                 <a href="#inicio" id="nav-inicio">Início</a>
                             </li>
@@ -129,12 +130,13 @@ $(function () {
                             <li>
                                 <a href="#contato">Contato</a>
                             </li>
+                            @endif
                             @if(Auth::user())
                             <li><a href="" target="" id="login-link"><b>Olá {{Auth::user()->nome}}</b></a></li>
                             <li><a href="{{route('sair')}}" target="" id="register-link"><b>Sair</b></a></li>
                             @else
-                            <li><a href="" target="" id="register-link"><b>Registrar</b></a></li>
-                            <li><a href="" target="" id="login-link"><b>Entrar</b></a></li>
+                            <li><a href="{{route('register')}}" target="" id="register-link"><b>Registrar</b></a></li>
+                            <li><a href="{{route('acessar')}}" target="" id="login-link"><b>Entrar</b></a></li>
 
                             @endif
                         </ul>

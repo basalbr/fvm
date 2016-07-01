@@ -1,13 +1,8 @@
-@extends('layouts.master')
-@section('header_title', 'Home')
-@section('content')
-<section id='page-header' style="margin-top: 55px" class="page-header">
-    <div class='container'>
-        <h1>Chamados</h1>
-    </div>
-</section>
-<section>
-    <div class="container">
+@extends('layouts.dashboard')
+@section('header_title', 'Chamados')
+@section('main')
+<h1>Chamados</h1>
+<hr class="dash-title">
         <table class='table'>
             <thead>
                 <tr>
@@ -34,6 +29,5 @@
             </tbody>
         </table>
         <a href='{{route('cadastrar-chamado')}}'>Abrir chamado</a><br />
-    </div>
-</section>
+ 
 @stop
