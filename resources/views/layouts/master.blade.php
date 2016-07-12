@@ -9,7 +9,6 @@
         <link rel="stylesheet" type="text/css" href="{{url('public/css/font-awesome.min.css')}}" />
         <link rel="stylesheet" type="text/css" href="{{url('public/css/bootstrap.min.css')}}" />
         <link rel="stylesheet" name="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.css" />
-        <link rel="stylesheet" name="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.print.css" />
         <link rel="stylesheet" type="text/css" href="{{url('public/css/custom.css')}}" />
         @show
         @section('js')
@@ -31,6 +30,11 @@ $(function () {
     });
     // $.xhrPool and $.ajaxSetup are the solution
     $('#calendar').fullCalendar({
+        header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
         lang: 'pt-br',
         events: {
             url: "{{route('ajax-calendar')}}",

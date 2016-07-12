@@ -35,6 +35,12 @@ Route::post('/admin/simples-nacional/cadastrar', ['as' => 'cadastrar-simples-nac
 Route::get('/admin/simples-nacional/editar/{id}', ['as' => 'editar-simples-nacional', 'uses' => 'SimplesNacionalController@edit','middleware'=>'admin']);
 Route::post('/admin/simples-nacional/editar/{id}', ['as' => 'editar-simples-nacional', 'uses' => 'SimplesNacionalController@update','middleware'=>'admin']);
 
+Route::get('/admin/plano/', ['as' => 'listar-plano', 'uses' => 'PlanoController@index','middleware'=>'admin']);
+Route::get('/admin/plano/cadastrar', ['as' => 'cadastrar-plano', 'uses' => 'PlanoController@create','middleware'=>'admin']);
+Route::post('/admin/plano/cadastrar', ['as' => 'cadastrar-plano', 'uses' => 'PlanoController@store','middleware'=>'admin']);
+Route::get('/admin/plano/editar/{id}', ['as' => 'editar-plano', 'uses' => 'PlanoController@edit','middleware'=>'admin']);
+Route::post('/admin/plano/editar/{id}', ['as' => 'editar-plano', 'uses' => 'PlanoController@update','middleware'=>'admin']);
+
 Route::get('/admin/tipo-tributacao/', ['as' => 'listar-tipo-tributacao', 'uses' => 'TipoTributacaoController@index','middleware'=>'admin']);
 Route::get('/admin/tipo-tributacao/cadastrar', ['as' => 'cadastrar-tipo-tributacao', 'uses' => 'TipoTributacaoController@create','middleware'=>'admin']);
 Route::post('/admin/tipo-tributacao/cadastrar', ['as' => 'cadastrar-tipo-tributacao', 'uses' => 'TipoTributacaoController@store','middleware'=>'admin']);

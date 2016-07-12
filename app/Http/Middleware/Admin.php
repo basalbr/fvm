@@ -43,12 +43,12 @@ class Admin {
         if (Auth::user()->admin) {
             return $next($request);
         }
-        
+
         if ($this->auth->check()) {
-            return redirect('/dashboard');
+            return redirect('/admin');
         }
 
-        
+
 
         return redirect()->guest(route('acessar'));
     }
