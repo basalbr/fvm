@@ -28,19 +28,114 @@ $(function () {
         }, 1000, 'easeInOutExpo');
         event.preventDefault();
     });
-    // $.xhrPool and $.ajaxSetup are the solution
     $('#calendar').fullCalendar({
         header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+        },
         lang: 'pt-br',
         events: {
             url: "{{route('ajax-calendar')}}",
             type: 'POST'
+        },
+        eventClick: function (calEvent) {
+            $('.fc-event').each(function () {
+                $(this).removeClass('fc-event-success');
+            });
+            $(this).addClass('fc-event-success');
+            $.get("{{route('ajax-instrucoes')}}", {'id': calEvent.id}, function (data) {
+                if (data.length !== undefined) {
+                    if (data.length > 0) {
+                        var html = "<div class='col-xs-12'>\n\
+                                    <input type='hidden' id='instrucao-page' value='1' />\n\
+                                    <input type='hidden' id='instrucao-total' value='" + data.length + "' />";
+                        html += '<h2 style="margin-bottom:15px; margin-top:0; padding:0;">' + calEvent.title + '</h2>';
+                        if (data.length > 1) {
+                            html += "<div id='paginacao-instrucao-container'>";
+                            html += "<div class='paginacao-instrucao'>Página <span id='pagina-atual' class='numero'>1</span> de <span class='numero'>" + data.length + "</span></div>";
+                            html += "<div class='paginacao-botoes'>";
+                            html += "<div class='btn btn-primary disabled btn-instrucao-voltar' style='margin-right: 5px'>Voltar</div>";
+                            html += "<div class='btn btn-primary btn-instrucao-avancar'>Avançar</div>";
+                            html += "</div>";
+                            html += "<div class='clearfix'></div>";
+                            html += "</div>";
+                        }
+                        html += "</div>";
+                        data.forEach(function (instrucao, key) {
+                            if (key == 0) {
+                                html += "<div class='col-xs-12 instrucao-descricao' style='display: block' data-pagina='" + (key + 1) + "'>";
+                            } else {
+                                html += "<div class='col-xs-12 instrucao-descricao' style='display: none' data-pagina='" + (key + 1) + "'>";
+                            }
+                            html += instrucao.descricao;
+                            html += "</div>";
+                        }, html);
+
+                        $('#instrucao').html(html);
+                        $('html, body').animate({
+                            scrollTop: $("#instrucao").offset().top - 200
+                        }, 1000);
+                    }
+                }
+            })
         }
     });
+
+    $("#instrucao").on('click', '.btn-instrucao-avancar', function () {
+        avancarInstrucao();
+    });
+
+    $("#instrucao").on('click', '.btn-instrucao-voltar', function () {
+        voltarInstrucao();
+    });
+
+    function avancarInstrucao() {
+        if ($(".btn-instrucao-avancar").hasClass('disabled')) {
+            return false;
+        }
+
+        $("#instrucao-page").val(parseInt($("#instrucao-page").val()) + 1);
+        $("#pagina-atual").html(parseInt($("#instrucao-page").val()));
+        atualizaBotoesInstrucao();
+        mostrarDescricaoInstrucao();
+
+    }
+
+    function atualizaBotoesInstrucao() {
+        if (parseInt($("#instrucao-total").val()) <= parseInt($("#instrucao-page").val())) {
+            $(".btn-instrucao-avancar").addClass('disabled');
+        } else {
+            $(".btn-instrucao-avancar").removeClass('disabled');
+        }
+
+        if (parseInt($("#instrucao-page").val()) > 1) {
+            $(".btn-instrucao-voltar").removeClass('disabled');
+        } else {
+            $(".btn-instrucao-voltar").addClass('disabled');
+        }
+    }
+
+    function mostrarDescricaoInstrucao() {
+        $('.instrucao-descricao').each(function () {
+            $(this).hide();
+            if (parseInt($(this).data('pagina')) == parseInt($("#instrucao-page").val())) {
+                $(this).show();
+            }
+        })
+    }
+
+    function voltarInstrucao() {
+        if ($(".btn-instrucao-voltar").hasClass('disabled')) {
+            return false;
+        }
+
+        $("#instrucao-page").val(parseInt($("#instrucao-page").val()) - 1);
+        $("#pagina-atual").html(parseInt($("#instrucao-page").val()));
+        atualizaBotoesInstrucao();
+        mostrarDescricaoInstrucao()
+    }
+
     $('.cnpj-mask').mask('00.000.000/0000-00');
     $('.cep-mask').mask('00000-000');
     $('.numero-mask').mask("#0", {reverse: true});

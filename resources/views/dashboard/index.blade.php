@@ -1,9 +1,16 @@
 @extends('layouts.dashboard')
+@section('js')
+@parent
+<script type="text/javascript">
+$(function(){
+});
+</script>
+@stop
 @section('main')
 <h1>Início</h1>
 <hr class="dash-title">
-<div class="col-md-7"><div id="calendar"></div></div>
-<div class="col-md-5">Olá, no calendário ao lado se encontram os impostos que você deve pagar para suas empresas.<br /> Para verificar como pagar, clique no imposto desejado.</div>
+<div class="col-lg-7 col-md-12"><div class="hidden-lg">Olá, no calendário abaixo se encontram os impostos que você deve pagar para suas empresa.<br /> Para verificar como pagar, clique no imposto desejado.</div><br /><div id="calendar"></div></div>
+<div class="col-lg-5 col-md-12" id="instrucao"><div class="visible-lg">Olá, no calendário ao lado se encontram os impostos que você deve pagar para suas empresas.<br /> Para verificar como pagar, clique no imposto desejado.</div></div>
 
 @stop
 @section('header_title', 'Início')

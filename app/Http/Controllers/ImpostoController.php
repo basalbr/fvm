@@ -111,12 +111,18 @@ class ImpostoController extends Controller {
                     foreach ($imposto->meses as $impostoMes) {
                         $mes = $impostoMes->mes + 1;
                         $date = $this->corrigeData(date('Y') . '-' . $mes . '-' . $imposto->vencimento, $imposto->antecipa_posterga);
-                        $jsonRet[] = array('title' => $imposto->nome, 'start' => $date);
+                        $jsonRet[] = array('title' => $imposto->nome, 'start' => $date, 'id' => $imposto->id);
                     }
                 }
             }
         }
         return response()->json($jsonRet);
+    }
+    
+    public function ajaxInstrucoes( Request $request){
+        
+        $instrucoes = Imposto::find($request->get('id'))->instrucoes()->orderBy('ordem', 'asc')->get(['descricao']);
+        return response()->json($instrucoes);
     }
 
 }

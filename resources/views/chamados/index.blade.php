@@ -28,6 +28,6 @@
                 @endif
             </tbody>
         </table>
-        <a href='{{route('cadastrar-chamado')}}'>Abrir chamado</a><br />
+        <a class='btn btn-primary' href='{{route('cadastrar-chamado')}}'>Abrir chamado</a><br />
  
 @stop

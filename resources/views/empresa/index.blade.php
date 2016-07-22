@@ -27,5 +27,5 @@
                 @endif
             </tbody>
         </table>
-        <a href='{{route('cadastrar-empresa')}}'>Cadastrar uma empresa</a><br />
+        <a class='btn btn-primary' href='{{route('cadastrar-empresa')}}'>Cadastrar uma empresa</a><br />
 @stop
