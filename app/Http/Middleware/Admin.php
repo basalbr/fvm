@@ -45,7 +45,7 @@ class Admin {
         }
 
         if ($this->auth->check()) {
-            return redirect('/admin');
+           return $next($request);
         }
 
 

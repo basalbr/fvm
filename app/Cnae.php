@@ -47,4 +47,8 @@ class Cnae extends Model {
         return $this->errors;
     }
 
+    public function tabela_simples_nacional() {
+        return $this->belongsTo('App\TabelaSimplesNacional', 'id_tabela_simples_nacional');
+    }
+
 }

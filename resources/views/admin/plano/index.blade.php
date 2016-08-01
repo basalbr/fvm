@@ -1,40 +1,34 @@
-@extends('layouts.master')
-@section('header_title', 'Home')
-@section('content')
-<section id='page-header' style="margin-top: 55px" class="page-header">
-    <div class='container'>
-        <h1>Planos de Pagamento</h1>
-    </div>
-</section>
-<section>
-    <div class="container">
-        <table class='table'>
-            <thead>
-                <tr>
-                    <th>Descrição</th>
-                    <th>Representante</th>
-                    <th>Qualificação</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @if($planos->count())
-                @foreach($planos as $plano)
-                <tr>
-                    <td>{{$plano->descricao}}</td>
-                    <td>{{$plano->representante}}</td>
-                    <td>{{$plano->qualificacao}}</td>
-                    <td><a href="{{route('editar-plano', ['id' => $plano->id])}}">Editar</a> | <a href="{{$plano->id}}">Remover</a></td>
-                </tr>
-                @endforeach
-                @else
-                <tr>
-                    <td colspan="2">Nenhum registro cadastrado</td>
-                </tr>
-                @endif
-            </tbody>
-        </table>
-        <a href='{{route('cadastrar-plano')}}'>Cadastrar um plano de pagamento</a><br />
-    </div>
-</section>
+@extends('layouts.admin')
+@section('main')
+
+<h1>Planos de Pagamento</h1>
+<hr class="dash-title">
+<table class='table'>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Duração</th>
+            <th>Valor</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if($planos->count())
+        @foreach($planos as $plano)
+        <tr>
+            <td>{{$plano->nome}}</td>
+            <td>{{$plano->duracao}}</td>
+            <td>{{$plano->valor}}</td>
+            <td><a class="btn btn-warning" href="{{route('editar-plano', ['id' => $plano->id])}}">Editar</a> <a class="btn btn-danger" href="{{$plano->id}}">Remover</a></td>
+        </tr>
+        @endforeach
+        @else
+        <tr>
+            <td colspan="2">Nenhum registro cadastrado</td>
+        </tr>
+        @endif
+    </tbody>
+</table>
+<a class='btn btn-primary' href='{{route('cadastrar-plano')}}'>Cadastrar um plano de pagamento</a><br />
+
 @stop
