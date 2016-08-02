@@ -20,4 +20,7 @@
     </div>
     <div class="clearfix"></div>
 </div>
+<div>
+    @yield('modal')
+</div>
 @overwrite

@@ -8,6 +8,11 @@ $(function(){
 @stop
 @section('main')
 <h1>Início</h1>
+@if(Auth::user()->pessoas->count() > 0)
+<div>aaaaaaaaaaaaaaaaaaaaaa121</div>
+@else
+<div>aaaaaaaaaaaaaaaaaaaaaa</div>
+@endif
 <hr class="dash-title">
 <div class="col-lg-7 col-md-12"><div class="hidden-lg">Olá, no calendário abaixo se encontram os impostos que você deve pagar para suas empresa.<br /> Para verificar como pagar, clique no imposto desejado.</div><br /><div id="calendar"></div></div>
 <div class="col-lg-5 col-md-12" id="instrucao"><div class="visible-lg">Olá, no calendário ao lado se encontram os impostos que você deve pagar para suas empresas.<br /> Para verificar como pagar, clique no imposto desejado.</div></div>

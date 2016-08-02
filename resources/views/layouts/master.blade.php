@@ -142,50 +142,7 @@ $(function () {
     $('.dia-mask').mask("09");
     $(".fone-mask").mask("(00) 0000-00009")
     $('.cnae-mask').mask('0000-0/00')
-    $('.cnae-search').on('keyup', function () {
-        if ($(this).val().length > 2) {
-            $.post("{{route('ajax-cnae')}}", {'search': $(this).val()}, function (data) {
-                var html = '';
-                try {
-                    $('.cnae-search-box .result').empty();
-                    if (data.length) {
-                        for (i in data) {
-                            html += '<div class="cnae-item" data-val="' + data[i].codigo + '" data-id="' + data[i].id + '">';
-                            html += '<b>' + data[i].codigo + '</b>' + ' ' + data[i].descricao;
-                            html += '</div>';
-                        }
-                        $('.cnae-search-box .result').html(html);
-                        $('.cnae-search-box').show();
-                    } else {
-                        $('.cnae-search-box .result').empty();
-                        $('.cnae-search-box').hide();
-                    }
-                } catch (e) {
-                    $('.cnae-search-box').hide();
-                }
-            });
-        } else {
-            $('.cnae-search-box .result').empty();
-            $('.cnae-search-box').hide();
-        }
-    })
-    $('.cnae-search-box .result').on('click', '.cnae-item', function () {
-        console.log($(this).data('val'));
-        $('.cnae-search').after('<input type="hidden" value="' + $(this).data('id') + '" name="cnaes[]"/>');
-        $('.cnae-search').after('<div class="col-xs-12"><a data-id="' + $(this).data('id') + '" class="remove-cnae">' + $(this).data('val') + '</a></div>');
-        $('.cnae-search').val('');
-        $('.cnae-search-box .result').empty();
-        $('.cnae-search-box').hide();
-    })
-    $('.form-group').on('click', 'div .remove-cnae', function () {
-        var id = $(this).data('id');
-        $('input[type=hidden]').each(function () {
-            if ($(this).val() == id) {
-                $(this).remove();
-            }
-        })
-        $(this).parent().remove();
-    })
+    
     jQuery.support.cors = true;
     /*$('.cep-mask').on('keyup', function () {
      if ($(this).val().length == 9) {
