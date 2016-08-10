@@ -33,10 +33,15 @@ class EmpresaController extends Controller {
             $empresa = $empresa->create($request->except('_token', 'cnaes'));
             if (count($request->get('cnaes'))) {
                 foreach ($request->get('cnaes') as $cnae) {
-                    $pessoaCnae = new \App\PessoaCnae;
-                    $pessoaCnae->id_pessoa = $empresa->id;
-                    $pessoaCnae->id_cnae = $cnae;
-                    $pessoaCnae->save();
+                    if (\App\Cnae::where('id', '=', $cnae)->first()->id_tabela_simples_nacional == null) {
+                        $empresa->delete();
+                        return redirect(route('cadastrar-empresa'))->withInput()->withErrors(['Não foi possível cadastrar sua empresa pois um de seus CNAEs não está apto para o Simples Nacional.\nNesse momento só trabalhamos com Simples Nacional.']);
+                    } else {
+                        $pessoaCnae = new \App\PessoaCnae;
+                        $pessoaCnae->id_pessoa = $empresa->id;
+                        $pessoaCnae->id_cnae = $cnae;
+                        $pessoaCnae->save();
+                    }
                 }
             }
             return redirect(route('empresas'));

@@ -85,8 +85,23 @@ class Pessoa extends Model {
         return true;
     }
 
+    public function isSimplesNacional() {
+        if ($this->cnaes->count() > 0) {
+            foreach ($this->cnaes as $cnae) {
+                if ($cnae->cnae->id_tabela_simples_nacional == null) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
     public function errors() {
         return $this->errors;
+    }
+
+    public function cnaes() {
+        return $this->hasMany('App\PessoaCnae', 'id_pessoa');
     }
 
     public function usuario() {

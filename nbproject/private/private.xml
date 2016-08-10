@@ -3,13 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Projetos/fvm/resources/views/empresa/index.blade.php</file>
-            <file>file:/D:/Projetos/fvm/public/css/custom.css</file>
-            <file>file:/D:/Projetos/fvm/resources/views/layouts/master.blade.php</file>
-            <file>file:/D:/Projetos/fvm/resources/views/chamados/index.blade.php</file>
-            <file>file:/D:/Projetos/fvm/app/Http/Controllers/ImpostoController.php</file>
-            <file>file:/D:/Projetos/fvm/resources/views/dashboard/index.blade.php</file>
-            <file>file:/D:/Projetos/fvm/app/Http/routes.php</file>
+            <file>file:/C:/xampp/htdocs/fvm/app/Http/Controllers/EmpresaController.php</file>
+            <file>file:/C:/xampp/htdocs/fvm/database/migrations/2015_12_14_085414_create_pessoa_table.php</file>
+            <file>file:/C:/xampp/htdocs/fvm/resources/views/empresa/cadastrar.blade.php</file>
+            <file>file:/C:/xampp/htdocs/fvm/app/Http/Controllers/ChamadosController.php</file>
         </group>
     </open-files>
 </project-private>
