@@ -71,7 +71,7 @@ Route::get('/chamados/responder/{id}', ['as' => 'responder-chamado-usuario', 'us
 Route::post('/chamados/responder/{id}', ['as' => 'responder-chamado-usuario', 'uses' => 'ChamadosController@update','middleware'=>'admin']);
 Route::get('/acessar', ['as' => 'acessar', 'uses' => 'HomeController@acessar','middleware'=>'guest']);
 Route::post('/acessar', ['as' => 'acessar', 'uses' => 'HomeController@checkEmail']);
-Route::get('/register', ['as' => 'register', 'uses' => 'HomeController@register']);
+//Route::get('/register', ['as' => 'register', 'uses' => 'HomeController@register']);
 
 
 // Empresa routes...

@@ -13,7 +13,7 @@ class CreateCnaeTable extends Migration {
     public function up() {
         Schema::create('cnae', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_tabela_simples_nacional')->unsigned();
+            $table->integer('id_tabela_simples_nacional')->unsigned()->nullable();
             $table->foreign('id_tabela_simples_nacional')->references('id')->on('tabela_simples_nacional');
             $table->string('descricao');
             $table->string('codigo');

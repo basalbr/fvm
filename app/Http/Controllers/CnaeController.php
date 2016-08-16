@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class CnaeController extends Controller {
 
     public function index() {
-        $cnaes = Cnae::orderBy('descricao', 'asc')->get();
+        $cnaes = Cnae::orderBy('descricao', 'asc')->paginate(15);
         return view('admin.cnae.index', ['cnaes' => $cnaes]);
     }
 

@@ -19,6 +19,7 @@
         @endif
         <p>Olá, digite seu e-mail e clique em continuar para acessar o sistema.</p>
         <form method="POST" action="">
+            {{ csrf_field() }}
             <div class='form-group'>
                 <label>E-mail</label>
                 <input type='text' class='form-control' name='email' />
