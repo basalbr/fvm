@@ -139,6 +139,7 @@ $(function () {
     $('.cnpj-mask').mask('00.000.000/0000-00');
     $('.cep-mask').mask('00000-000');
     $('.numero-mask').mask("#0", {reverse: true});
+    $('.dinheiro-mask').mask("#.##0,00", {reverse: true});
     $('.dia-mask').mask("09");
     $(".fone-mask").mask("(00) 0000-00009")
     $('.cnae-mask').mask('0000-0/00')

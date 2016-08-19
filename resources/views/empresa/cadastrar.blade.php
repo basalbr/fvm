@@ -8,7 +8,7 @@
         $('.cnae-search').on('keyup', function () {
             $("#adicionar-cnae").prop('disabled', true);
             if ($(this).val().length == 9) {
-                $.post("{{route('ajax-cnae')}}", {'tipo':'codigo', 'search': $(this).val()}, function (data) {
+                $.post("{{route('ajax-cnae')}}", {'tipo': 'codigo', 'search': $(this).val()}, function (data) {
                     var html = '';
                     try {
                         $('.cnae-search-box .result').empty();
@@ -33,6 +33,9 @@
                 $('.cnae-search-box .result').empty();
                 $('.cnae-search-box').hide();
             }
+        });
+        $("#abrir-modal-socios").on('click', function(){
+            $("#socios-modal").modal('show');
         });
         $("#adicionar-cnae").on('click', function () {
             var descricao = $('.cnae-search-box .result .cnae-item').data('descricao');
@@ -59,7 +62,6 @@
         });
 
         $('.cnae-search-box .result').on('click', '.cnae-item', function () {
-            console.log($(this).data('val'));
             $('.cnae-search').after('<input type="hidden" value="' + $(this).data('id') + '" name="cnaes[]"/>');
             $('.cnae-search').after('<div class="col-xs-12"><a data-id="' + $(this).data('id') + '" class="remove-cnae">' + $(this).data('val') + '</a></div>');
             $('.cnae-search').val('');
@@ -83,7 +85,7 @@
 
         $("#cnae-form").on('submit', function (e) {
             e.preventDefault();
-            $.post("{{route('ajax-cnae')}}", {'tipo':'descricao', 'search': $("#cnae-search").val()}, function (data) {
+            $.post("{{route('ajax-cnae')}}", {'tipo': 'descricao', 'search': $("#cnae-search").val()}, function (data) {
                 $("#lista-cnaes-modal tr").not('.nenhum-cnae-modal').remove();
                 if (data.length > 0) {
                     var html;
@@ -115,7 +117,7 @@
             $("#lista-cnaes").append("<tr><td>" + descricao + "</td><td>" + codigo + "</td><td><button type='button' class='btn btn-danger remover-cnae' data-id='" + id + "'><span class='fa fa-remove'></span> Remover</button></td></tr>")
             $("#principal-form").append('<input type="hidden" value="' + id + '" name="cnaes[]"></input>');
             $('.nenhum-cnae').hide();
-            $(this).prop('disabled',true);
+            $(this).prop('disabled', true);
             $(this).html('Adicionado');
         });
 
@@ -197,18 +199,7 @@
             <label>Bairro</label>
             <input type='text' class='form-control' name='bairro'  value="{{Input::old('bairro')}}"/>
         </div>
-        <div class='form-group'>
-            <label>E-mail do responsável</label>
-            <input type='text' class='form-control' name='email'  value="{{Input::old('email')}}"/>
-        </div>
-        <div class='form-group'>
-            <label>Nome do responsável</label>
-            <input type='text' class='form-control' name='responsavel' value="{{Input::old('responsavel')}}" />
-        </div>
-        <div class='form-group'>
-            <label>Telefone do responsável</label>
-            <input type='text' class='form-control fone-mask' name='telefone' value="{{Input::old('telefone')}}" />
-        </div>
+
         <div class='form-group'>
             <label>Natureza Jurídica</label>
             <select class="form-control" name="id_natureza_juridica">
@@ -227,6 +218,83 @@
                 <option value="{{$tributacao->id}}">{{$tributacao->descricao}}</option>
                 @endforeach
             </select>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <h2>Sócios</h2>
+        <p>Complete os campos abaixo com as informações do <b>sócio responsável pela empresa perante a Receita Federal</b>, essas informações são importantes para automatizarmos processos contábeis junto com os sistemas do governo.<br />
+            Caso tenha mais de um sócio, clique no botão "Adicionar Sócio" e complete o formulário que irá aparecer.</p>
+        <div class='form-group'>
+            <label>Nome do responsável</label>
+            <input type='text' class='form-control' name='socio[0][nome]' value="{{Input::old('socio')[0]['nome']}}" />
+        </div> 
+
+        <div class='form-group'>
+            <label>Telefone do responsável</label>
+            <input type='text' class='form-control fone-mask' name='socio[0][telefone]' value="{{Input::old('socio')[0]['telefone']}}" />
+        </div>
+
+        <div class='form-group'>
+            <label>CPF</label>
+            <input type='text' class='form-control cpf-mask' name='socio[0][cpf]' value="{{Input::old('socio')[0]['cpf']}}"/>
+        </div>
+        <div class='form-group'>
+            <label>RG</label>
+            <input type='text' class='form-control' name='socio[0][rg]' value="{{Input::old('socio')[0]['rg']}}"/>
+        </div>
+        <div class='form-group'>
+            <label>Nº Título de Eleitor</label>
+            <input type='text' class='form-control' name='socio[0][titulo_eleitor]' value="{{Input::old('socio')[0]['titulo_eleitor']}}"/>
+        </div>
+        <div class='form-group'>
+            <label>Nº do Último Recibo do Imposto de Renda</label>
+            <input type='text' class='form-control' name='socio[0][recibo_ir]' value="{{Input::old('socio')[0]['recibo_ir']}}"/>
+        </div>
+        <div class='form-group'>
+            <label>PIS</label>
+            <input type='text' class='form-control' name='socio[0][pis]' value="{{Input::old('socio')[0]['pis']}}"/>
+        </div>
+        <div class='form-group'>
+            <label>CEP</label>
+            <input type='text' class='form-control cep-mask' name='socio[0][cep]' value="{{Input::old('socio')[0]['cep']}}"/>
+        </div>
+        <div class='form-group'>
+            <label>Estado</label>
+            <input type='text' class='form-control' name='socio[0][id_uf]' value="{{Input::old('socio')[0]['id_uf']}}"/>
+        </div>
+        <div class='form-group'>
+            <label>Cidade</label>
+            <input type='text' class='form-control' name='socio[0][cidade]' value="{{Input::old('socio')[0]['cidade']}}"/>
+        </div>
+        <div class='form-group'>
+            <label>Endereço</label>
+            <input type='text' class='form-control' name='socio[0][endereco]' value="{{Input::old('socio')[0]['endereco']}}"/>
+        </div>
+        <div class='form-group'>
+            <label>Bairro</label>
+            <input type='text' class='form-control' name='socio[0][bairro]' value="{{Input::old('socio')[0]['bairro']}}"/>
+        </div>
+        <div class='form-group'>
+            <label>Pró-Labore (Deixe em branco caso não receba pró-labore)</label>
+            <input type='text' class='form-control dinheiro-mask' name='socio[0][pro_labore]' value="{{Input::old('socio')[0]['pro_labore']}}"/>
+        </div>
+        <input type='hidden' name='socio[0][principal]' value="true"/>
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th>Código</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="lista-socios">
+                <tr>
+                    <td colspan="3" class="nenhum-socio">Caso a empresa possua mais que um sócio, clique em "Adicionar Sócio"</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class='form-group'>
+            <button type="button" class="btn btn-success" id='abrir-modal-socios'><span class="fa fa-plus"></span> Adicionar Sócio</button>
         </div>
     </div>
     <div class="col-xs-12">
@@ -312,4 +380,79 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-@stop
+<div class="modal fade" id="socios-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Adicionar Sócio</h4>
+            </div>
+            <div class="modal-body">
+                <p>Complete os campos abaixo e clique em adicionar para adicionar um novo sócio.</p>
+                
+                    
+                    <form id="socios-form">
+                        <div class='form-group'>
+                            <label>Nome</label>
+                            <input type='text' class='form-control' name='nome' />
+                        </div> 
+
+                        <div class='form-group'>
+                            <label>Telefone</label>
+                            <input type='text' class='form-control fone-mask' name='telefone'/>
+                        </div>
+
+                        <div class='form-group'>
+                            <label>CPF</label>
+                            <input type='text' class='form-control cpf-mask' name='cpf'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>RG</label>
+                            <input type='text' class='form-control' name='rg'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Nº Título de Eleitor</label>
+                            <input type='text' class='form-control' name='titulo_eleitor'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Nº do Último Recibo do Imposto de Renda</label>
+                            <input type='text' class='form-control' name='recibo_ir'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>PIS</label>
+                            <input type='text' class='form-control' name='pis'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>CEP</label>
+                            <input type='text' class='form-control cep-mask' name='cep'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Estado</label>
+                            <input type='text' class='form-control' name='id_uf'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Cidade</label>
+                            <input type='text' class='form-control' name='cidade'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Endereço</label>
+                            <input type='text' class='form-control' name='endereco'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Bairro</label>
+                            <input type='text' class='form-control' name='bairro'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Pró-Labore (Deixe em branco caso não receba pró-labore)</label>
+                            <input type='text' class='form-control dinheiro-mask' name='socio[0][pro_labore]' value="{{Input::old('socio')[0]['pro_labore']}}"/>
+                        </div>
+                    </form>
+
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar Janela</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    @stop

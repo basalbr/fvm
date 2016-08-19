@@ -20,6 +20,8 @@ class EmpresaController extends Controller {
     }
 
     public function store(Request $request) {
+        dd($request->all());
+        
         $empresa = new \App\Pessoa;
         $request->merge(['id_usuario' => Auth::user()->id]);
 
