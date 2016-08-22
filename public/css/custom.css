@@ -884,3 +884,7 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
     background-color: #fff;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.12) rgba(0, 0, 0, 0.15);
 }
+
+select.form-control{
+    padding-left: 8px;
+}

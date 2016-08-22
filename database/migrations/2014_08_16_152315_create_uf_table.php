@@ -15,9 +15,7 @@ class CreateUfTable extends Migration
      Schema::create('uf', function (Blueprint $table) {
          $table->increments('id');
             $table->string('sigla')->nullable();
-            $table->float('nome')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
+            $table->string('nome')->nullable();
      });
     }
 

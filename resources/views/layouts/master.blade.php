@@ -137,12 +137,15 @@ $(function () {
     }
 
     $('.cnpj-mask').mask('00.000.000/0000-00');
+    $('.cpf-mask').mask('000.000.000-00');
     $('.cep-mask').mask('00000-000');
     $('.numero-mask').mask("#0", {reverse: true});
     $('.dinheiro-mask').mask("#.##0,00", {reverse: true});
     $('.dia-mask').mask("09");
-    $(".fone-mask").mask("(00) 0000-00009")
-    $('.cnae-mask').mask('0000-0/00')
+    $(".fone-mask").mask("(00) 0000-00009");
+    $('.cnae-mask').mask('0000-0/00');
+    $('.irpf-mask').mask('000000000000');
+    $('.pis-mask').mask('000.00000.00-0');
     
     jQuery.support.cors = true;
     /*$('.cep-mask').on('keyup', function () {

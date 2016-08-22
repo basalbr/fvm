@@ -34,9 +34,6 @@
                 $('.cnae-search-box').hide();
             }
         });
-        $("#abrir-modal-socios").on('click', function(){
-            $("#socios-modal").modal('show');
-        });
         $("#adicionar-cnae").on('click', function () {
             var descricao = $('.cnae-search-box .result .cnae-item').data('descricao');
             var codigo = $('.cnae-search-box .result .cnae-item').data('val');
@@ -144,7 +141,7 @@
     <div class="col-xs-12">
         <p>Preencha os campos abaixo e clique em "cadastrar" para registrar sua empresa em nosso sistema.</p>
     </div>
-    <div class="col-xs-6">
+    <div class="col-xs-12">
         <div class='form-group'>
             <label>Nome Fantasia</label>
             <input type='text' class='form-control' name='nome_fantasia' value="{{Input::old('nome_fantasia')}}"/>
@@ -154,21 +151,20 @@
             <input type='text' class='form-control' name='razao_social' value="{{Input::old('razao_social')}}" />
         </div>
         <div class='form-group'>
+            <label>Natureza Jurídica</label>
+            <select class="form-control" name="id_natureza_juridica">
+                <option value="">Selecione uma opção</option>
+                @foreach($naturezasJuridicas as $natureza_juridica)
+                <option value="{{$natureza_juridica->id}}">{{$natureza_juridica->descricao}}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class='form-group'>
             <label>CNPJ</label>
             <input type='text' class='form-control cnpj-mask' name='cpf_cnpj' value="{{Input::old('cpf_cnpj')}}"/>
         </div>
-        <div class='form-group'>
-            <label>CEP</label>
-            <input type='text' class='form-control cep-mask' name='cep' value="{{Input::old('cep')}}" />
-        </div>
-        <div class='form-group'>
-            <label>Estado</label>
-            <input type='text' class='form-control' name='estado' value="{{Input::old('estado')}}" />
-        </div>
-        <div class='form-group'>
-            <label>Cidade</label>
-            <input type='text' class='form-control' name='cidade'  value="{{Input::old('cidade')}}"/>
-        </div>
+
         <div class='form-group'>
             <label>Inscrição Estadual</label>
             <input type='text' class='form-control' name='inscricao_estadual'  value="{{Input::old('inscricao_estadual')}}"/>
@@ -186,116 +182,110 @@
             <input type='text' class='form-control' name='qtde_funcionarios'  value="{{Input::old('qtde_funcionarios')}}"/>
         </div>
     </div>
-    <div class="col-xs-6">
+     <div class="col-xs-12">
+        <h2>Endereço</h2>
+        <p>Complete os campos abaixo com o endereço da sua empresa.</p>
+        <div class='form-group'>
+            <label>CEP</label>
+            <input type='text' class='form-control cep-mask' name='cep' value="{{Input::old('cep')}}" />
+        </div>
+        <div class='form-group'>
+            <label>Estado</label>
+            <select class="form-control" name='id_uf'>
+                <option value="">Selecione uma opção</option>
+                @foreach(\App\Uf::get() as $uf)
+                <option value="{{$uf->id}}" {{Input::old('id_uf') == $uf->id ? 'selected' : null}}>{{$uf->nome}}</option>
+                @endforeach
+            </select> 
+        </div>
+        <div class='form-group'>
+            <label>Cidade</label>
+            <input type='text' class='form-control' name='cidade'  value="{{Input::old('cidade')}}"/>
+        </div>
         <div class='form-group'>
             <label>Endereço</label>
             <input type='text' class='form-control' name='endereco'  value="{{Input::old('endereco')}}"/>
         </div>
         <div class='form-group'>
-            <label>Número</label>
-            <input type='text' class='form-control numero-mask' name='numero' value="{{Input::old('numero')}}"/>
-        </div>
-        <div class='form-group'>
             <label>Bairro</label>
             <input type='text' class='form-control' name='bairro'  value="{{Input::old('bairro')}}"/>
         </div>
-
         <div class='form-group'>
-            <label>Natureza Jurídica</label>
-            <select class="form-control" name="id_natureza_juridica">
-                <option value="">Selecione uma opção</option>
-                @foreach($naturezasJuridicas as $natureza_juridica)
-                <option value="{{$natureza_juridica->id}}">{{$natureza_juridica->descricao}}</option>
-                @endforeach
-            </select>
+            <label>Número</label>
+            <input type='text' class='form-control numero-mask' name='numero' value="{{Input::old('numero')}}"/>
         </div>
-
-        <div class='form-group'>
-            <label>Tipo de Tributação</label>
-            <select class="form-control" name="tipo_tributacao">
-                <option value="">Selecione uma opção</option>
-                @foreach($tipoTributacoes as $tributacao)
-                <option value="{{$tributacao->id}}">{{$tributacao->descricao}}</option>
-                @endforeach
-            </select>
-        </div>
+        
     </div>
     <div class="col-xs-12">
         <h2>Sócios</h2>
-        <p>Complete os campos abaixo com as informações do <b>sócio responsável pela empresa perante a Receita Federal</b>, essas informações são importantes para automatizarmos processos contábeis junto com os sistemas do governo.<br />
-            Caso tenha mais de um sócio, clique no botão "Adicionar Sócio" e complete o formulário que irá aparecer.</p>
+        <p>Complete os campos abaixo com as informações do <b>sócio responsável pela empresa perante a Receita Federal</b><br />
+            <b>Atenção:</b> Essas informações são importantes para automatizarmos processos contábeis junto com os sistemas do governo.</p>
         <div class='form-group'>
             <label>Nome do responsável</label>
-            <input type='text' class='form-control' name='socio[0][nome]' value="{{Input::old('socio')[0]['nome']}}" />
+            <input type='text' class='form-control' name='socio[nome]' value="{{Input::old('socio')['nome']}}" />
         </div> 
 
         <div class='form-group'>
             <label>Telefone do responsável</label>
-            <input type='text' class='form-control fone-mask' name='socio[0][telefone]' value="{{Input::old('socio')[0]['telefone']}}" />
+            <input type='text' class='form-control fone-mask' name='socio[telefone]' value="{{Input::old('socio')['telefone']}}" />
         </div>
 
         <div class='form-group'>
             <label>CPF</label>
-            <input type='text' class='form-control cpf-mask' name='socio[0][cpf]' value="{{Input::old('socio')[0]['cpf']}}"/>
+            <input type='text' class='form-control cpf-mask' name='socio[cpf]' value="{{Input::old('socio')['cpf']}}"/>
         </div>
         <div class='form-group'>
             <label>RG</label>
-            <input type='text' class='form-control' name='socio[0][rg]' value="{{Input::old('socio')[0]['rg']}}"/>
+            <input type='text' class='form-control' name='socio[rg]' value="{{Input::old('socio')['rg']}}"/>
+        </div>
+        <div class='form-group'>
+            <label>Órgão Expedidor do RG (Ex: SSP/SC)</label>
+            <input type='text' class='form-control' name='socio[orgao_expedidor]' value="{{Input::old('socio')['orgao_expedidor']}}"/>
         </div>
         <div class='form-group'>
             <label>Nº Título de Eleitor</label>
-            <input type='text' class='form-control' name='socio[0][titulo_eleitor]' value="{{Input::old('socio')[0]['titulo_eleitor']}}"/>
+            <input type='text' class='form-control' name='socio[titulo_eleitor]' value="{{Input::old('socio')['titulo_eleitor']}}"/>
         </div>
         <div class='form-group'>
-            <label>Nº do Último Recibo do Imposto de Renda</label>
-            <input type='text' class='form-control' name='socio[0][recibo_ir]' value="{{Input::old('socio')[0]['recibo_ir']}}"/>
+            <label>Nº do Último Recibo do Imposto de Renda (Deixe em branco caso não tenha declarado)</label>
+            <input type='text' class='form-control irpf-mask' name='socio[recibo_ir]' value="{{Input::old('socio')['recibo_ir']}}"/>
         </div>
         <div class='form-group'>
             <label>PIS</label>
-            <input type='text' class='form-control' name='socio[0][pis]' value="{{Input::old('socio')[0]['pis']}}"/>
+            <input type='text' class='form-control pis-mask' name='socio[pis]' value="{{Input::old('socio')['pis']}}"/>
         </div>
         <div class='form-group'>
             <label>CEP</label>
-            <input type='text' class='form-control cep-mask' name='socio[0][cep]' value="{{Input::old('socio')[0]['cep']}}"/>
+            <input type='text' class='form-control cep-mask' name='socio[cep]' value="{{Input::old('socio')['cep']}}"/>
         </div>
         <div class='form-group'>
             <label>Estado</label>
-            <input type='text' class='form-control' name='socio[0][id_uf]' value="{{Input::old('socio')[0]['id_uf']}}"/>
+
+            <select class="form-control" name='socio[id_uf]'>
+                <option value="">Selecione uma opção</option>
+                @foreach(\App\Uf::get() as $uf)
+                <option value="{{$uf->id}}" {{Input::old('socio')['id_uf'] == $uf->id ? 'selected' : null}}>{{$uf->nome}}</option>
+                @endforeach
+            </select> 
         </div>
         <div class='form-group'>
             <label>Cidade</label>
-            <input type='text' class='form-control' name='socio[0][cidade]' value="{{Input::old('socio')[0]['cidade']}}"/>
+            <input type='text' class='form-control' name='socio[cidade]' value="{{Input::old('socio')['cidade']}}"/>
         </div>
         <div class='form-group'>
             <label>Endereço</label>
-            <input type='text' class='form-control' name='socio[0][endereco]' value="{{Input::old('socio')[0]['endereco']}}"/>
+            <input type='text' class='form-control' name='socio[endereco]' value="{{Input::old('socio')['endereco']}}"/>
         </div>
         <div class='form-group'>
             <label>Bairro</label>
-            <input type='text' class='form-control' name='socio[0][bairro]' value="{{Input::old('socio')[0]['bairro']}}"/>
+            <input type='text' class='form-control' name='socio[bairro]' value="{{Input::old('socio')['bairro']}}"/>
         </div>
         <div class='form-group'>
             <label>Pró-Labore (Deixe em branco caso não receba pró-labore)</label>
-            <input type='text' class='form-control dinheiro-mask' name='socio[0][pro_labore]' value="{{Input::old('socio')[0]['pro_labore']}}"/>
+            <input type='text' class='form-control dinheiro-mask' name='socio[pro_labore]' value="{{Input::old('socio')['pro_labore']}}"/>
         </div>
-        <input type='hidden' name='socio[0][principal]' value="true"/>
-        <table class='table table-striped'>
-            <thead>
-                <tr>
-                    <th>Descrição</th>
-                    <th>Código</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="lista-socios">
-                <tr>
-                    <td colspan="3" class="nenhum-socio">Caso a empresa possua mais que um sócio, clique em "Adicionar Sócio"</td>
-                </tr>
-            </tbody>
-        </table>
-        <div class='form-group'>
-            <button type="button" class="btn btn-success" id='abrir-modal-socios'><span class="fa fa-plus"></span> Adicionar Sócio</button>
-        </div>
+        <input type='hidden' name='socio[principal]' value="true"/>
+
     </div>
     <div class="col-xs-12">
         <h2>CNAEs</h2>
@@ -380,79 +370,5 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<div class="modal fade" id="socios-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Adicionar Sócio</h4>
-            </div>
-            <div class="modal-body">
-                <p>Complete os campos abaixo e clique em adicionar para adicionar um novo sócio.</p>
-                
-                    
-                    <form id="socios-form">
-                        <div class='form-group'>
-                            <label>Nome</label>
-                            <input type='text' class='form-control' name='nome' />
-                        </div> 
 
-                        <div class='form-group'>
-                            <label>Telefone</label>
-                            <input type='text' class='form-control fone-mask' name='telefone'/>
-                        </div>
-
-                        <div class='form-group'>
-                            <label>CPF</label>
-                            <input type='text' class='form-control cpf-mask' name='cpf'/>
-                        </div>
-                        <div class='form-group'>
-                            <label>RG</label>
-                            <input type='text' class='form-control' name='rg'/>
-                        </div>
-                        <div class='form-group'>
-                            <label>Nº Título de Eleitor</label>
-                            <input type='text' class='form-control' name='titulo_eleitor'/>
-                        </div>
-                        <div class='form-group'>
-                            <label>Nº do Último Recibo do Imposto de Renda</label>
-                            <input type='text' class='form-control' name='recibo_ir'/>
-                        </div>
-                        <div class='form-group'>
-                            <label>PIS</label>
-                            <input type='text' class='form-control' name='pis'/>
-                        </div>
-                        <div class='form-group'>
-                            <label>CEP</label>
-                            <input type='text' class='form-control cep-mask' name='cep'/>
-                        </div>
-                        <div class='form-group'>
-                            <label>Estado</label>
-                            <input type='text' class='form-control' name='id_uf'/>
-                        </div>
-                        <div class='form-group'>
-                            <label>Cidade</label>
-                            <input type='text' class='form-control' name='cidade'/>
-                        </div>
-                        <div class='form-group'>
-                            <label>Endereço</label>
-                            <input type='text' class='form-control' name='endereco'/>
-                        </div>
-                        <div class='form-group'>
-                            <label>Bairro</label>
-                            <input type='text' class='form-control' name='bairro'/>
-                        </div>
-                        <div class='form-group'>
-                            <label>Pró-Labore (Deixe em branco caso não receba pró-labore)</label>
-                            <input type='text' class='form-control dinheiro-mask' name='socio[0][pro_labore]' value="{{Input::old('socio')[0]['pro_labore']}}"/>
-                        </div>
-                    </form>
-
-                
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar Janela</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    @stop
+@stop
