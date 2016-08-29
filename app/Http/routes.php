@@ -29,6 +29,12 @@ Route::post('/admin/imposto/{id_imposto}/instrucoes/cadastrar', ['as' => 'cadast
 Route::get('/admin/imposto/{id_imposto}/instrucoes/editar/{id_instrucao}', ['as' => 'editar-instrucao', 'uses' => 'InstrucaoController@edit','middleware'=>'admin']);
 Route::post('/admin/imposto/{id_imposto}/instrucoes/editar/{id_instrucao}', ['as' => 'editar-instrucao', 'uses' => 'InstrucaoController@update','middleware'=>'admin']);
 
+Route::get('/admin/imposto/{id_imposto}/informacoes-extras', ['as' => 'listar-informacao-extra', 'uses' => 'InformacaoExtraController@index','middleware'=>'admin']);
+Route::get('/admin/imposto/{id_imposto}/informacoes-extras/cadastrar', ['as' => 'cadastrar-informacao-extra', 'uses' => 'InformacaoExtraController@create','middleware'=>'admin']);
+Route::post('/admin/imposto/{id_imposto}/informacoes-extras/cadastrar', ['as' => 'cadastrar-informacao-extra', 'uses' => 'InformacaoExtraController@store','middleware'=>'admin']);
+Route::get('/admin/imposto/{id_imposto}/informacoes-extras/editar/{id_informacao_extra}', ['as' => 'editar-informacao-extra', 'uses' => 'InformacaoExtraController@edit','middleware'=>'admin']);
+Route::post('/admin/imposto/{id_imposto}/informacoes-extras/editar/{id_informacao_extra}', ['as' => 'editar-informacao-extra', 'uses' => 'InformacaoExtraController@update','middleware'=>'admin']);
+
 Route::get('/admin/simples-nacional/', ['as' => 'listar-simples-nacional', 'uses' => 'SimplesNacionalController@index','middleware'=>'admin']);
 Route::get('/admin/simples-nacional/cadastrar', ['as' => 'cadastrar-simples-nacional', 'uses' => 'SimplesNacionalController@create','middleware'=>'admin']);
 Route::post('/admin/simples-nacional/cadastrar', ['as' => 'cadastrar-simples-nacional', 'uses' => 'SimplesNacionalController@store','middleware'=>'admin']);

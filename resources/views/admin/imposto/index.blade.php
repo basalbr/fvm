@@ -14,7 +14,7 @@
         @foreach($impostos as $imposto)
         <tr>
             <td>{{$imposto->nome}}</td>
-            <td><a class="btn btn-info" href="{{route('listar-instrucao', ['id' => $imposto->id])}}">Instruções</a> <a class="btn btn-warning" href="{{route('editar-imposto', ['id' => $imposto->id])}}">Editar</a> <a class="btn btn-danger" href="{{$imposto->id}}">Remover</a></td>
+            <td><a class="btn btn-info" href="{{route('listar-instrucao', ['id' => $imposto->id])}}">Instruções</a> <a class="btn btn-primary" href="{{route('listar-informacao-extra', ['id' => $imposto->id])}}">Informações Extras</a> <a class="btn btn-warning" href="{{route('editar-imposto', ['id' => $imposto->id])}}">Editar</a> <a class="btn btn-danger" href="{{$imposto->id}}">Remover</a></td>
         </tr>
         @endforeach
         @else

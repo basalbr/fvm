@@ -55,4 +55,8 @@ class Imposto extends Model {
         return $this->hasMany('App\Instrucao', 'id_imposto', 'id');
     }
 
+    public function informacoes_extras() {
+        return $this->hasMany('App\InformacaoExtra', 'id_imposto', 'id');
+    }
+    
 }
