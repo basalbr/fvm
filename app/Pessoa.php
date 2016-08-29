@@ -5,7 +5,6 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
 
 class Pessoa extends Model {
 
@@ -14,23 +13,22 @@ class Pessoa extends Model {
     protected $rules = [
         'id_usuario' => 'required',
         'id_natureza_juridica' => 'required',
-        'cpf_cnpj' => 'required',
-        'inscricao_estadual' => 'required',
-        'inscricao_municipal' => 'required',
+        'cpf_cnpj' => 'required|unique:pessoa,cpf_cnpj',
+        'inscricao_estadual' => 'required|unique:pessoa,inscricao_estadual',
+        'inscricao_municipal' => 'required|unique:pessoa,inscricao_municipal',
         'iptu' => 'required',
-        'qtde_funcionarios' => 'required',
-        'email' => 'required',
-        'telefone' => 'required',
-        'responsavel' => 'required',
+        'qtde_funcionarios' => 'required|numeric',
         'tipo' => 'required',
         'endereco' => 'required',
         'bairro' => 'required',
         'cep' => 'required',
         'cidade' => 'required',
-        'estado' => 'required',
-        'cnaes' => 'required',
+        'numero' => 'numeric',
+        'id_uf' => 'required',
+        'codigo_acesso_simples_nacional' => 'numeric',
         'nome_fantasia' => 'required',
-        'razao_social' => 'required'
+        'razao_social' => 'required',
+        'id_tipo_tributacao' => 'required'
     ];
     protected $errors;
     protected $niceNames = ['descricao' => 'Descrição', 'representante' => 'Representante', 'qualificacao' => 'Qualificação'];
@@ -64,14 +62,22 @@ class Pessoa extends Model {
         'bairro',
         'cep',
         'cidade',
-        'estado',
-        'cnaes',
+        'id_uf',
+        'codigo_acesso_simples_nacional',
         'nome_fantasia',
-        'razao_social'
+        'razao_social',
+        'numero',
+        'codigo_acesso_simples_nacional',
+        'id_tipo_tributacao'
     ];
 
-    public function validate($data) {
+    public function validate($data, $update = false) {
         // make a new validator object
+        if($update){
+            $this->rules['cpf_cnpj'] = 'required|unique:pessoa,cpf_cnpj,'.$data['id'];
+            $this->rules['inscricao_municipal'] = 'required|unique:pessoa,inscricao_municipal,'.$data['id'];
+            $this->rules['inscricao_estadual'] = 'required|unique:pessoa,inscricao_estadual,'.$data['id'];
+        }
         $v = Validator::make($data, $this->rules);
         $v->setAttributeNames($this->niceNames);
         // check for failure

@@ -239,6 +239,10 @@
             <input type='text' class='form-control' name='socio[rg]' value="{{Input::old('socio')['rg']}}"/>
         </div>
         <div class='form-group'>
+            <label>Código de Acesso do Simples Nacional (<a href="">Clique aqui caso não possua um</a>)</label>
+            <input type='text' class='form-control' name='codigo_acesso_simples_nacional' value="{{Input::old('codigo_acesso_simples_nacional')}}"/>
+        </div>
+        <div class='form-group'>
             <label>Órgão Expedidor do RG (Ex: SSP/SC)</label>
             <input type='text' class='form-control' name='socio[orgao_expedidor]' value="{{Input::old('socio')['orgao_expedidor']}}"/>
         </div>
