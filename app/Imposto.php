@@ -10,6 +10,23 @@ class Imposto extends Model {
 
     use SoftDeletes;
 
+    private static $arr_meses = array(
+        'Janeiro',
+        'Fevereiro',
+        'Março',
+        'Abril',
+        'Maio',
+        'Junho',
+        'Julho',
+        'Agosto',
+        'Setembro',
+        'Outubro',
+        'Novembro',
+        'Dezembro'
+    );
+
+   
+
     protected $rules = ['nome' => 'required', 'vencimento' => 'required|integer', 'antecipa_posterga' => 'required', 'recebe_documento' => 'required'];
     protected $errors;
     protected $niceNames = ['nome' => 'Nome', 'vencimento' => 'Dia do Vencimento', 'antecipa_posterga' => 'Antecipa ou posterga', 'recebe_documento' => 'Receber documentos'];
@@ -57,6 +74,28 @@ class Imposto extends Model {
 
     public function informacoes_extras() {
         return $this->hasMany('App\InformacaoExtra', 'id_imposto', 'id');
+    }
+
+     public function corrigeData($date) {
+        $retDate = new \DateTime($date);
+        $weekDay = date('w', strtotime($date));
+        if ($this->antecipa_posterga == 'posterga') {
+            if ($weekDay == 0) {
+                $retDate->add(new \DateInterval('P1D'));
+            }
+            if ($weekDay == 6) {
+                $retDate->add(new \DateInterval('P2D'));
+            }
+        }
+        if ($this->antecipa_posterga == 'antecipa') {
+            if ($weekDay == 0) {
+                $retDate->sub(new \DateInterval('P2D'));
+            }
+            if ($weekDay == 6) {
+                $retDate->sub(new \DateInterval('P1D'));
+            }
+        }
+        return $retDate->format('d-m-Y');
     }
     
 }

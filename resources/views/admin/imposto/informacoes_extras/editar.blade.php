@@ -1,60 +1,84 @@
-@extends('layouts.master')
-@section('header_title', 'Home')
-@section('js')
-@parent
-<script type="text/javascript" src="{{url('public/ckeditor/ckeditor.js')}}"></script>
-<script type="text/javascript" src="{{url('public/ckfinder/ckfinder.js')}}"></script>
-<script type="text/javascript">
-$(document).ready(function () {
-    //CKFinder.setupCKEditor();
-    CKEDITOR.editorConfig = function( config ) {
-	// Define changes to default configuration here. For example:
-	// config.language = 'fr';
-	// config.uiColor = '#AADC6E';
-	 config.filebrowserBrowseUrl = '{{url("public/kcfinder/browse.php?opener=ckeditor&type=files")}}';
-   config.filebrowserImageBrowseUrl =  '{{url("public/kcfinder/browse.php?opener=ckeditor&type=images")}}';
-   config.filebrowserFlashBrowseUrl = '{{url("public/kcfinder/browse.php?opener=ckeditor&type=flash")}}';
-   config.filebrowserUploadUrl = '{{url("public/kcfinder/upload.php?opener=ckeditor&type=files")}}';
-   config.filebrowserImageUploadUrl = '{{url("public/kcfinder/upload.php?opener=ckeditor&type=images")}}';
-   config.filebrowserFlashUploadUrl = '{{url("public/kcfinder/upload.php?opener=ckeditor&type=flash")}}';
-   config.contentsCss = '{{url("public/css/custom.css")}}'
-};
-    CKEDITOR.replace('ckeditor');
-});
-</script>
-@stop
-@section('content')
-<section id='page-header' style="margin-top: 55px" class="page-header">
-    <div class='container'>
-        <h1>Editar Instrução</h1>
-    </div>
-</section>
-<section>
-    <div class="container">
+@extends('layouts.admin')
 
-        @if($errors->has())
-        <div class="alert alert-warning shake">
-            <b>Atenção</b><br />
-            @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-            @endforeach
-        </div>
-        @endif
-        <form method="POST" action="">
-            {{ csrf_field() }}
-            <div class='form-group'>
-                <label>Ordem</label>
-                <input type='text' class='form-control' name='ordem' value="{{$instrucao->ordem}}"/>
-            </div>
-            <div class='form-group'>
-                <label>Descrição</label>
-                <textarea id='ckeditor'class='form-control' name='descricao'>{{$instrucao->descricao}}</textarea>
-            </div>
-            <div class='form-group'>
-                <input type='submit' value="Salvar alterações" class='btn btn-primary' />
-            </div>
-        </form>
-    </div>
+@section('main')
+<h1>Cadastrar Informação Extra</h1>
+<hr class="dash-title">
+
+@if($errors->has())
+<div class="alert alert-warning shake">
+    <b>Atenção</b><br />
+    @foreach ($errors->all() as $error)
+    {{ $error }}<br />
+    @endforeach
 </div>
-</section>
+@endif
+<form method="POST" action="">
+    {{ csrf_field() }}
+    <input type='hidden' class='form-control' name='tipo' value="{{$informacao_extra->tipo}}"/>
+    <div class='form-group'>
+        <label>Tipo</label>
+        <input type='text' class='form-control' disabled="" value="{{$informacao_extra->tipo_formatado()}}"/>
+    </div>
+    <div class='form-group'>
+        <label>Nome</label>
+        <input type='text' class='form-control' name='nome' value="{{$informacao_extra->nome}}"/>
+    </div>
+    <div class='form-group'>
+        <label>Descrição</label>
+        <textarea class='form-control' name='descricao'>{{$informacao_extra->descricao}}</textarea>
+    </div>
+    @if($informacao_extra->tipo == 'anexo')
+    <div class='form-group'>
+        <label>Tamanho Máximo do Arquivo (KBs)</label>
+        <input type='text'  class='form-control' name='tamanho_maximo' max="9999" value="{{$informacao_extra->tamanho_maximo}}"/>
+    </div>
+    <div class='form-group'>
+        <label>Selecione as extensões permitidas</label>
+        <br />
+        <label>
+            <input type='checkbox' name='extensao[]' {{count($informacao_extra->extensoes()->where('extensao','=','doc')->first())>0 ? 'checked="checked"' : ''}} value="doc"/> DOC
+        </label>
+        <label>
+            <input  type='checkbox' name='extensao[]' {{count($informacao_extra->extensoes()->where('extensao','=','docx')->first())>0 ? 'checked="checked"' : ''}} value="docx"/> DOCX
+        </label>
+        <label>
+            <input  type='checkbox' name='extensao[]' {{count($informacao_extra->extensoes()->where('extensao','=','gif')->first())>0 ? 'checked="checked"' : ''}} value="gif"/> GIF
+        </label>
+        <label>
+            <input type='checkbox' name='extensao[]' {{count($informacao_extra->extensoes()->where('extensao','=','jpg')->first())>0 ? 'checked="checked"' : ''}} value="jpg"/> JPG
+        </label>
+        <label>
+            <input  type='checkbox' name='extensao[]' {{count($informacao_extra->extensoes()->where('extensao','=','pdf')->first())>0 ? 'checked="checked"' : ''}} value="pdf"/> PDF
+        </label>
+        <label>
+            <input  type='checkbox' name='extensao[]' {{count($informacao_extra->extensoes()->where('extensao','=','png')->first())>0 ? 'checked="checked"' : ''}} value="png"/> PNG
+        </label>
+        <label>
+            <input  type='checkbox' name='extensao[]' {{count($informacao_extra->extensoes()->where('extensao','=','txt')->first())>0 ? 'checked="checked"' : ''}} value="txt"/> TXT
+        </label>
+        <label>
+            <input  type='checkbox' name='extensao[]' {{count($informacao_extra->extensoes()->where('extensao','=','xls')->first())>0 ? 'checked="checked"' : ''}} value="xls"/> XLS
+        </label>
+        <label>
+            <input  type='checkbox' name='extensao[]' {{count($informacao_extra->extensoes()->where('extensao','=','xlsx')->first())>0 ? 'checked="checked"' : ''}} value="xlsx"/> XLSX
+        </label>
+        <label>
+            <input  type='checkbox' name='extensao[]' {{count($informacao_extra->extensoes()->where('extensao','=','xml')->first())>0 ? 'checked="checked"' : ''}} value="xml"/> XML
+        </label>
+    </div>
+    @endif
+    @if($informacao_extra->tipo == 'dado_integrado')
+    <div class='form-group'>
+        <label>Tabela</label>
+        <input type='text'  class='form-control' name='tabela' value="{{$informacao_extra->tabela}}"/>
+    </div>
+    <div class='form-group'>
+        <label>Campo</label>
+        <input type='text'  class='form-control' name='campo' value="{{$informacao_extra->campo}}"/>
+    </div>
+    @endif
+    <div class='form-group'>
+        <input type='submit' value="Salvar" class='btn btn-primary' />
+    </div>
+</form>
 @stop

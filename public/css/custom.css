@@ -831,6 +831,8 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
     text-transform: uppercase;
     font-size: 12px;
     height: 34px;
+    padding: 8px 15px!important;
+    letter-spacing: 0.02em; 
 }
 
 .table>tbody>tr>td{

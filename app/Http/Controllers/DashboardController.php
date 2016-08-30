@@ -8,10 +8,24 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
 class DashboardController extends Controller {
-   
+
     public function index() {
-        $params = $this->getParams();
-        return view('dashboard.index', ['params' => $params]);
+        $meses = array(
+            '01' => 'Janeiro',
+            '02' => 'Fevereiro',
+            '03' => 'Março',
+            '04' => 'Abril',
+            '05' => 'Maio',
+            '06' => 'Junho',
+            '07' => 'Julho',
+            '08' => 'Agosto',
+            '09' => 'Setembro',
+            '10' => 'Outubro',
+            '11' => 'Novembro',
+            '12' => 'Dezembro'
+        );
+        $impostos = \App\Imposto::all();
+        return view('dashboard.index', ['meses'=>$meses, 'impostos'=>$impostos]);
     }
 
     public function acessar() {
@@ -59,7 +73,7 @@ class DashboardController extends Controller {
 
     public function consulta($cnpj, $cpf, $codigo, $captcha, $stringCookie, $viewState, $eventValidation) {
         $jar = new \GuzzleHttp\Cookie\CookieJar;
-        $requisicao = new Client(['cookies'=>true]);
+        $requisicao = new Client(['cookies' => true]);
         $param = [
             'form_params' => [
                 '__VIEWSTATE' => $viewState,
@@ -76,14 +90,14 @@ class DashboardController extends Controller {
                 'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
                 'Accept-Encoding' => 'gzip, deflate',
                 'Accept-Language' => 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4',
-                'Cache-Control'=>'max-age=0',
+                'Cache-Control' => 'max-age=0',
                 'Connection' => 'keep-alive',
                 'Content-type' => 'application/x-www-form-urlencoded',
                 'Cookie' => $stringCookie,
                 'Host' => 'www8.receita.fazenda.gov.br',
-                'Origin'=> 'http://www8.receita.fazenda.gov.br',
+                'Origin' => 'http://www8.receita.fazenda.gov.br',
                 'Referer' => 'http://www8.receita.fazenda.gov.br/SimplesNacional/controleAcesso/Autentica.aspx?id=6',
-                'Upgrade-Insecure-Requests'=>'1',
+                'Upgrade-Insecure-Requests' => '1',
                 'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36',
             ],
             'timeout' => 20, // Response timeout

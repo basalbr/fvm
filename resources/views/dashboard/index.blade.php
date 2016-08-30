@@ -1,51 +1,56 @@
 @extends('layouts.dashboard')
 @section('js')
 @parent
-<script type="text/javascript">
-    $(function () {
-       $("#iframe").load(function() {
-        $("#mItem11")[0].click()
-        console.log('a')
-    });
-
-        $('#teste').on('submit', function (e) {
-            e.preventDefault();
-            $.post('{{route("ajax-simples")}}',
-                    {
-                        cnpj: $("[name='ctl00$ContentPlaceHolder$txtCNPJ']").val(),
-                        cpf: $("[name='ctl00$ContentPlaceHolder$txtCPFResponsavel']").val(),
-                        codigoAcesso: $("[name='ctl00$ContentPlaceHolder$txtCodigoAcesso']").val(),
-                        cookie: $("[name='cookie']").val(),
-                        viewState: $("[name='viewState']").val(),
-                        input_captcha: $("[name='txtTexto_captcha']").val(),
-                        eventValidation: $("[name='eventValidation']").val()
-                    },
-                    function (data) {
-//                        $("#darf").html(data);
-                    });
-        });
-    });
-</script>
 @stop
 @section('main')
 <h1>Início</h1>
-<iframe id="iframe" width="800" height="800" src='http://www8.receita.fazenda.gov.br/SimplesNacional/controleAcesso/Autentica.aspx?id=6#form-login'></iframe>
-<form id="teste">
-    CNPJ:<input name="ctl00$ContentPlaceHolder$txtCNPJ" value="72477912000160" /><br />
-    CPF:<input name="ctl00$ContentPlaceHolder$txtCPFResponsavel" value="53434528920"/><br />
-    Código Acesso:<input name="ctl00$ContentPlaceHolder$txtCodigoAcesso" value="553522778563"/><br />
-    Captcha:<input name="txtTexto_captcha" /><br />
-    <input type="hidden" name="cookie" value="{{$params['cookie']}}" />
-    <input type="hidden" name="viewState" value="{{$params['viewState']}}"/>
-    <input type="hidden" name="eventValidation" value="{{$params['eventValidation']}}"/>
-    <input type="submit" value="Continuar" name="ctl00$ContentPlaceHolder$btContinuar" /><br />
-</form>
-<img id="captcha-img" alt="Imagem captcha" src="{{$params['captchaBase64']}}" />
-<div id="darf"></div>
 <hr class="dash-title">
-<div class="col-lg-7 col-md-12"><div class="hidden-lg">Olá, no calendário abaixo se encontram os impostos que você deve pagar para suas empresa.<br /> Para verificar como pagar, clique no imposto desejado.</div><br /><div id="calendar"></div></div>
-<div class="col-lg-5 col-md-12" id="instrucao"><div class="visible-lg">Olá, no calendário ao lado se encontram os impostos que você deve pagar para suas empresas.<br /> Para verificar como pagar, clique no imposto desejado.</div></div>
-
+@if(Auth::user()->pessoas()->count())
+<p>Selecione uma empresa abaixo para ver os impostos e os processos.</p>
+<ul role="presentation" class="nav nav-tabs" role="tablist">
+    @foreach(Auth::user()->pessoas()->get() as $k => $empresa)
+    <li role="tab" data-toggle="tab" aria-controls="{{$empresa->cnpj}}" class="{{$k==0 ? "active" : ''}}"><a href="#">{{$empresa->nome_fantasia}}</a></li>
+    @endforeach
+</ul>
+<div class="tab-content">
+    @foreach(Auth::user()->pessoas()->get() as $k => $empresa)
+    <div role="tabpanel" class="tab-pane fade in  {{$k==0?'active':''}}" id="{{$empresa->cnpj}}">
+        <div class="col-xs-6">
+            <p>Impostos com vencimento em <b>{{$meses[date('m')].'/'.date('Y')}}. <a href="">Mudar Data</a></b></p>
+               <ul class="list-group">
+            @if ($impostos->count()) 
+            @foreach ($impostos as $imposto) 
+                @if ($imposto->meses()->where('mes','=',((date('m')))-1)->get()->count())
+                <li class="list-group-item"><a href=''>{{$imposto->nome}} - Vencimento: {{$imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento)}}</a></li>
+                @endif
+            @endforeach
+        @endif
+               </ul>
+        </div>
+        <div class="col-xs-6">
+            <p>Processos em aberto</p>
+            <ul class="list-group">
+                @if($empresa->processos()->count())
+                @foreach($empresa->processos()->get() as $processo)
+                <li class="list-group-item">
+                    {{$processo->imposto->nome}} - {{$processo->competência}}
+                </li>
+                @endforeach
+                @else
+                <li class="list-group-item">
+                    Nenhum processo em aberto para essa empresa
+                </li>
+                @endif
+            </ul>
+        </div>
+    </div>
+    @endforeach
+</div>
+@else
+<div class="col-xs-6">
+    <p>É necessário cadastrar uma empresa</p>
+</div>
+@endif
 @stop
 @section('header_title', 'Início')
 <!--@section('content')-->

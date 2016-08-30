@@ -6,25 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
 
-class InformacaoExtraExtensao extends Model {
+class Processo extends Model {
 
+    use SoftDeletes;
 
-    protected $rules = ['id_informacao_extra' => 'required', 'extensao' => 'required'];
+    protected $rules = ['id_pessoa' => 'required', 'competencia'=>'required', 'id_imposto'];
     protected $errors;
-    protected $niceNames = ['extensao' => 'Extensão'];
+    protected $niceNames = ['competencia' => 'Competência'];
+
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'informacao_extra_extensao';
+    protected $table = 'processo';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['id_informacao_extra', 'extensao'];
+    protected $fillable = ['id_pessoa', 'competencia', 'id_imposto'];
 
     public function validate($data) {
         // make a new validator object
@@ -44,9 +46,14 @@ class InformacaoExtraExtensao extends Model {
     public function errors() {
         return $this->errors;
     }
-
-    public function extensoes() {
-        return $this->belongsTo('App\InformacaoExtra', 'id_informacao_extra','id');
+    
+    public function processo_respostas(){
+        return $this->hasMany('App\ProcessoResposta', 'id_processo');
+    }
+    
+    public function imposto()
+    {
+        return $this->belongsTo('App\Imposto','id_imposto');
     }
 
 }

@@ -110,6 +110,10 @@ class Pessoa extends Model {
         return $this->hasMany('App\PessoaCnae', 'id_pessoa');
     }
 
+    public function processos() {
+        return $this->hasMany('App\Processo', 'id_pessoa');
+    }
+    
     public function usuario() {
         return $this->belongsTo('App\Usuario', 'id_usuario');
     }

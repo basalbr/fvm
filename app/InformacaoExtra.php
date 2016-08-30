@@ -10,9 +10,9 @@ class InformacaoExtra extends Model {
 
     use SoftDeletes;
 
-    protected $rules = ['tipo' => 'required', 'nome' => 'required','tamanho_maximo' => 'required|integer', 'id_imposto'=>'required'];
+    protected $rules = ['tipo' => 'required', 'nome' => 'required','tamanho_maximo' => 'integer', 'id_imposto'=>'required'];
     protected $errors;
-    protected $niceNames = ['descricao' => 'Descrição', 'tamanho_maximo' => 'Tamanho Máximo', 'nome'=>'Nome', 'tabela'=>'Tabela', 'campo'=>'Campo'];
+    protected $niceNames = ['descricao' => 'Descrição', 'tamanho_maximo' => 'Tamanho Máximo', 'nome'=>'Nome', 'tabela'=>'Tabela', 'campo'=>'Campo', 'tipo'=>'Tipo'];
     /**
      * The database table used by the model.
      *
@@ -48,6 +48,18 @@ class InformacaoExtra extends Model {
 
     public function extensoes() {
         return $this->hasMany('App\InformacaoExtraExtensao', 'id_informacao_extra','id');
+    }
+    
+    public function tipo_formatado(){
+        if($this->tipo == 'dado_integrado'){
+            return 'Dado Integrado';
+        }
+        if($this->tipo == 'anexo'){
+            return 'Anexo';
+        }
+        if($this->tipo == 'informacao_extra'){
+            return 'Informação Extra';
+        }
     }
 
 }
