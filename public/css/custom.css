@@ -890,3 +890,89 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
 select.form-control{
     padding-left: 8px;
 }
+
+ul.lista-impostos{
+    margin-top: 5px;
+}
+
+ul.lista-impostos li, ul.lista-processos li{
+    border-radius: 0px!important;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    margin-bottom: 3px;
+    cursor: pointer;
+}
+
+ul.lista-impostos li{
+    background-color: #fff2e6;
+    border: 2px solid #ffd9b3;
+}
+ul.lista-impostos li i{
+    font-size: 16px;
+}
+ul.lista-impostos li a{
+    color: #2C2F3B;
+}
+
+ul.lista-impostos li a, ul.lista-processos li a:hover{
+    text-decoration: none;
+}
+
+p .fa.fa-dollar{
+    background-color: #ffcc66;
+    height: 30px;
+    width: 30px;
+    border-radius: 30px;
+    line-height: 28px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    box-shadow: inset 2px 2px 5px #ffb31a;
+}
+
+p .fa.fa-file-o{
+    background-color: #80bfff;
+    height: 30px;
+    width: 30px;
+    border-radius: 30px;
+    line-height: 28px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    box-shadow: inset 2px 2px 5px #4da6ff;
+}
+
+ul.lista-impostos li:hover{
+    background-color: #ffe6cc
+}
+
+.tab-content{
+    background-color: #66ffff;
+    box-shadow: 1px 2px 3px rgba(0,0,0,.25);
+    z-index:2;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: #555;
+    cursor: default;
+    background-color: #66ffff;
+    border: transparent;
+    border-bottom-color: transparent;
+    font-size: 17px;
+    font-weight: bold;
+
+}
+
+.nav-tabs{
+    z-index:1;
+    border: transparent;
+}
+
+.dash-info{
+    border: 2px solid #00e6e6;
+    background-color: #fff;
+    margin: 10px 0;
+    font-size: 16px;
+    padding: 5px;
+}

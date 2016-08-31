@@ -76,7 +76,7 @@ class Imposto extends Model {
         return $this->hasMany('App\InformacaoExtra', 'id_imposto', 'id');
     }
 
-     public function corrigeData($date) {
+     public function corrigeData($date, $format) {
         $retDate = new \DateTime($date);
         $weekDay = date('w', strtotime($date));
         if ($this->antecipa_posterga == 'posterga') {
@@ -95,7 +95,7 @@ class Imposto extends Model {
                 $retDate->sub(new \DateInterval('P1D'));
             }
         }
-        return $retDate->format('d-m-Y');
+        return $retDate->format($format);
     }
     
 }

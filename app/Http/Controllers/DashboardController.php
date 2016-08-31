@@ -24,7 +24,7 @@ class DashboardController extends Controller {
             '11' => 'Novembro',
             '12' => 'Dezembro'
         );
-        $impostos = \App\Imposto::all();
+        $impostos = \App\Imposto::orderBy('vencimento')->get();
         return view('dashboard.index', ['meses'=>$meses, 'impostos'=>$impostos]);
     }
 

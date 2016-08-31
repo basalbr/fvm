@@ -79,6 +79,8 @@ Route::get('/acessar', ['as' => 'acessar', 'uses' => 'HomeController@acessar','m
 Route::post('/acessar', ['as' => 'acessar', 'uses' => 'HomeController@checkEmail']);
 //Route::get('/register', ['as' => 'register', 'uses' => 'HomeController@register']);
 
+Route::post('/processos/cadastrar', ['as' => 'criar-processo', 'uses' => 'ProcessoController@store','middleware'=>'auth']);
+Route::post('/processos/cadastrar', ['as' => 'abrir-processo', 'uses' => 'ProcessoController@create','middleware'=>'auth']);
 
 // Empresa routes...
 Route::get('/empresas', ['as' => 'empresas', 'uses' => 'EmpresaController@index','middleware'=>'auth']);
