@@ -22,7 +22,7 @@ return array(
     'CreateIrrfTable' => $baseDir . '/database/migrations/2016_08_16_152801_create_irrf_table.php',
     'CreateNaturezaJuridicaTable' => $baseDir . '/database/migrations/2015_12_14_085031_create_natureza_juridica_table.php',
     'CreateNoticiaTable' => $baseDir . '/database/migrations/2016_08_29_160318_create_noticia_table.php',
-    'CreateNoticiaTagsTable' => $baseDir . '/database/migrations/2016_08_29_160337_create_noticia_tags_table.php',
+    'CreateNoticiaTagTable' => $baseDir . '/database/migrations/2016_08_29_160337_create_noticia_tag_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
     'CreatePessoaCnaeTable' => $baseDir . '/database/migrations/2015_12_14_085434_create_pessoa_cnae_table.php',
     'CreatePessoaTable' => $baseDir . '/database/migrations/2015_12_14_085414_create_pessoa_table.php',

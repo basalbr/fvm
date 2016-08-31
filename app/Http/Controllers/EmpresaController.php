@@ -29,11 +29,13 @@ class EmpresaController extends Controller {
                 }
             }
         }
+        
+        //atencao, arrumar telefone!!!!!!!!!!!!!!!!!!!!
         $request->merge([
             'id_tipo_tributacao' => 1,
-            'cpf_cnpj' => intval(preg_replace('/[^0-9]+/', '', $request->get('cpf_cnpj')), 10),
-            'cep' => intval(preg_replace('/[^0-9]+/', '', $request->get('cep')), 10),
-            'telefone' => intval(preg_replace('/[^0-9]+/', '', $request->get('telefone')), 10),
+            'cpf_cnpj' => str_replace (['.','-','/'],['','',''],$request->get('cpf_cnpj')),
+            'cep' => str_replace (['.','-','/'],['','',''],$request->get('cep')),
+            'telefone' => '123456',
         ]);
         if ($empresa->validate($request->except('_token'))) {
 

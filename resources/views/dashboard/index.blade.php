@@ -16,12 +16,12 @@
     @foreach(Auth::user()->pessoas()->get() as $k => $empresa)
     <div role="tabpanel" class="tab-pane fade in  {{$k==0?'active':''}}" id="{{$empresa->cnpj}}">
         <div class="col-xs-6">
-            <p>Impostos com vencimento em <b>{{$meses[date('m')].'/'.date('Y')}}. <a href="">Mudar Data</a></b></p>
+            <p>Obrigações com vencimento em <b>{{$meses[date('m')].'/'.date('Y')}}. <a href="">Mudar Data</a></b></p>
                <ul class="list-group">
             @if ($impostos->count()) 
             @foreach ($impostos as $imposto) 
                 @if ($imposto->meses()->where('mes','=',((date('m')))-1)->get()->count())
-                <li class="list-group-item"><a href=''>{{$imposto->nome}} - Vencimento: {{$imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento)}}</a></li>
+                <li class="list-group-item"><a href=''>Dia: {{$imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento, 'd')}} - {{$imposto->nome}}</a></li>
                 @endif
             @endforeach
         @endif
