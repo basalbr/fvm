@@ -8,6 +8,9 @@
         <li class='{{Request::is('empresas*') ? "active" : ""}}'>
             <a href="{{route('empresas')}}"><div class="icon"><span class="fa fa-building"></div>Empresas</a>
         </li>
+        <li class='{{Request::is('processos*') ? "active" : ""}}'>
+            <a href="{{route('listar-processos')}}"><div class="icon"><span class="fa fa-file"></div>processos</a>
+        </li>
         <li class='{{Request::is('chamados*') ? "active" : ""}}'>
             <a href="{{route('listar-chamados-usuario')}}"><div class="icon"><span class="fa fa-envelope"></div>Chamados</a>
         </li>

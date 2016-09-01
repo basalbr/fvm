@@ -3,13 +3,7 @@
 @parent
 <script type="text/javascript">
     $(function () {
-        $(".lista-impostos").on('click', 'li', function () {
-            $("input[name='id_imposto']").val($(this).data('id-imposto'));
-            $("input[name='competencia']").val($(this).data('competencia'));
-            $("input[name='vencimento']").val($(this).data('vencimento'));
-            $("input[name='c']").val($(this).data('vencimento'));
-            $("#processo-form").submit();
-        });
+       
     });
 </script>
 @stop
@@ -30,7 +24,7 @@
             <p class='dash-info'><span class='fa fa-dollar'></span> Obrigações com vencimento em <b>{{$meses[date('m')].'/'.date('Y')}}</b>. Clique em uma das obrigações para abrir um processo de apuração.</p>
             <a class='btn btn-primary' href="">Mudar Data</a>
             <hr>
-            <form method="POST" action="{{route('abrir-processo')}}" id="processo-form">
+            <form method="GET" action="{{route('abrir-processo')}}" id="processo-form">
                 {{csrf_field()}}
                 <input type="hidden" name="competencia">
                 <input type="hidden" name="id_imposto">
@@ -40,7 +34,10 @@
                     @if ($impostos->count()) 
                     @foreach ($impostos as $imposto) 
                     @if ($imposto->meses()->where('mes','=',((date('m')))-1)->get()->count())
-                    <li class="list-group-item" data-id-imposto="{{$imposto->id}}" data-competencia="{{(date('m')-1).'/'.date('Y')}}" data-vencimento="{{$imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento, 'd/m/Y')}}"><b>Dia {{$imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento, 'd')}}</b> - <i>{{$imposto->nome}}</i></li>
+                    
+                    <li class="list-group-item" >
+                        <a class="btn-block" href="{{route('abrir-processo',['competencia'=>(date('m')-1).'-'.date('Y'), 'id_imposto'=>$imposto->id, 'cnpj'=>$empresa->cpf_cnpj,'vencimento'=>$imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento, 'd-m-Y')])}}"><b>Dia {{$imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento, 'd')}}</b> - <i>{{$imposto->nome}}</i></a>
+                    </li>
                     @endif
                     @endforeach
                     @endif

@@ -1,23 +1,29 @@
 @extends('layouts.dashboard')
-@section('header_title', 'Chamados')
+@section('header_title', 'Processos')
 @section('main')
-<h1>Chamados</h1>
+<h1>Processos</h1>
 <hr class="dash-title">
 <table class='table'>
     <thead>
         <tr>
-            <th>Data</th>
-            <th>Título</th>
+            <th>Empresa</th>
+            <th>Imposto</th>
+            <th>Competência</th>
+            <th>Aberto em</th>
+            <th>Status</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @if($chamados->count())
-        @foreach($chamados as $chamado)
+        @if($processos->count())
+        @foreach($processos as $processo)
         <tr>
-            <td>{{$chamado->updated_at}}</td>
-            <td>{{$chamado->titulo}}</td>
-            <td><a href="{{route('responder-chamado-usuario', ['id' => $chamado->id])}}">Responder</a></td>
+            <td>{{$processo->pessoa->nome_fantasia}}</td>
+            <td>{{$processo->imposto->nome}}</td>
+            <td>{{$processo->competencia}}</td>
+            <td>{{$processo->created_at}}</td>
+            <td>{{$processo->status}}</td>
+            <td><a href="{{route('responder-processo-usuario', ['id' => $processo->id])}}">Responder</a></td>
         </tr>
         @endforeach
         @else
@@ -27,6 +33,5 @@
         @endif
     </tbody>
 </table>
-<a class='btn btn-primary' href='{{route('cadastrar-chamado')}}'>Abrir chamado</a><br />
 
 @stop

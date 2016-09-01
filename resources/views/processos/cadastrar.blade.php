@@ -12,7 +12,7 @@
     @endforeach
 </div>
 @endif
-<form method="POST" action="" enctype="multipart/form-data">
+<form method="POST" action="{{route('criar-processo')}}" enctype="multipart/form-data">
     {{ csrf_field() }}
     <div class='form-group'>
         <label>Empresa</label>
@@ -55,7 +55,7 @@
         @endif
         <p>Tamanho máximo: {{$informacao_extra->tamanho_maximo}}KBs<br />Extensões válidas: @foreach($informacao_extra->extensoes as $extensao) {!!'<span class="label label-primary">'.$extensao->extensao.'</span>'!!} @endforeach</p>
         <div class='input-group col-md-12'>
-            <input type='file' class='form-control' required="" value="" name='anexo[{{$informacao_extra->id}}]'/>
+            <input type='file' class='form-control' value="" name='anexo[{{$informacao_extra->id}}]'/>
         </div>
     </div>
     @endif
@@ -66,14 +66,14 @@
         <p><i>{{$informacao_extra->descricao}}</i></p>
         @endif
         <div class='input-group col-md-12'>
-            <input type='text' class='form-control' name="informacao_adicional[{{$informacao_extra->id}}]"/>
+            <input type='text' class='form-control'  name="informacao_adicional[{{$informacao_extra->id}}]"/>
         </div>
     </div>
     @endif
     @endforeach
     @endif
     <input type='hidden' name="id_imposto" value="{{$imposto->id}}" class='form-control'/>
-    <input type='hidden' name="id_pessoa" value="{{$competencia}}" class='form-control'/>
+    <input type='hidden' name="id_pessoa" value="{{$empresa->id}}" class='form-control'/>
     <input type='hidden' name="competencia" value="{{$competencia}}" class='form-control'/>
     <input type='hidden' name="vencimento" value="{{$vencimento}}" class='form-control'/>
     <div class='form-group'>

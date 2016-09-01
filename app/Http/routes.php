@@ -73,14 +73,17 @@ Route::get('/dashboard', ['as' => 'dashboard', 'uses' => 'DashboardController@in
 Route::get('/chamados', ['as' => 'listar-chamados-usuario', 'uses' => 'ChamadosController@indexUsuario','middleware'=>'auth']);
 Route::get('/chamados/cadastrar', ['as' => 'cadastrar-chamado', 'uses' => 'ChamadosController@create','middleware'=>'auth']);
 Route::post('/chamados/cadastrar', ['uses' => 'ChamadosController@store','middleware'=>'auth']);
-Route::get('/chamados/responder/{id}', ['as' => 'responder-chamado-usuario', 'uses' => 'ChamadosController@edit','middleware'=>'admin']);
-Route::post('/chamados/responder/{id}', ['as' => 'responder-chamado-usuario', 'uses' => 'ChamadosController@update','middleware'=>'admin']);
+Route::get('/chamados/responder/{id}', ['as' => 'responder-chamado-usuario', 'uses' => 'ChamadosController@edit','middleware'=>'auth']);
+Route::post('/chamados/responder/{id}', ['as' => 'responder-chamado-usuario', 'uses' => 'ChamadosController@update','middleware'=>'auth']);
 Route::get('/acessar', ['as' => 'acessar', 'uses' => 'HomeController@acessar','middleware'=>'guest']);
 Route::post('/acessar', ['as' => 'acessar', 'uses' => 'HomeController@checkEmail']);
 //Route::get('/register', ['as' => 'register', 'uses' => 'HomeController@register']);
 
+Route::get('/processos', ['as' => 'listar-processos', 'uses' => 'ProcessoController@indexUsuario','middleware'=>'auth']);
+Route::get('/processos/abrir/{competencia}/{id_imposto}/{cnpj}/{vencimento}', ['as' => 'abrir-processo', 'uses' => 'ProcessoController@create','middleware'=>'auth'])->where('cnpj', '(.*)');
 Route::post('/processos/cadastrar', ['as' => 'criar-processo', 'uses' => 'ProcessoController@store','middleware'=>'auth']);
-Route::post('/processos/cadastrar', ['as' => 'abrir-processo', 'uses' => 'ProcessoController@create','middleware'=>'auth']);
+Route::get('/processos/responder/{id}', ['as' => 'responder-processo-usuario', 'uses' => 'ProcessoController@edit','middleware'=>'auth']);
+Route::post('/processos/responder/{id}', ['as' => 'responder-processo-usuario', 'uses' => 'ProcessoController@update','middleware'=>'auth']);
 
 // Empresa routes...
 Route::get('/empresas', ['as' => 'empresas', 'uses' => 'EmpresaController@index','middleware'=>'auth']);

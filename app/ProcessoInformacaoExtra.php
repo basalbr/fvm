@@ -6,27 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
 
-class Processo extends Model {
+class ProcessoInformacaoExtra extends Model {
 
     use SoftDeletes;
 
-    protected $rules = ['id_pessoa' => 'required', 'competencia'=>'required', 'id_imposto'=>'required', 'vencimento'=>'required|date'];
+    protected $rules = ['id_processo' => 'required', 'id_informacao_extra'=>'required', 'informacao'=>'required'];
     protected $errors;
-    protected $niceNames = ['competencia' => 'Competência'];
+    protected $niceNames = ['informacao' => 'Informação'];
 
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'processo';
+    protected $table = 'processo_informacao_extra';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['id_pessoa', 'competencia', 'id_imposto', 'vencimento','status'];
+    protected $fillable = ['id_processo', 'id_informacao_extra', 'informacao'];
 
     public function validate($data) {
         // make a new validator object
@@ -47,18 +47,13 @@ class Processo extends Model {
         return $this->errors;
     }
     
-    public function processo_respostas(){
-        return $this->hasMany('App\ProcessoResposta', 'id_processo');
+    public function processo(){
+        return $this->belongsTo('App\Processo', 'id_processo');
     }
     
-    public function imposto()
+    public function informacao_extra()
     {
-        return $this->belongsTo('App\Imposto','id_imposto');
+        return $this->belongsTo('App\InformacaoExtra','id_informacao_extra');
     }
 
-     public function pessoa()
-    {
-        return $this->belongsTo('App\Pessoa','id_pessoa');
-    }
-    
 }
