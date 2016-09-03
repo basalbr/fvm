@@ -23,6 +23,9 @@
         <li class='{{Request::is('admin/plano*') ? "active" : ""}}'>
             <a href="{{route('listar-plano')}}"><div class="icon"><span class="fa fa-shopping-cart"></div>Planos</a>
         </li>
+        <li class='{{Request::is('admin/processos*') ? "active" : ""}}'>
+            <a href="{{route('listar-processos-admin')}}"><div class="icon"><span class="fa fa-file"></div>processos</a>
+        </li>
         <li class='{{Request::is('admin/simples-nacional*') ? "active" : ""}}'>
             <a href="{{route('listar-simples-nacional')}}"><div class="icon"><span class="fa fa-table"></div>Simples Nacional</a>
         </li>

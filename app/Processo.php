@@ -61,4 +61,9 @@ class Processo extends Model {
         return $this->belongsTo('App\Pessoa','id_pessoa');
     }
     
+     public function informacoes_extras()
+    {
+        return $this->hasMany('App\ProcessoInformacaoExtra','id_processo');
+    }
+    
 }

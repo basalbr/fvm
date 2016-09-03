@@ -10,7 +10,7 @@ class ProcessoResposta extends Model {
 
     use SoftDeletes;
 
-    protected $rules = ['mensagem' => 'required'];
+    protected $rules = ['mensagem' => 'required', 'id_usuario'=>'required', 'id_processo'=>'required'];
     protected $errors;
     protected $niceNames = ['mensagem' => 'Mensagem'];
 
@@ -26,7 +26,7 @@ class ProcessoResposta extends Model {
      *
      * @var array
      */
-    protected $fillable = ['mensagem', 'id_usuario', 'id_chamado'];
+    protected $fillable = ['id_processo', 'id_usuario', 'anexo', 'mensagem'];
 
     public function validate($data) {
         // make a new validator object

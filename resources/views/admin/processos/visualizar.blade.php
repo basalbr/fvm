@@ -12,15 +12,6 @@
     @endforeach
 </div>
 @endif
-@if($processo->status == 'pendente')
-    <div class='alert alert-info'><b>Status:</b> Pendente</div>
-    @elseif($processo->status == 'atencao')
-    <div class='alert alert-warning'><b>Status:</b> Atenção</div>
-    @elseif($processo->status == 'cancelado')
-    <div class='alert alert-danger'><b>Status:</b> Cancelado</div>
-    @elseif($processo->status == 'concluido')
-    <div class='alert alert-success'><b>Status:</b> Concluído</div>
-    @endif
 <div class="processo-info">
     <div class="pull-left">
         <div class="titulo">Empresa</div>
@@ -42,22 +33,39 @@
         <div class="titulo">Data de Vencimento</div>
         <div class="info">{{date_format(date_create($processo->vencimento), 'd/m/Y')}}</div>
     </div>
+    @if($processo->informacoes_extras()->count())
+    @foreach($processo->informacoes_extras as $informacao_extra)
+    <div class="pull-left">
+        <div class="titulo">{{$informacao_extra->informacao_extra->nome}}</div>
+        @if($informacao_extra->informacao_extra->tipo=='informacao_adicional')
+        <div class="info">{{$informacao_extra->informacao}}</div>
+        @endif
+        @if($informacao_extra->informacao_extra->tipo=='anexo')
+        <div class="info"><a download href='{{asset('/uploads/processos/'.$informacao_extra->informacao)}}' target="_blank">Download</a></div>
+        @endif
+    </div>
+    @endforeach
+    @endif
+
     <div class="clearfix"></div>
-    
+
 </div>
 
 <form method="POST" action="">
     {{ csrf_field() }}
     <div class='form-group'>
+        <label>Mudar Status</label>
+        <select name='status' class='form-control'>
+            <option value="atencao" {{$processo->status == 'atencao' ? 'selected=""' : ''}}>Atenção</option>
+            <option value="cancelado" {{$processo->status == 'cancelado' ? 'selected=""' : ''}}>Cancelado</option>
+            <option value="concluido" {{$processo->status == 'concluido' ? 'selected=""' : ''}}>Concluído</option>
+            <option value="pendente" {{$processo->status == 'pendente' ? 'selected=""' : ''}}>Pendente</option>
+        </select>
+    </div>
+    <div class='form-group'>
         <label>Nova Mensagem</label>
         <textarea class="form-control" name='mensagem' required=""></textarea>
     </div>
-    @if($processo->status == 'atencao')
-    <div class='form-group'>
-        <label>Anexar arquivo</label>
-        <input type='file' class='form-control' value="" name='anexo'/>
-    </div>
-    @endif
     <div class='form-group'>
         <input type='submit' value="Enviar mensagem" class='btn btn-primary' />
     </div>

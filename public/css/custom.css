@@ -976,3 +976,56 @@ ul.lista-impostos li:hover{
     font-size: 16px;
     padding: 5px;
 }
+
+.processo-info{
+    padding: 0px 5px;
+    margin-bottom: 15px;
+}
+
+.processo-info .pull-left{
+    margin-right: 20px;
+}
+
+.processo-info .titulo{
+    color: #858585;
+    font-size: 14px;
+    font-style: italic;
+}
+.processo-info .info{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.alert{
+    border-radius: 0px;
+    border:2px solid;    
+}
+
+.alert-info{
+    border: #b9def0 2px solid;
+}
+
+.mensagem{
+    transition: box-shadow .25s;
+    padding: 20px;
+    margin: .5rem 0 1rem 0;
+    border-radius: 0px;
+    background-color: #fff;
+    border: 1px solid;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+}
+
+.mensagem .title{
+    font-weight: bold;
+}
+
+.mensagem-usuario{
+    background-color: #f6bd68;
+    color: #fff;
+    border-color: #f29d1d;
+}
+
+.mensagem-admin{
+    background-color: #f4f4f4;
+}

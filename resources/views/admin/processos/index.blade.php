@@ -23,7 +23,7 @@
             <td>{{$processo->competencia}}</td>
             <td>{{$processo->created_at}}</td>
             <td>{{$processo->status}}</td>
-            <td><a href="{{route('responder-processo-usuario', ['id' => $processo->id])}}">Visualizar</a></td>
+            <td><a href="{{route('visualizar-processo-admin', ['id' => $processo->id])}}">Visualizar</a></td>
         </tr>
         @endforeach
         @else
