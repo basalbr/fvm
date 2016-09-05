@@ -44,5 +44,8 @@ class HomeController extends Controller {
         }
     }
    
+    public function curl(){
+        return 'IT WORKZ';
+    }
 
 }

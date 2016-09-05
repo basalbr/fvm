@@ -1,12 +1,5 @@
 @extends('layouts.dashboard')
-@section('js')
-@parent
-<script type="text/javascript">
-    $(function () {
-       
-    });
-</script>
-@stop
+
 @section('main')
 <h1>Início</h1>
 <hr class="dash-title">

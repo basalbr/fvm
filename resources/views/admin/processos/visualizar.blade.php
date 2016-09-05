@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.admin')
 @section('header_title', $processo->imposto->nome .' - Competência: '. date_format(date_create($processo->competencia), 'm/Y'))
 @section('main')
 <h1>Visualizar Processo <small>{{$processo->imposto->nome}} - {{date_format(date_create($processo->competencia), 'm/Y')}}</small></h1>
@@ -13,46 +13,59 @@
 </div>
 @endif
 <div class="processo-info">
-    <div class="pull-left">
-        <div class="titulo">Empresa</div>
-        <div class="info">{{$processo->pessoa->nome_fantasia}}</div>
-    </div>
-    <div class="pull-left">
-        <div class="titulo">CNPJ</div>
-        <div class="info">{{$processo->pessoa->cpf_cnpj}}</div>
-    </div>
-    <div class="pull-left">
-        <div class="titulo">Imposto</div>
-        <div class="info">{{$processo->imposto->nome}}</div>
-    </div>
-    <div class="pull-left">
-        <div class="titulo">Competência</div>
-        <div class="info">{{date_format(date_create($processo->competencia), 'm/Y')}}</div>
-    </div>
-    <div class="pull-left">
-        <div class="titulo">Data de Vencimento</div>
-        <div class="info">{{date_format(date_create($processo->vencimento), 'd/m/Y')}}</div>
-    </div>
-    @if($processo->informacoes_extras()->count())
-    @foreach($processo->informacoes_extras as $informacao_extra)
-    <div class="pull-left">
-        <div class="titulo">{{$informacao_extra->informacao_extra->nome}}</div>
-        @if($informacao_extra->informacao_extra->tipo=='informacao_adicional')
-        <div class="info">{{$informacao_extra->informacao}}</div>
+    <blockquote>
+        <div class="pull-left">
+            <div class="titulo">Empresa</div>
+            <div class="info">{{$processo->pessoa->nome_fantasia}}</div>
+        </div>
+        <div class="pull-left">
+            <div class="titulo">CNPJ</div>
+            <div class="info">{{$processo->pessoa->cpf_cnpj}}</div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="pull-left">
+            <div class="titulo">Imposto</div>
+            <div class="info">{{$processo->imposto->nome}}</div>
+        </div>
+        <div class="pull-left">
+            <div class="titulo">Competência</div>
+            <div class="info">{{date_format(date_create($processo->competencia), 'm/Y')}}</div>
+        </div>
+        <div class="pull-left">
+            <div class="titulo">Data de Vencimento</div>
+            <div class="info">{{date_format(date_create($processo->vencimento), 'd/m/Y')}}</div>
+        </div>
+        @if($processo->informacoes_extras()->count())
+        <div class="clearfix"></div>
+        @foreach($processo->informacoes_extras as $informacao_extra)
+        <div class="pull-left">
+            <div class="titulo">{{$informacao_extra->informacao_extra->nome}}</div>
+            @if($informacao_extra->informacao_extra->tipo=='informacao_adicional')
+            <div class="info">{{$informacao_extra->informacao}}</div>
+            @endif
+            @if($informacao_extra->informacao_extra->tipo=='anexo')
+            <div class="info"><a download href='{{asset('/uploads/processos/'.$informacao_extra->informacao)}}' target="_blank">Download</a></div>
+            @endif
+        </div>
+        @endforeach
         @endif
-        @if($informacao_extra->informacao_extra->tipo=='anexo')
-        <div class="info"><a download href='{{asset('/uploads/processos/'.$informacao_extra->informacao)}}' target="_blank">Download</a></div>
+        @if($processo->guia)
+        <div class="clearfix"></div>
+        <div class="pull-left">
+            <div class="titulo">Guia do Processo</div>
+            <div class="info"><a download href='{{asset('/uploads/guias/'.$processo->guia)}}' target="_blank">Download</a></div>
+        </div>
         @endif
-    </div>
-    @endforeach
-    @endif
-
-    <div class="clearfix"></div>
-
+        <div class="clearfix"></div>
+    </blockquote>
 </div>
 
-<form method="POST" action="">
+<form method="POST" action="" enctype="multipart/form-data">
     {{ csrf_field() }}
+    <div class="form-group">
+        <label>Anexar Arquivo</label>
+        <input type="file" name="guia" class="form-control"/>
+    </div>
     <div class='form-group'>
         <label>Mudar Status</label>
         <select name='status' class='form-control'>
@@ -70,6 +83,7 @@
         <input type='submit' value="Enviar mensagem" class='btn btn-primary' />
     </div>
 </form>
+
 @if($processo->processo_respostas->count())
 <hr>
 <h4>Últimas mensagens:</h4>

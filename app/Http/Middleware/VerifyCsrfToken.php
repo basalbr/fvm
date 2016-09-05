@@ -15,6 +15,8 @@ class VerifyCsrfToken extends BaseVerifier
         'acessar',
         'registrar',
         'login',
+        'curl',
+        'chat*',
         'ajax*'
     ];
 }

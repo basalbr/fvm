@@ -103,6 +103,13 @@ Route::get('/login', ['uses' => 'Auth\AuthController@getLogin', 'as' => 'login']
 Route::post('/login', ['uses' => 'Auth\AuthController@postLogin', 'as' => 'login']);
 
 
+Route::get('/curl', ['uses' => 'HomeController@curl', 'as'=>'curl']);
+
+
+Route::post('/chat/novo', ['uses' => 'ChatController@storeAjax', 'as'=>'novo-chat']);
+Route::post('/chat/atualiza-mensagens', ['uses' => 'ChatController@getMensagensAjax', 'as'=>'atualiza-mensagens-chat']);
+Route::post('/chat/envia-mensagem', ['uses' => 'ChatController@updateAjax', 'as'=>'envia-mensagem-chat']);
+
 
 Route::get('/sair', ['uses' => 'Auth\AuthController@getLogout', 'as' => 'sair']);
 

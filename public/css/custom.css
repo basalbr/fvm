@@ -984,6 +984,8 @@ ul.lista-impostos li:hover{
 
 .processo-info .pull-left{
     margin-right: 20px;
+    padding-bottom: 10px;
+    padding-top:10px;
 }
 
 .processo-info .titulo{
@@ -1028,4 +1030,93 @@ ul.lista-impostos li:hover{
 
 .mensagem-admin{
     background-color: #f4f4f4;
+}
+
+.form-control {
+    background-color: #ffffff;
+    border: 1px solid #e4e7ea;
+    border-radius: 0;
+    box-shadow: none;
+    color: #565656;
+    height: 38px;
+    max-width: 100%;
+    padding: 7px 12px;
+    transition: all 300ms linear 0s;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #2b2b2b;
+}
+
+#chat-box{
+    z-index: 1000;
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    height: 450px;
+    width: 350px;
+    background-color: #fff;
+    border: 1px solid #e4e7ea;
+    padding: 15px;
+    box-shadow: 1px 2px 3px rgba(0,0,0,.4);
+}
+
+#chat-button button{
+    box-shadow: 1px 2px 3px rgba(0,0,0,.4);
+    border-radius: 0;
+    background-color: #4da6ff;
+    color: #fff;
+    width: 215px;
+    height: 50px;
+    position: fixed;
+    z-index: 999;
+    border: 1px solid #4da6ff;
+    bottom: 30px;
+    right: 30px;
+    font-size: 14px;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    line-height: 35px;
+}
+
+#chat-button button:hover{
+    background-color: #4d7aff;
+}
+
+#chat-button button span{
+    font-size: 15px;
+    margin-right: 5px;
+}
+
+#chat-mensagens{
+    border: 1px solid #e4e7ea;
+    height: 230px;
+    overflow: auto;
+    width: 318px;
+}
+
+#chat-mensagens .mensagem{
+    padding: 5px 10px;
+    border: none;
+    font-size: 12px;
+}
+
+#chat-mensagens .atendente{
+    margin-right: 25px;
+    background: #FEF9D7;
+    border-left: 2px solid #1BBC9B;
+}
+
+#chat-mensagens .cliente{
+    margin-left: 25px;
+    background: #fafafa;
+    border-right: 2px solid #F3565D;
+}
+
+#chat-mensagens .mensagem .nome{
+    color: #3590c1;
+    font-size: 13px;
+    font-weight: 400;
 }

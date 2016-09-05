@@ -12,38 +12,48 @@
     @endforeach
 </div>
 @endif
-@if($processo->status == 'pendente')
-    <div class='alert alert-info'><b>Status:</b> Pendente</div>
-    @elseif($processo->status == 'atencao')
-    <div class='alert alert-warning'><b>Status:</b> Atenção</div>
-    @elseif($processo->status == 'cancelado')
-    <div class='alert alert-danger'><b>Status:</b> Cancelado</div>
-    @elseif($processo->status == 'concluido')
-    <div class='alert alert-success'><b>Status:</b> Concluído</div>
-    @endif
 <div class="processo-info">
-    <div class="pull-left">
-        <div class="titulo">Empresa</div>
-        <div class="info">{{$processo->pessoa->nome_fantasia}}</div>
-    </div>
-    <div class="pull-left">
-        <div class="titulo">CNPJ</div>
-        <div class="info">{{$processo->pessoa->cpf_cnpj}}</div>
-    </div>
-    <div class="pull-left">
-        <div class="titulo">Imposto</div>
-        <div class="info">{{$processo->imposto->nome}}</div>
-    </div>
-    <div class="pull-left">
-        <div class="titulo">Competência</div>
-        <div class="info">{{date_format(date_create($processo->competencia), 'm/Y')}}</div>
-    </div>
-    <div class="pull-left">
-        <div class="titulo">Data de Vencimento</div>
-        <div class="info">{{date_format(date_create($processo->vencimento), 'd/m/Y')}}</div>
-    </div>
-    <div class="clearfix"></div>
-    
+    <blockquote>
+        <div class="pull-left">
+            <div class="titulo">Status do Processo</div>
+            @if($processo->status == 'pendente')
+            <div class='text-info info'>Pendente</div>
+            @elseif($processo->status == 'atencao')
+            <div class='text-danger info'>Atenção</div>
+            @elseif($processo->status == 'cancelado')
+            <div class='text-muted info'>Cancelado</div>
+            @elseif($processo->status == 'concluido')
+            <div class='text-success info'>Concluído</div>
+            @endif
+        </div>
+        <div class="pull-left">
+            <div class="titulo">Empresa</div>
+            <div class="info">{{$processo->pessoa->nome_fantasia}}</div>
+        </div>
+        <div class="pull-left">
+            <div class="titulo">CNPJ</div>
+            <div class="info">{{$processo->pessoa->cpf_cnpj}}</div>
+        </div>
+        <div class="pull-left">
+            <div class="titulo">Imposto</div>
+            <div class="info">{{$processo->imposto->nome}}</div>
+        </div>
+        <div class="pull-left">
+            <div class="titulo">Competência</div>
+            <div class="info">{{date_format(date_create($processo->competencia), 'm/Y')}}</div>
+        </div>
+        <div class="pull-left">
+            <div class="titulo">Data de Vencimento</div>
+            <div class="info">{{date_format(date_create($processo->vencimento), 'd/m/Y')}}</div>
+        </div>
+        @if($processo->guia)
+        <div class="pull-left">
+            <div class="titulo">Guia do Processo</div>
+            <div class="info"><a download href='{{asset('/uploads/guias/'.$processo->guia)}}' target="_blank">Download</a></div>
+        </div>
+        @endif
+        <div class="clearfix"></div>
+    </blockquote>
 </div>
 
 <form method="POST" action="">

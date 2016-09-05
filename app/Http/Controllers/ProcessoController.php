@@ -97,7 +97,7 @@ class ProcessoController extends Controller {
         $processo = Processo::where('id', '=', $id)->first();
         return view('admin.processos.visualizar', ['processo' => $processo]);
     }
-    
+
     public function editUsuario($id) {
         $processo = Processo::where('id', '=', $id)->whereExists(function($query) {
                     $query->from('pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id);
@@ -106,11 +106,19 @@ class ProcessoController extends Controller {
     }
 
     public function update($id, Request $request) {
+        $processo = Processo::where('id', '=', $id)->first();
         $resposta = new ProcessoResposta;
-        $request->merge(['id_usuario' => Auth::user()->id]);
-        $request->merge(['id_processo' => $id]);
-
+        $request->merge(['id_usuario' => Auth::user()->id, 'id_processo' => $id]);
+        if ($request->file('guia')) {
+            $guia = $request->file('guia');
+            $guia_nome = 'processo_guia' . str_shuffle(date('dmyhis')) . '.' . $guia->guessClientExtension();
+            $guia->move(getcwd() . '/uploads/guias/', $guia_nome);
+            $request->merge(['guia' => $guia_nome]);
+            $processo->guia = $guia_nome;
+            $processo->save();
+        }
         if ($request->file('anexo')) {
+            $anexo = $request->file('anexo');
             $anexo_nome = 'processo_anexo' . str_shuffle(date('dmyhis')) . '.' . $anexo->guessClientExtension();
             $anexo->move(getcwd() . '/uploads/processos/', $anexo_nome);
             $request->merge(['anexo' => $anexo_nome]);
@@ -118,7 +126,6 @@ class ProcessoController extends Controller {
         if ($resposta->validate($request->all())) {
             $resposta->create($request->all());
             if ($request->get('status')) {
-                $processo = Processo::where('id', '=', $id)->first();
                 $processo->status = $request->get('status');
                 $processo->save();
             }

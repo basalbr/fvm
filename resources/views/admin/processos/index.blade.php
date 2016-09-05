@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.admin')
 @section('header_title', 'Processos')
 @section('main')
 <h1>Processos</h1>
