@@ -15,7 +15,7 @@ class CreateInformacaoExtraTable extends Migration {
             $table->increments('id');
             $table->integer('id_imposto')->unsigned();
             $table->foreign('id_imposto')->references('id')->on('imposto');
-            $table->enum('tipo',['anexo','dado_integrado','informacao_adicional']);
+            $table->string('tipo');
             $table->string('nome');
             $table->text('descricao')->nullable();
             $table->integer('tamanho_maximo')->nullable();

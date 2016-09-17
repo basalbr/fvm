@@ -47,7 +47,7 @@ class ImpostoMes extends Model {
     }
     
     public function imposto(){
-        $this->belongsTo('App\Imposto', 'id_imposto');
+        return $this->belongsTo('App\Imposto', 'id_imposto');
     }
 
 }

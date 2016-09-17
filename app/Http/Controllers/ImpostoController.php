@@ -24,6 +24,8 @@ class ImpostoController extends Controller {
         'Dezembro'
     );
 
+    
+    
     private function corrigeData($date, $option) {
         $retDate = new \DateTime($date);
         $weekDay = date('w', strtotime($date));

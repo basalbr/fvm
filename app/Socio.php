@@ -13,7 +13,7 @@ class Socio extends Model {
     protected $rules = [
         'id_pessoa' => 'required',
         'nome' => 'required',
-        'principal' => 'required|boolean',
+        'principal' => 'required',
         'cpf' => 'required|unique:socio,cpf',
         'rg' => 'required|unique:socio,rg',
         'titulo_eleitor' => 'required',
@@ -63,9 +63,9 @@ class Socio extends Model {
 
     public function validate($data, $update = false) {
         // make a new validator object
-        if($update){
-            $this->rules['cpf'] = 'required|unique:socio,cpf,'.$data['id'];
-            $this->rules['rg'] = 'required|unique:socio,rg,'.$data['id'];
+        if ($update) {
+            $this->rules['cpf'] = 'required|unique:socio,cpf,' . $data['id'];
+            $this->rules['rg'] = 'required|unique:socio,rg,' . $data['id'];
         }
         $v = Validator::make($data, $this->rules);
         $v->setAttributeNames($this->niceNames);
@@ -80,16 +80,6 @@ class Socio extends Model {
         return true;
     }
 
-    public function isSimplesNacional() {
-        if ($this->cnaes->count() > 0) {
-            foreach ($this->cnaes as $cnae) {
-                if ($cnae->cnae->id_tabela_simples_nacional == null) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
 
     public function errors() {
         return $this->errors;
@@ -97,6 +87,14 @@ class Socio extends Model {
 
     public function pessoa() {
         return $this->belongsTo('App\Pessoa', 'id_pessoa');
+    }
+
+    public function pro_labores() {
+        return $this->hasMany('App\Prolabore', 'id_socio');
+    }
+    
+    public function pro_labore_formatado(){
+        return number_format($this->pro_labore, 2, ',','.');
     }
 
 }

@@ -61,5 +61,6 @@ class InformacaoExtra extends Model {
             return 'Informação Extra';
         }
     }
+    
 
 }

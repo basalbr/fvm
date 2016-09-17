@@ -46,9 +46,9 @@ class CnaeController extends Controller {
     
     public function ajax(Request $request){
         if($request->get('tipo') == 'descricao'){
-        $lista = Cnae::where('descricao','ilike','%'.$request->get('search').'%')->orderBy('descricao')->take(5)->get(['descricao','codigo','id']);
+        $lista = Cnae::where('descricao','like','%'.$request->get('search').'%')->orderBy('descricao')->take(5)->get(['descricao','codigo','id']);
         }else{
-            $lista = Cnae::where('codigo','ilike','%'.$request->get('search').'%')->orderBy('descricao')->take(5)->get(['descricao','codigo','id']);
+            $lista = Cnae::where('codigo','like','%'.$request->get('search').'%')->orderBy('descricao')->take(5)->get(['descricao','codigo','id']);
         }
         return response()->json($lista);
     }

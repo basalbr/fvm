@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('header_title', 'Home')
+@section('js')
 @parent
 <script type="text/javascript" src="{{url('public/ckeditor/ckeditor.js')}}"></script>
 <script type="text/javascript" src="{{url('public/ckfinder/ckfinder.js')}}"></script>

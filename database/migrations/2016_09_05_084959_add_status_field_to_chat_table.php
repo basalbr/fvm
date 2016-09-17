@@ -13,7 +13,7 @@ class AddStatusFieldToChatTable extends Migration
     public function up()
     {
            Schema::table('chat', function ($table) {
-            $table->enum('status',['aberto','encerrado'])->default('aberto');
+            $table->string('status')->default('aberto');
         });
     }
 

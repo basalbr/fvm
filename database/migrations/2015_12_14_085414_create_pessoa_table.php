@@ -19,7 +19,7 @@ class CreatePessoaTable extends Migration {
             $table->foreign('id_natureza_juridica')->references('id')->on('natureza_juridica');
             $table->integer('id_tipo_tributacao')->unsigned();
             $table->foreign('id_tipo_tributacao')->references('id')->on('tipo_tributacao');
-            $table->enum('tipo', ['F', 'J']);
+            $table->string('tipo');
             $table->bigInteger('cpf_cnpj');
             $table->bigInteger('inscricao_estadual');
             $table->bigInteger('inscricao_municipal');

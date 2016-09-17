@@ -9,6 +9,7 @@
         <link rel="stylesheet" type="text/css" href="{{url('public/css/font-awesome.min.css')}}" />
         <link rel="stylesheet" type="text/css" href="{{url('public/css/bootstrap.min.css')}}" />
         <link rel="stylesheet" name="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.css" />
+        <link rel="stylesheet" type="text/css" href="{{url('public/css/bootstrap-datepicker3.min.css')}}" />
         <link rel="stylesheet" type="text/css" href="{{url('public/css/custom.css')}}" />
         @show
         @section('js')
@@ -29,6 +30,7 @@ $(function () {
         event.preventDefault();
     });
     $('#calendar').fullCalendar({
+        height:'auto',
         header: {
             left: 'prev,next today',
             center: 'title',
@@ -136,6 +138,7 @@ $(function () {
         mostrarDescricaoInstrucao()
     }
 
+    $('.date-mask').mask('00/00/0000',{placeholder: "__/__/____"});
     $('.cnpj-mask').mask('00.000.000/0000-00');
     $('.cpf-mask').mask('000.000.000-00');
     $('.cep-mask').mask('00000-000');

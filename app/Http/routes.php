@@ -17,6 +17,22 @@ Route::get('/', function () {
 
 Route::get('/admin', ['as' => 'admin', 'uses' => 'AdminController@index','middleware'=>'admin']);
 
+
+Route::get('/testeimpostos', ['as' => 'testeimposto', 'uses' => 'ProcessoController@abreProcessos','middleware'=>'admin']);
+Route::get('/admin/chat/', ['as' => 'listar-chat', 'uses' => 'ChatController@index','middleware'=>'admin']);
+Route::get('/admin/chat/visualizar/{id}', ['as' => 'visualizar-chat', 'uses' => 'ChatController@edit','middleware'=>'admin']);
+
+Route::get('/admin/pro-labore/', ['as' => 'listar-pro-labore', 'uses' => 'ProlaboreController@index','middleware'=>'admin']);
+Route::get('/admin/pro-labore/historico', ['as' => 'listar-pro-labore-historico', 'uses' => 'ProlaboreController@historico','middleware'=>'admin']);
+Route::get('/admin/socio/{id}/pro-labore/cadastrar/', ['as' => 'cadastrar-pro-labore', 'uses' => 'ProlaboreController@create','middleware'=>'admin']);
+Route::post('/admin/socio/{id}/pro-labore/cadastrar/', ['as' => 'cadastrar-pro-labore', 'uses' => 'ProlaboreController@store','middleware'=>'admin']);
+Route::get('/admin/socio/{id}/pro-labore/editar/{pro_labore}', ['as' => 'editar-pro-labore', 'uses' => 'ProlaboreController@edit','middleware'=>'admin']);
+Route::post('/admin/socio/{id}/pro-labore/editar/{pro_labore}', ['as' => 'editar-pro-labore', 'uses' => 'ProlaboreController@update','middleware'=>'admin']);
+
+Route::get('/pro-labore/', ['as' => 'listar-pro-labore-cliente', 'uses' => 'ProlaboreController@indexCliente','middleware'=>'auth']);
+Route::get('/socio/{id}/pro-labore', ['as' => 'listar-pro-labore-socio', 'uses' => 'ProlaboreController@socio','middleware'=>'auth']);
+Route::get('/socio/{id}/pro-labore/{id_pro_labore}', ['as' => 'visualizar-pro-labore-socio', 'uses' => 'ProlaboreController@socioEdit','middleware'=>'auth']);
+
 Route::get('/admin/imposto/', ['as' => 'listar-imposto', 'uses' => 'ImpostoController@index','middleware'=>'admin']);
 Route::get('/admin/imposto/cadastrar', ['as' => 'cadastrar-imposto', 'uses' => 'ImpostoController@create','middleware'=>'admin']);
 Route::post('/admin/imposto/cadastrar', ['as' => 'cadastrar-imposto', 'uses' => 'ImpostoController@store','middleware'=>'admin']);
@@ -28,6 +44,12 @@ Route::get('/admin/imposto/{id_imposto}/instrucoes/cadastrar', ['as' => 'cadastr
 Route::post('/admin/imposto/{id_imposto}/instrucoes/cadastrar', ['as' => 'cadastrar-instrucao', 'uses' => 'InstrucaoController@store','middleware'=>'admin']);
 Route::get('/admin/imposto/{id_imposto}/instrucoes/editar/{id_instrucao}', ['as' => 'editar-instrucao', 'uses' => 'InstrucaoController@edit','middleware'=>'admin']);
 Route::post('/admin/imposto/{id_imposto}/instrucoes/editar/{id_instrucao}', ['as' => 'editar-instrucao', 'uses' => 'InstrucaoController@update','middleware'=>'admin']);
+
+Route::get('/empresa/{id_empresa}/socios', ['as' => 'listar-socios', 'uses' => 'SocioController@index','middleware'=>'admin']);
+Route::get('/empresa/{id_empresa}/socios/cadastrar', ['as' => 'cadastrar-socio', 'uses' => 'SocioController@create','middleware'=>'admin']);
+Route::post('/empresa/{id_empresa}/socios/cadastrar', ['as' => 'cadastrar-socio', 'uses' => 'SocioController@store','middleware'=>'admin']);
+Route::get('/empresa/{id_empresa}/socios/editar/{id_socio}', ['as' => 'editar-socio', 'uses' => 'SocioController@edit','middleware'=>'admin']);
+Route::post('/empresa/{id_empresa}/socios/editar/{id_socio}', ['as' => 'editar-socio', 'uses' => 'SocioController@update','middleware'=>'admin']);
 
 Route::get('/admin/imposto/{id_imposto}/informacoes-extras', ['as' => 'listar-informacao-extra', 'uses' => 'InformacaoExtraController@index','middleware'=>'admin']);
 Route::get('/admin/imposto/{id_imposto}/informacoes-extras/cadastrar', ['as' => 'cadastrar-informacao-extra', 'uses' => 'InformacaoExtraController@create','middleware'=>'admin']);
@@ -46,6 +68,12 @@ Route::get('/admin/plano/cadastrar', ['as' => 'cadastrar-plano', 'uses' => 'Plan
 Route::post('/admin/plano/cadastrar', ['as' => 'cadastrar-plano', 'uses' => 'PlanoController@store','middleware'=>'admin']);
 Route::get('/admin/plano/editar/{id}', ['as' => 'editar-plano', 'uses' => 'PlanoController@edit','middleware'=>'admin']);
 Route::post('/admin/plano/editar/{id}', ['as' => 'editar-plano', 'uses' => 'PlanoController@update','middleware'=>'admin']);
+
+Route::get('/admin/faq/', ['as' => 'listar-faq', 'uses' => 'FaqController@index','middleware'=>'admin']);
+Route::get('/admin/faq/cadastrar', ['as' => 'cadastrar-faq', 'uses' => 'FaqController@create','middleware'=>'admin']);
+Route::post('/admin/faq/cadastrar', ['as' => 'cadastrar-faq', 'uses' => 'FaqController@store','middleware'=>'admin']);
+Route::get('/admin/faq/editar/{id}', ['as' => 'editar-faq', 'uses' => 'FaqController@edit','middleware'=>'admin']);
+Route::post('/admin/faq/editar/{id}', ['as' => 'editar-faq', 'uses' => 'FaqController@update','middleware'=>'admin']);
 
 Route::get('/admin/tipo-tributacao/', ['as' => 'listar-tipo-tributacao', 'uses' => 'TipoTributacaoController@index','middleware'=>'admin']);
 Route::get('/admin/tipo-tributacao/cadastrar', ['as' => 'cadastrar-tipo-tributacao', 'uses' => 'TipoTributacaoController@create','middleware'=>'admin']);
@@ -69,11 +97,12 @@ Route::get('/admin/chamados/', ['as' => 'listar-chamados', 'uses' => 'ChamadosCo
 Route::get('/admin/chamados/visualizar/{id}', ['as' => 'visualizar-chamados', 'uses' => 'ChamadosController@edit','middleware'=>'admin']);
 Route::post('/admin/chamados/visualizar/{id}', ['as' => 'visualizar-chamados', 'uses' => 'ChamadosController@update','middleware'=>'admin']);
 
-Route::get('/admin/processos/', ['as' => 'listar-processos-admin', 'uses' => 'ProcessoController@index','middleware'=>'admin']);
-Route::get('/admin/processos/visualizar/{id}', ['as' => 'visualizar-processo-admin', 'uses' => 'ProcessoController@edit','middleware'=>'admin']);
-Route::post('/admin/processos/visualizar/{id}', ['as' => 'visualizar-processo-admin', 'uses' => 'ProcessoController@update','middleware'=>'admin']);
+Route::get('/admin/apuracoes/', ['as' => 'listar-processos-admin', 'uses' => 'ProcessoController@index','middleware'=>'admin']);
+Route::get('/admin/apuracoes/visualizar/{id}', ['as' => 'visualizar-processo-admin', 'uses' => 'ProcessoController@edit','middleware'=>'admin']);
+Route::post('/admin/apuracoes/visualizar/{id}', ['as' => 'visualizar-processo-admin', 'uses' => 'ProcessoController@update','middleware'=>'admin']);
 
 Route::get('/dashboard', ['as' => 'dashboard', 'uses' => 'DashboardController@index','middleware'=>'auth']);
+Route::get('/calendario', ['as' => 'calendario', 'uses' => 'CalendarioController@index','middleware'=>'auth']);
 Route::get('/chamados', ['as' => 'listar-chamados-usuario', 'uses' => 'ChamadosController@indexUsuario','middleware'=>'auth']);
 Route::get('/chamados/cadastrar', ['as' => 'cadastrar-chamado', 'uses' => 'ChamadosController@create','middleware'=>'auth']);
 Route::post('/chamados/cadastrar', ['uses' => 'ChamadosController@store','middleware'=>'auth']);
@@ -83,11 +112,11 @@ Route::get('/acessar', ['as' => 'acessar', 'uses' => 'HomeController@acessar','m
 Route::post('/acessar', ['as' => 'acessar', 'uses' => 'HomeController@checkEmail']);
 //Route::get('/register', ['as' => 'register', 'uses' => 'HomeController@register']);
 
-Route::get('/processos', ['as' => 'listar-processos', 'uses' => 'ProcessoController@indexUsuario','middleware'=>'auth']);
-Route::get('/processos/abrir/{competencia}/{id_imposto}/{cnpj}/{vencimento}', ['as' => 'abrir-processo', 'uses' => 'ProcessoController@create','middleware'=>'auth'])->where('cnpj', '(.*)');
-Route::post('/processos/cadastrar', ['as' => 'criar-processo', 'uses' => 'ProcessoController@store','middleware'=>'auth']);
-Route::get('/processos/responder/{id}', ['as' => 'responder-processo-usuario', 'uses' => 'ProcessoController@editUsuario','middleware'=>'auth']);
-Route::post('/processos/responder/{id}', ['as' => 'responder-processo-usuario', 'uses' => 'ProcessoController@update','middleware'=>'auth']);
+Route::get('/apuracoes', ['as' => 'listar-processos', 'uses' => 'ProcessoController@indexUsuario','middleware'=>'auth']);
+Route::get('/apuracoes/abrir/{competencia}/{id_imposto}/{cnpj}/{vencimento}', ['as' => 'abrir-processo', 'uses' => 'ProcessoController@create','middleware'=>'auth'])->where('cnpj', '(.*)');
+Route::post('/apuracoes/cadastrar', ['as' => 'criar-processo', 'uses' => 'ProcessoController@store','middleware'=>'auth']);
+Route::get('/apuracoes/responder/{id}', ['as' => 'responder-processo-usuario', 'uses' => 'ProcessoController@editUsuario','middleware'=>'auth']);
+Route::post('/apuracoes/responder/{id}', ['as' => 'responder-processo-usuario', 'uses' => 'ProcessoController@update','middleware'=>'auth']);
 
 // Empresa routes...
 Route::get('/empresas', ['as' => 'empresas', 'uses' => 'EmpresaController@index','middleware'=>'auth']);

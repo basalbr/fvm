@@ -33,8 +33,6 @@ class EmpresaController extends Controller {
         //atencao, arrumar telefone!!!!!!!!!!!!!!!!!!!!
         $request->merge([
             'id_tipo_tributacao' => 1,
-            'cpf_cnpj' => str_replace (['.','-','/'],['','',''],$request->get('cpf_cnpj')),
-            'cep' => str_replace (['.','-','/'],['','',''],$request->get('cep')),
             'telefone' => '123456',
         ]);
         if ($empresa->validate($request->except('_token'))) {

@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Auth;
 class ChatController extends Controller {
 
     public function index() {
-        $chat = Chat::orderBy('updated_at', 'desc')->get();
-        return view('admin.chat.index', ['chat' => $chat]);
+        $chats = Chat::orderBy('updated_at', 'desc')->paginate(15);
+        return view('admin.chat.index', ['chats' => $chats]);
     }
 
     public function indexUsuario() {
@@ -39,7 +39,7 @@ class ChatController extends Controller {
 
     public function edit($id) {
         $chat = Chat::where('id', '=', $id)->first();
-        return view('chat.visualizar', ['chat' => $chat]);
+        return view('admin.chat.visualizar', ['chat' => $chat]);
     }
 
     public function update($id, Request $request) {
@@ -73,9 +73,9 @@ class ChatController extends Controller {
             $json = [];
             foreach($mensagens as $k => $mensagem){
                 if($mensagem->id_atendente){
-                    $json[] = ['id'=>$mensagem->id, 'mensagem'=>$mensagem->mensagem, 'atendente'=>$mensagem->atendente->nome, 'hora'=>  date_format($mensagem->created_at, 'H:i:s')];
+                    $json[] = ['id'=>$mensagem->id, 'mensagem'=>$mensagem->mensagem, 'atendente'=>$mensagem->atendente->nome, 'hora'=>  date_format($mensagem->created_at, 'H:i')];
                 }else{
-                    $json[] = ['id'=>$mensagem->id,'mensagem'=>$mensagem->mensagem,'nome'=>$mensagem->chat->nome, 'hora'=>  date_format($mensagem->created_at, 'H:i:s')];
+                    $json[] = ['id'=>$mensagem->id,'mensagem'=>$mensagem->mensagem,'nome'=>$mensagem->chat->nome, 'hora'=>  date_format($mensagem->created_at, 'H:i')];
                 }
             }
             return response()->json($json);

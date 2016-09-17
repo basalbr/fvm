@@ -27,7 +27,7 @@ class Pessoa extends Model {
         'id_uf' => 'required',
         'codigo_acesso_simples_nacional' => 'numeric',
         'nome_fantasia' => 'required',
-        'razao_social' => 'required',
+        'razao_social' => 'required|unique:pessoa,razao_social',
         'id_tipo_tributacao' => 'required'
     ];
     protected $errors;
@@ -108,6 +108,9 @@ class Pessoa extends Model {
 
     public function cnaes() {
         return $this->hasMany('App\PessoaCnae', 'id_pessoa');
+    }
+    public function socios() {
+        return $this->hasMany('App\Socio', 'id_pessoa');
     }
 
     public function processos() {

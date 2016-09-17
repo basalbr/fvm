@@ -11,8 +11,14 @@
         <li class='{{Request::is('admin/chamados*') ? "active" : ""}}'>
             <a href="{{route('listar-chamados')}}"><div class="icon"><span class="fa fa-envelope"></div>Chamados</a>
         </li>
+        <li class='{{Request::is('admin/chat*') ? "active" : ""}}'>
+            <a href="{{route('listar-chat')}}"><div class="icon"><span class="fa fa-comment"></div>Chat</a>
+        </li>
         <li class='{{Request::is('admin/cnae*') ? "active" : ""}}'>
             <a href="{{route('listar-cnae')}}"><div class="icon"><span class="fa fa-industry"></div>CNAEs</a>
+        </li>
+        <li class='{{Request::is('admin/faq*') ? "active" : ""}}'>
+            <a href="{{route('listar-faq')}}"><div class="icon"><span class="fa fa-info"></div>F.A.Q</a>
         </li>
         <li class='{{Request::is('admin/imposto*') ? "active" : ""}}'>
             <a href="{{route('listar-imposto')}}"><div class="icon"><span class="fa fa-money"></div>Impostos</a>
@@ -23,8 +29,11 @@
         <li class='{{Request::is('admin/plano*') ? "active" : ""}}'>
             <a href="{{route('listar-plano')}}"><div class="icon"><span class="fa fa-shopping-cart"></div>Planos</a>
         </li>
-        <li class='{{Request::is('admin/processos*') ? "active" : ""}}'>
-            <a href="{{route('listar-processos-admin')}}"><div class="icon"><span class="fa fa-file"></div>processos</a>
+        <li class='{{Request::is('admin/apuracoes*') ? "active" : ""}}'>
+            <a href="{{route('listar-processos-admin')}}"><div class="icon"><span class="fa fa-file"></div>apurações</a>
+        </li>
+        <li class='{{Request::is('admin/pro-labore*') ? "active" : ""}}'>
+            <a href="{{route('listar-pro-labore')}}"><div class="icon"><span class="fa fa-dollar"></div>pró-labore</a>
         </li>
         <li class='{{Request::is('admin/simples-nacional*') ? "active" : ""}}'>
             <a href="{{route('listar-simples-nacional')}}"><div class="icon"><span class="fa fa-table"></div>Simples Nacional</a>

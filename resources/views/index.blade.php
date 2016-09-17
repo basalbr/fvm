@@ -5,36 +5,37 @@
 <script type="text/javascript">
     var chat_id, chat_message_last_id = 0;
     function updateChat() {
-            $.post('{{route("atualiza-mensagens-chat")}}', {'chat_id': chat_id, 'chat_message_last_id': chat_message_last_id}, function (data) {
-                console.log(data)
-                if (data) {
-                    var html = '';
-                    for (i in data) {
-                        chat_message_last_id = data[i].id;
-                        if (data[i].atendente !== undefined) {
-                            html += "<div class='mensagem atendente'>";
-                            html += "<div class='nome'>" + data[i].atendente + " - " + data[i].hora + "</div>";
-                            html += "<div class='texto'>" + data[i].mensagem + "</div>";
-                            html += "</div>";
-                        } else {
-                            html += "<div class='mensagem cliente'>";
-                            html += "<div class='nome'>" + data[i].nome + " - " + data[i].hora + "</div>";
-                            html += "<div class='texto'>" + data[i].mensagem + "</div>";
-                            html += "</div>";
-                        }
+        $.post('{{route("atualiza-mensagens-chat")}}', {'chat_id': chat_id, 'chat_message_last_id': chat_message_last_id}, function (data) {
+            console.log(data)
+            if (data) {
+                var html = '';
+                for (i in data) {
+                    chat_message_last_id = data[i].id;
+                    if (data[i].atendente !== undefined) {
+                        html += "<div class='mensagem atendente'>";
+                        html += "<div class='nome'>" + data[i].atendente + " - " + data[i].hora + "</div>";
+                        html += "<div class='texto'>" + data[i].mensagem + "</div>";
+                        html += "</div>";
+                    } else {
+                        html += "<div class='mensagem cliente'>";
+                        html += "<div class='nome'>" + data[i].nome + " - " + data[i].hora + "</div>";
+                        html += "<div class='texto'>" + data[i].mensagem + "</div>";
+                        html += "</div>";
                     }
-                    $("#chat-mensagens").append(html);
-                    var objDiv = document.getElementById("chat-mensagens");
-                    objDiv.scrollTop = objDiv.scrollHeight;
                 }
-            });
-        }
+                $("#chat-mensagens").append(html);
+                var objDiv = document.getElementById("chat-mensagens");
+                objDiv.scrollTop = objDiv.scrollHeight;
+            }
+        });
+    }
     $(function () {
 
         $('#chat-app form').on('submit', function (e) {
             e.preventDefault();
+            $('#chat-app form textarea').empty().val(null);
             if (!$('#chat-app form textarea').val()) {
-                
+
             }
             $.post('{{route("envia-mensagem-chat")}}', {id_chat: chat_id, mensagem: $('#chat-app form textarea').val()}, function (data) {
 
@@ -56,7 +57,15 @@
             });
             $.post("{{route('novo-chat')}}", {nome: $('#chat-info input[name="nome"]').val(), email: $('#chat-info input[name="email"]').val(), mensagem: $('#chat-info textarea[name="mensagem"]').val(), _token: $('#chat-info input[name="_token"]').val()}, function (data) {
                 if (data.id !== undefined) {
+                    var currentdate = new Date();
+                    var datetime = currentdate.getHours() + ":" + (currentdate.getMinutes() < 10 ? "0" : "") + currentdate.getMinutes();
                     chat_id = data.id;
+                    html = ''
+                    html += "<div class='mensagem cliente'>";
+                    html += "<div class='nome'>" + $('#chat-info input[name="nome"]').val() + " - " + datetime + "</div>";
+                    html += "<div class='texto'>" + $('#chat-info textarea[name="mensagem"]').val() + "</div>";
+                    html += "</div>";
+                    $("#chat-mensagens").prepend(html);
                     $('#chat-app').show();
                     $('#chat-info').hide();
                     setInterval(updateChat, 2000);
@@ -269,7 +278,7 @@
     <div id="chat-app" style="display: none">
         <div id="chat-mensagens">
             <div class='mensagem atendente'>
-                <div class='nome'>Sistema - 11:12</div>
+                <div class='nome'>Sistema</div>
                 <div class='texto'>Por favor aguarde, em breve você será atendido.</div>
             </div>
 

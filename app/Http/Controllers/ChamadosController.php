@@ -7,6 +7,7 @@ use App\Chamado;
 use App\ChamadoResposta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 
 class ChamadosController extends Controller {
 
@@ -16,7 +17,41 @@ class ChamadosController extends Controller {
     }
 
     public function indexUsuario() {
-        $chamados = Chamado::where('id_usuario', '=', Auth::user()->id)->orderBy('updated_at', 'desc')->get();
+        $chamados = Chamado::query();
+        $chamados->where('id_usuario', '=', Auth::user()->id);
+        if (Input::get('de')) {
+            $data = explode('/', Input::get('de'));
+            $data = $data[2].'-'.$data[1].'-'.$data[0];
+            $chamados->where('created_at', '>=', $data);
+        }
+        if (Input::get('ate')) {
+            $data = explode('/', Input::get('ate'));
+            $data = $data[2].'-'.$data[1].'-'.$data[0];
+            $chamados->where('created_at', '<=', $data);
+        }
+        if (Input::get('titulo')) {
+            $chamados->where('titulo', 'like', '%' . Input::get('titulo') . '%');
+        }
+        if (Input::get('status')) {
+            $chamados->where('status', '=',Input::get('status'));
+        }
+        if (Input::get('ordenar')) {
+            if (Input::get('ordenar') == 'atualizado_desc') {
+                $chamados->orderBy('updated_at', 'desc');
+            }
+            if (Input::get('ordenar') == 'atualizado_asc') {
+                $chamados->orderBy('updated_at', 'asc');
+            }
+            if (Input::get('ordenar') == 'titulo_desc') {
+                $chamados->orderBy('titulo', 'desc');
+            }
+            if (Input::get('ordenar') == 'titulo_asc') {
+                $chamados->orderBy('titulo', 'asc');
+            }
+        }else{
+            $chamados->orderBy('updated_at','desc');
+        }
+        $chamados->paginate(10);
         return view('chamados.index', ['chamados' => $chamados]);
     }
 
@@ -47,6 +82,7 @@ class ChamadosController extends Controller {
         $request->merge(['id_chamado' => $id]);
         if ($resposta->validate($request->only('mensagem'))) {
             $resposta->create($request->only('mensagem', 'id_usuario', 'id_chamado'));
+            $chamado = Chamado::where('id', '=', $id)->first()->touch();
             if ($request->is('admin/*')) {
                 return redirect(route('listar-chamados'));
             }

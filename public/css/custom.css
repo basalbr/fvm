@@ -13,6 +13,60 @@ body{
     font-family: Raleway,sans-serif;
 }
 
+.card{
+    background-color: #fff;
+    box-shadow: 1px 2px 3px rgba(0,0,0,.4);
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.form-inline .form-control{
+    width: 100%;
+}
+
+.form-inline .form-group{
+    margin-bottom: 4px;
+}
+
+.card h3{
+    margin: 5px 5px 10px 0px;
+    padding: 5px 5px 10px 5px;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: 2px solid #f7f7ff; 
+}
+
+h1 {
+    font-size: 30px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 16px;
+}
+
+*::-webkit-scrollbar-track
+{
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar
+{
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar-thumb
+{
+    border-radius: 0px;
+    background-color: #11a8bb;
+}
+
 button:active, button:focus{
     outline: 0!important;
 }
@@ -224,13 +278,14 @@ label{
 }
 
 #sidebar-left{
+    overflow: auto;
     width: 250px;
     position: fixed;
-    height: 100%;
+    height: calc(100% - 60px);
     top: 60px;
     background-color: #D7D6DB;
     box-shadow: inset -9px 0 8px -11px rgba(0,0,0,.4);
-    z-index: 49
+    z-index: 49;
 }
 
 #dash-container{
@@ -246,16 +301,27 @@ label{
 
 #sidebar-left ul{
     list-style: none;
-    padding-left: 15px;
+    padding-left: 5px;
+}
+
+#sidebar-left > ul > li.sidebar-header{
+    margin-left: 2px!important;
+    border-left: 3px solid gray;
+    padding-left: 8px;
+    background-color: #2F3A49 !important;
+    color: #fff;
+    height: 35px;
+    line-height: 35px;
+    box-shadow: 1px 2px 3px rgba(0,0,0,.4);
 }
 
 #sidebar-left > ul > li{
-    margin: 10px 0;
-    height: 60px;
-    font-size: 17px;
+    margin: 5px 0 5px 5px;
+    height: 50px;
+    font-size: 14px;
     text-transform: uppercase;
     font-weight: bold;
-    line-height: 60px;
+    line-height: 50px;
 }
 
 #sidebar-left > ul > li.active{
@@ -268,7 +334,7 @@ label{
     background-color: #C1C0C5;
     display: block;
     color: #8e8e93;
-    padding-left: 60px;
+    padding-left: 50px;
     position: relative;
 }
 
@@ -294,15 +360,15 @@ label{
 }
 
 #sidebar-left > ul > li > a div.icon{
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     background-color: #aaabb0;
     color: #fff;
     position: absolute;
     top: 10px;
     left: 10px;
-    line-height: 40px;
-    font-size: 30px;
+    line-height: 30px;
+    font-size: 20px;
     text-align: center;
 }
 
@@ -753,33 +819,16 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
     overflow: auto;
 }
 
+.btn{
+    border: 0;  
+}
+
 .btn-primary,
 .btn-primary:focus {
-    border-radius: 0px;
-    display: inline-block;
-    margin-bottom: 0;
-    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-    font-weight: 700;
-    text-align: center;
-    vertical-align: middle;
-    text-transform: uppercase;
-    cursor: pointer;
-    background-image: none;
-    border: 0;
-    border-color: rgba(0, 0, 0, 0.07) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.18);
-    white-space: nowrap;
-    padding: 8px 15px;
-    font-size: 12px;
-    color: #fff;
-    letter-spacing: 0.02em;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+
     color: #fff;
     background-color: #11a8bb;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.12) rgba(0, 0, 0, 0.15);
-    height: auto;
 }
 .btn-primary:hover,.btn-primary:active{
     color: #fff;
@@ -820,6 +869,7 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
 }
 
 #calendar{
+    margin-top: 15px;
     margin-bottom: 15px;
 }
 
@@ -830,9 +880,10 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
     vertical-align: middle;
     text-transform: uppercase;
     font-size: 12px;
-    height: 34px;
+    height: 38px;
     padding: 8px 15px!important;
     letter-spacing: 0.02em; 
+    line-height: 23px;
 }
 
 .table>tbody>tr>td{
@@ -1013,7 +1064,6 @@ ul.lista-impostos li:hover{
     margin: .5rem 0 1rem 0;
     border-radius: 0px;
     background-color: #fff;
-    border: 1px solid;
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
 }
@@ -1023,13 +1073,15 @@ ul.lista-impostos li:hover{
 }
 
 .mensagem-usuario{
-    background-color: #f6bd68;
-    color: #fff;
-    border-color: #f29d1d;
+    background-color: #fafafa;
+    border-left: 2px solid #F3565D;
+    margin-right:35px; 
 }
 
 .mensagem-admin{
-    background-color: #f4f4f4;
+    margin-left:35px; 
+    background-color: #FEF9D7;
+    border-right: 2px solid #1BBC9B;
 }
 
 .form-control {
@@ -1120,3 +1172,40 @@ ul.lista-impostos li:hover{
     font-size: 13px;
     font-weight: 400;
 }
+
+.lista-apuracoes-urgentes{
+    padding: 0;
+}
+
+.lista-apuracoes-urgentes li{
+    list-style: none;
+    border-bottom: 1px solid #f7f7ff;
+    padding: 10px 0;
+
+}
+.lista-apuracoes-urgentes li a{
+    color: #11a8bb !important;
+}
+
+.lista-apuracoes-urgentes li a:hover{
+    text-decoration: none;
+    color: #2F3A49 !important;
+}
+
+.lista-apuracoes-urgentes li div.empresa{
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: bold;
+    width: 100%;
+}
+
+.lista-apuracoes-urgentes li div.imposto{
+    font-size: 14px;
+    width: 100%;
+}
+
+.lista-apuracoes-urgentes li div.vencimento{
+    font-weight: bold;
+    font-size: 13px;
+    width: 100%;
+}   

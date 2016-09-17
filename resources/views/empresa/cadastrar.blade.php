@@ -288,7 +288,7 @@
             <label>Pró-Labore (Deixe em branco caso não receba pró-labore)</label>
             <input type='text' class='form-control dinheiro-mask' name='socio[pro_labore]' value="{{Input::old('socio')['pro_labore']}}"/>
         </div>
-        <input type='hidden' name='socio[principal]' value="true"/>
+        <input type='hidden' name='socio[principal]' value="1"/>
 
     </div>
     <div class="col-xs-12">

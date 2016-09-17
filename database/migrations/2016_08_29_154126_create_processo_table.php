@@ -18,7 +18,7 @@ class CreateProcessoTable extends Migration
             $table->foreign('id_imposto')->references('id')->on('imposto');
             $table->integer('id_pessoa')->unsigned();
             $table->foreign('id_pessoa')->references('id')->on('pessoa');
-            $table->enum('status',['concluido','pendente','cancelado','atencao']);
+            $table->string('status');
             $table->date('competencia');
             $table->timestamps();
             $table->softDeletes();
