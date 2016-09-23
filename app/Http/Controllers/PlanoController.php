@@ -19,8 +19,9 @@ class PlanoController extends Controller {
 
     public function store(Request $request) {
         $plano = new Plano;
-        if ($plano->validate($request->only('duracao', 'valor', 'nome', 'descricao'))) {
-            $plano->create($request->only('duracao', 'valor', 'nome', 'descricao'));
+        $request->merge(['valor' => str_replace(',', '.', preg_replace('#[^\d\,]#is', '', $request->get('valor')))]);
+        if ($plano->validate($request->all())) {
+            $plano->create($request->all());
             return redirect(route('listar-plano'));
         } else {
             return redirect(route('cadastrar-plano'))->withInput()->withErrors($plano->errors());
@@ -34,12 +35,22 @@ class PlanoController extends Controller {
 
     public function update($id, Request $request) {
         $plano = Plano::where('id', '=', $id)->first();
-        if ($plano->validate($request->only('duracao', 'valor', 'nome', 'descricao'))) {
-            $plano->update($request->only('duracao', 'valor', 'nome', 'descricao'));
+        $request->merge(['valor' => str_replace(',', '.', preg_replace('#[^\d\,]#is', '', $request->get('valor')))]);
+        if ($plano->validate($request->all())) {
+            $plano->update($request->all());
             return redirect(route('listar-plano'));
         } else {
             return redirect(route('editar-plano'))->withInput()->withErrors($plano->errors());
         }
+    }
+
+    public function simular() {
+        $planos = Plano::orderBy('total_documentos','asc')->get();
+        $max_documentos = Plano::max('total_documentos');
+        $max_pro_labores = Plano::max('pro_labores');
+        $max_valor = Plano::max('valor');
+        $min_valor = Plano::min('valor');
+        return response()->json(['planos' => $planos, 'max_documentos' => $max_documentos, 'max_pro_labores' => $max_pro_labores, 'max_valor' => $max_valor, 'min_valor' => $min_valor]);
     }
 
 }

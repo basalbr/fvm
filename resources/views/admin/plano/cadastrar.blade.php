@@ -48,12 +48,24 @@ $(document).ready(function () {
                 <input type='text' class='form-control' name='nome' value="{{Input::old('nome')}}"/>
             </div>
             <div class='form-group'>
+                <label>Quantidade Total de Documentos Fiscais</label>
+                <input type='text' class='form-control numero-mask' name='total_documentos' value="{{Input::old('total_documentos')}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Quantidade Total de Pró-labores</label>
+                <input type='text' class='form-control numero-mask' name='pro_labores' value="{{Input::old('pro_labores')}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Quantidade Total de Funcionários</label>
+                <input type='text' class='form-control numero-mask' name='funcionarios' value="{{Input::old('funcionarios')}}"/>
+            </div>
+            <div class='form-group'>
                 <label>Duração</label>
                 <input type='text' class='form-control' name='duracao' value="{{Input::old('duracao')}}"/>
             </div>
             <div class='form-group'>
                 <label>Valor</label>
-                <input type='text' class='form-control' name='valor' value="{{Input::old('valor')}}"/>
+                <input type='text' class='form-control dinheiro-mask' name='valor' value="{{Input::old('valor')}}"/>
             </div>
             <div class='form-group'>
                 <label>Descrição</label>

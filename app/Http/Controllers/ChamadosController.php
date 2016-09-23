@@ -51,7 +51,7 @@ class ChamadosController extends Controller {
         }else{
             $chamados->orderBy('updated_at','desc');
         }
-        $chamados->paginate(10);
+        $chamados = $chamados->paginate(10);
         return view('chamados.index', ['chamados' => $chamados]);
     }
 
@@ -84,9 +84,9 @@ class ChamadosController extends Controller {
             $resposta->create($request->only('mensagem', 'id_usuario', 'id_chamado'));
             $chamado = Chamado::where('id', '=', $id)->first()->touch();
             if ($request->is('admin/*')) {
-                return redirect(route('listar-chamados'));
+                return redirect(route('visualizar-chamados', $id));
             }
-            return redirect(route('listar-chamados-usuario'));
+            return redirect(route('responder-chamado-usuario', $id));
         } else {
             if ($request->is('admin/*')) {
                 return redirect(route('visualizar-chamados', $id))->withInput()->withErrors($resposta->errors());

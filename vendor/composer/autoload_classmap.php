@@ -14,6 +14,7 @@ return array(
     'AddVencimentoFieldToProcesso' => $baseDir . '/database/migrations/2016_09_01_102154_add_vencimento_field_to_processo.php',
     'ChangeCepToStringInPessoaTable' => $baseDir . '/database/migrations/2016_09_11_192233_change_cep_to_string_in_pessoa_table.php',
     'ChangeCpfCnpjToVarcharInPessoa' => $baseDir . '/database/migrations/2016_08_31_104042_change_cpf_cnpj_to_varchar_in_pessoa.php',
+    'ChangePlanoTable' => $baseDir . '/database/migrations/2016_09_21_222441_change_plano_table.php',
     'CreateAlertaTable' => $baseDir . '/database/migrations/2016_08_29_155836_create_alerta_table.php',
     'CreateAlertaUsuarioTable' => $baseDir . '/database/migrations/2016_08_29_155943_create_alerta_usuario_table.php',
     'CreateChamadoRespostaTable' => $baseDir . '/database/migrations/2016_04_08_192840_create_chamado_resposta_table.php',

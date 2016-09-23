@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 class PessoaCnae extends Model {
 
-    use SoftDeletes;
 
     protected $rules = ['id_pessoa' => 'required', 'id_cnae' => 'required'];
     protected $errors;

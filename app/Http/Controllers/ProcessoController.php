@@ -40,7 +40,7 @@ class ProcessoController extends Controller {
 
         $processos = Processo::query();
 
-        $processos->join('pessoa','pessoa.id','=','processo.id_pessoa')->where('pessoa.id_usuario','=',Auth::user()->id)->where('processo.status', '<>', 'concluido');
+        $processos->join('pessoa', 'pessoa.id', '=', 'processo.id_pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.status', '<>', 'concluido');
 
         if (Input::get('competencia_de')) {
             $data = explode('/', Input::get('competencia_de'));
@@ -94,84 +94,73 @@ class ProcessoController extends Controller {
         return view('processos.cadastrar', ['competencia' => $competencia, 'empresa' => $empresa, 'vencimento' => $vencimento, 'imposto' => $imposto]);
     }
 
-    public function store(Request $request) {
-//        dd($request->all());
-        $processo = new Processo;
-        $pessoa = \App\Pessoa::where('id', '=', $request->get('id_pessoa'))->first();
-//        $request->merge(['id_usuario' => Auth::user()->id]);
-        if ($processo->validate($request->all())) {
-            $vencimento = explode('-', $request->get('vencimento'));
-            $competencia = explode('-', $request->get('competencia'));
-            $request->merge(['vencimento' => $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0], 'competencia' => $competencia[1] . '-' . $competencia[0] . '-01', 'status' => 'pendente']);
-            $processo = $processo->create($request->all());
-            $erros = [];
-            if ($request->get('informacao_adicional')) {
-                foreach ($request->get('informacao_adicional') as $id => $informacao_adicional) {
-                    if (!$informacao_adicional) {
-                        $erros[] = 'É necessário preencher o campo ' . \App\InformacaoExtra::where('id', '=', $id)->first()->nome;
-                    }
+    public function store($id, Request $request) {
+        $processo = Processo::join('pessoa', 'processo.id_pessoa', '=', 'pessoa.id')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.id', '=', $id)->select('processo.*')->first();
+        $erros = [];
+        if ($request->get('informacao_adicional')) {
+            foreach ($request->get('informacao_adicional') as $k => $informacao_adicional) {
+                if (!$informacao_adicional) {
+                    $erros[] = 'É necessário preencher o campo ' . \App\InformacaoExtra::where('id', '=', $k)->first()->nome;
                 }
             }
-            if ($request->file('anexo')) {
-                foreach ($request->file('anexo') as $id => $anexo) {
-                    $informacao_extra = \App\InformacaoExtra::where('id', '=', $id)->first();
-                    $nome_bonito = ['informacao' => $informacao_extra->nome];
-                    $extensoes = '';
-                    foreach ($informacao_extra->extensoes as $k => $extensao) {
-                        if ($k > 0) {
-                            $extensoes.=',';
-                        }
-                        $extensoes.=$extensao->extensao;
-                    }
-                    $rules = ['informacao' => 'required|max:' . $informacao_extra->tamanho_maximo . '|mimes:' . $extensoes];
-                    // make a new validator object
-                    $v = Validator::make(['informacao' => $anexo], $rules);
-                    $v->setAttributeNames($nome_bonito);
-                    if ($v->fails()) {
-                        $erros = array_merge($erros, $v->errors()->all());
-                    }
-                }
-            }
-            if (count($erros)) {
-                $processo->delete();
-                return redirect(route('abrir-processo', ['competencia' => $request->get('competencia'), 'id_imposto' => $request->get('id_imposto'), 'cnpj' => $pessoa->cpf_cnpj, 'vencimento' => $request->get('vencimento')]))->withInput()->withErrors($erros);
-            }
-            if ($request->get('informacao_adicional')) {
-                foreach ($request->get('informacao_adicional') as $id => $informacao_adicional) {
-                    $informacao_extra = new \App\ProcessoInformacaoExtra;
-                    $informacao_extra->create(['informacao' => $informacao_adicional, 'id_processo' => $processo->id, 'id_informacao_extra' => $id]);
-                }
-            }
-            if ($request->file('anexo')) {
-                foreach ($request->file('anexo') as $id => $anexo) {
-                    $informacao_extra = new \App\ProcessoInformacaoExtra;
-                    $anexo_nome = 'processo_anexo' . str_shuffle(date('dmyhis')) . '.' . $anexo->guessClientExtension();
-                    $anexo->move(getcwd() . '/uploads/processos/', $anexo_nome);
-                    $informacao_extra->create(['informacao' => $anexo_nome, 'id_processo' => $processo->id, 'id_informacao_extra' => $id]);
-                }
-            }
-            return redirect(route('listar-processos'));
-        } else {
-            dd($processo->errors());
-            return redirect(route('cadastrar-processo'))->withInput()->withErrors($processo->errors());
         }
-        return redirect(route('listar-processos'));
+        if ($request->file('anexo')) {
+            foreach ($request->file('anexo') as $k => $anexo) {
+                $informacao_extra = \App\InformacaoExtra::where('id', '=', $k)->first();
+                $nome_bonito = ['informacao' => $informacao_extra->nome];
+                $extensoes = '';
+                foreach ($informacao_extra->extensoes as $x => $extensao) {
+                    if ($x > 0) {
+                        $extensoes.=',';
+                    }
+                    $extensoes.=$extensao->extensao;
+                }
+                $rules = ['informacao' => 'required|max:' . $informacao_extra->tamanho_maximo . '|mimes:' . $extensoes];
+                // make a new validator object
+                $v = Validator::make(['informacao' => $anexo], $rules);
+                $v->setAttributeNames($nome_bonito);
+                if ($v->fails()) {
+                    $erros = array_merge($erros, $v->errors()->all());
+                }
+            }
+        }
+        if (count($erros)) {
+            return redirect(route('responder-processo-usuario', [$id]))->withErrors($erros);
+        }
+        if ($request->get('informacao_adicional')) {
+            foreach ($request->get('informacao_adicional') as $k => $informacao_adicional) {
+                $informacao_extra = new \App\ProcessoInformacaoExtra;
+                $informacao_extra->create(['informacao' => $informacao_adicional, 'id_processo' => $processo->id, 'id_informacao_extra' => $k]);
+            }
+        }
+        if ($request->file('anexo')) {
+            foreach ($request->file('anexo') as $k => $anexo) {
+                $informacao_extra = new \App\ProcessoInformacaoExtra;
+                $anexo_nome = 'processo_anexo' . str_shuffle(date('dmyhis')) . '.' . $anexo->guessClientExtension();
+                $anexo->move(getcwd() . '/uploads/processos/', $anexo_nome);
+                $informacao_extra->create(['informacao' => $anexo_nome, 'id_processo' => $processo->id, 'id_informacao_extra' => $k]);
+            }
+        }
+        return redirect(route('responder-processo-usuario', [$id]));
     }
 
     public function edit($id) {
-        $processo = Processo::where('id', '=', $id)->first();
+        $processo = Processo::join('pessoa', 'processo.id_pessoa', '=', 'pessoa.id')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.id', '=', $id)->select('processo.*')->with('pessoa')->first();
         return view('admin.processos.visualizar', ['processo' => $processo]);
     }
 
     public function editUsuario($id) {
-        $processo = Processo::where('id', '=', $id)->whereExists(function($query) {
-                    $query->from('pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id);
-                })->first();
+        $processo = Processo::join('pessoa', 'processo.id_pessoa', '=', 'pessoa.id')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.id', '=', $id)->select('processo.*')->with('pessoa')->first();
         return view('processos.visualizar', ['processo' => $processo]);
     }
 
     public function update($id, Request $request) {
-        $processo = Processo::where('id', '=', $id)->first();
+        if ($request->is('admin/*')) {
+            $processo = Processo::join('pessoa', 'processo.id_pessoa', '=', 'pessoa.id')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.id', '=', $id)->select('processo.*')->with('pessoa')->first();
+        }else{
+            $processo = Processo::where('id', '=', $id)->first();
+        }
+        
         $resposta = new ProcessoResposta;
         $request->merge(['id_usuario' => Auth::user()->id, 'id_processo' => $id]);
         if ($request->file('guia')) {
@@ -195,9 +184,9 @@ class ProcessoController extends Controller {
                 $processo->save();
             }
             if ($request->is('admin/*')) {
-                return redirect(route('listar-processos-admin'));
+                return redirect(route('visualizar-processos', $id));
             }
-            return redirect(route('listar-processos'));
+            return redirect(route('responder-processo-usuario', $id));
         } else {
             if ($request->is('admin/*')) {
                 return redirect(route('visualizar-processos', $id))->withInput()->withErrors($resposta->errors());

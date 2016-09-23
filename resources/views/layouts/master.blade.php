@@ -8,8 +8,9 @@
         <link href='https://fonts.googleapis.com/css?family=Raleway:400,700,700italic,400italic' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" href="{{url('public/css/font-awesome.min.css')}}" />
         <link rel="stylesheet" type="text/css" href="{{url('public/css/bootstrap.min.css')}}" />
-        <link rel="stylesheet" name="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.css" />
+        <link rel="stylesheet" name="text/css" href="{{url('public/css/fullcalendar.min.css')}}" />
         <link rel="stylesheet" type="text/css" href="{{url('public/css/bootstrap-datepicker3.min.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url('public/css/animate.css')}}" />
         <link rel="stylesheet" type="text/css" href="{{url('public/css/custom.css')}}" />
         @show
         @section('js')
@@ -28,60 +29,6 @@ $(function () {
             scrollTop: $($anchor.attr('href')).offset().top - 50
         }, 1000, 'easeInOutExpo');
         event.preventDefault();
-    });
-    $('#calendar').fullCalendar({
-        height:'auto',
-        header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay'
-        },
-        lang: 'pt-br',
-        events: {
-            url: "{{route('ajax-calendar')}}",
-            type: 'POST'
-        },
-        eventClick: function (calEvent) {
-            $('.fc-event').each(function () {
-                $(this).removeClass('fc-event-success');
-            });
-            $(this).addClass('fc-event-success');
-            $.get("{{route('ajax-instrucoes')}}", {'id': calEvent.id}, function (data) {
-                if (data.length !== undefined) {
-                    if (data.length > 0) {
-                        var html = "<div class='col-xs-12'>\n\
-                                    <input type='hidden' id='instrucao-page' value='1' />\n\
-                                    <input type='hidden' id='instrucao-total' value='" + data.length + "' />";
-                        html += '<h2 style="margin-bottom:15px; margin-top:0; padding:0;">' + calEvent.title + '</h2>';
-                        if (data.length > 1) {
-                            html += "<div id='paginacao-instrucao-container'>";
-                            html += "<div class='paginacao-instrucao'>Página <span id='pagina-atual' class='numero'>1</span> de <span class='numero'>" + data.length + "</span></div>";
-                            html += "<div class='paginacao-botoes'>";
-                            html += "<div class='btn btn-primary disabled btn-instrucao-voltar' style='margin-right: 5px'>Voltar</div>";
-                            html += "<div class='btn btn-primary btn-instrucao-avancar'>Avançar</div>";
-                            html += "</div>";
-                            html += "<div class='clearfix'></div>";
-                            html += "</div>";
-                        }
-                        html += "</div>";
-                        data.forEach(function (instrucao, key) {
-                            if (key == 0) {
-                                html += "<div class='col-xs-12 instrucao-descricao' style='display: block' data-pagina='" + (key + 1) + "'>";
-                            } else {
-                                html += "<div class='col-xs-12 instrucao-descricao' style='display: none' data-pagina='" + (key + 1) + "'>";
-                            }
-                            html += instrucao.descricao;
-                            html += "</div>";
-                        }, html);
-
-                        $('#instrucao').html(html);
-                        $('html, body').animate({
-                            scrollTop: $("#instrucao").offset().top - 200
-                        }, 1000);
-                    }
-                }
-            })
-        }
     });
 
     $("#instrucao").on('click', '.btn-instrucao-avancar', function () {
@@ -138,18 +85,20 @@ $(function () {
         mostrarDescricaoInstrucao()
     }
 
-    $('.date-mask').mask('00/00/0000',{placeholder: "__/__/____"});
+    $('.date-mask').mask('00/00/0000', {placeholder: "__/__/____"});
     $('.cnpj-mask').mask('00.000.000/0000-00');
     $('.cpf-mask').mask('000.000.000-00');
     $('.cep-mask').mask('00000-000');
     $('.numero-mask').mask("#0", {reverse: true});
+    $('.numero-mask2').mask("#0", {reverse: true, placeholder: '0'});
     $('.dinheiro-mask').mask("#.##0,00", {reverse: true});
+    $('.dinheiro-mask2').mask("#.##0,00", {reverse: true, placeholder: '0,00'});
     $('.dia-mask').mask("09");
     $(".fone-mask").mask("(00) 0000-00009");
     $('.cnae-mask').mask('0000-0/00');
     $('.irpf-mask').mask('000000000000');
     $('.pis-mask').mask('000.00000.00-0');
-    
+
     jQuery.support.cors = true;
     /*$('.cep-mask').on('keyup', function () {
      if ($(this).val().length == 9) {

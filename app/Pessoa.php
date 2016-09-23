@@ -13,7 +13,7 @@ class Pessoa extends Model {
     protected $rules = [
         'id_usuario' => 'required',
         'id_natureza_juridica' => 'required',
-        'cpf_cnpj' => 'required|unique:pessoa,cpf_cnpj',
+        'cpf_cnpj' => 'required|unique:pessoa,cpf_cnpj|size:18',
         'inscricao_estadual' => 'required|unique:pessoa,inscricao_estadual',
         'inscricao_municipal' => 'required|unique:pessoa,inscricao_municipal',
         'iptu' => 'required',
@@ -21,7 +21,7 @@ class Pessoa extends Model {
         'tipo' => 'required',
         'endereco' => 'required',
         'bairro' => 'required',
-        'cep' => 'required',
+        'cep' => 'required|size:9',
         'cidade' => 'required',
         'numero' => 'numeric',
         'id_uf' => 'required',
@@ -77,6 +77,11 @@ class Pessoa extends Model {
             $this->rules['cpf_cnpj'] = 'required|unique:pessoa,cpf_cnpj,'.$data['id'];
             $this->rules['inscricao_municipal'] = 'required|unique:pessoa,inscricao_municipal,'.$data['id'];
             $this->rules['inscricao_estadual'] = 'required|unique:pessoa,inscricao_estadual,'.$data['id'];
+            $this->rules['razao_social'] = 'required|unique:pessoa,razao_social,'.$data['id'];
+            $this->rules['id_usuario'] = '';
+            $this->rules['id_natureza_juridica'] = '';
+            $this->rules['id_tipo_tributacao'] = '';
+            $this->rules['tipo'] = '';
         }
         $v = Validator::make($data, $this->rules);
         $v->setAttributeNames($this->niceNames);

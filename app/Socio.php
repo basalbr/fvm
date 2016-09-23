@@ -14,18 +14,18 @@ class Socio extends Model {
         'id_pessoa' => 'required',
         'nome' => 'required',
         'principal' => 'required',
-        'cpf' => 'required|unique:socio,cpf',
+        'cpf' => 'required|size:14|unique:socio,cpf',
         'rg' => 'required|unique:socio,rg',
         'titulo_eleitor' => 'required',
-        'recibo_ir' => 'required',
         'endereco' => 'required',
         'bairro' => 'required',
-        'cep' => 'required',
+        'cep|size:9' => 'required',
         'cidade' => 'required',
         'numero' => 'numeric',
         'id_uf' => 'required',
         'pro_labore' => 'numeric',
         'orgao_expedidor' => 'required',
+        'pis'=>'size:14'
     ];
     protected $errors;
     protected $niceNames = ['descricao' => 'Descrição', 'representante' => 'Representante', 'qualificacao' => 'Qualificação'];
@@ -66,6 +66,8 @@ class Socio extends Model {
         if ($update) {
             $this->rules['cpf'] = 'required|unique:socio,cpf,' . $data['id'];
             $this->rules['rg'] = 'required|unique:socio,rg,' . $data['id'];
+            $this->rules['id_pessoa'] = '';
+            $this->rules['principal'] = '';
         }
         $v = Validator::make($data, $this->rules);
         $v->setAttributeNames($this->niceNames);

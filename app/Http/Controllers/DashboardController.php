@@ -29,12 +29,12 @@ class DashboardController extends Controller {
             '11' => 'Novembro',
             '12' => 'Dezembro'
         );
-        $impostos = \App\Imposto::orderBy('vencimento')->get();
+        $impostos = \App\Imposto::join('imposto_mes','imposto_mes.id_imposto','=','imposto.id')->where('imposto_mes.mes','=',(int)date('m'))->orderBy('imposto.vencimento')->select('imposto.*')->get();
 
         $mensagens = ChamadoResposta::join("chamado","chamado.id",'=',"chamado_resposta.id_chamado")->where('chamado.id_usuario', '=', Auth::user()->id)->groupBy('chamado_resposta.id_chamado')->orderBy('chamado_resposta.created_at','desc')->select('chamado_resposta.*')->limit(5)->get();
         $empresas = Pessoa::where('id_usuario', '=', Auth::user()->id)->orderBy('nome_fantasia')->limit(5)->get();
         $socios = Socio::join('pessoa', 'pessoa.id', '=', 'socio.id_pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id)->select('socio.*')->orderBy('socio.nome')->limit(5)->get();
-        $apuracoes = Processo::join('pessoa', 'pessoa.id', '=', 'processo.id_pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.status', '<>', 'concluido')->get();
+        $apuracoes = Processo::join('pessoa', 'pessoa.id', '=', 'processo.id_pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.status', '<>', 'concluido')->select('processo.*')->get();
         $apuracoes_urgentes = [];
         foreach ($apuracoes as $apuracao) {
             if ($apuracao->imposto->informacoes_extras()->count() > 0 && $apuracao->informacoes_extras()->count() < 1) {
@@ -42,7 +42,7 @@ class DashboardController extends Controller {
             }
         }
 
-        return view('dashboard.index', ['mensagens'=>$mensagens, 'empresas' => $empresas, 'impostos' => $impostos, 'apuracoes' => $apuracoes_urgentes]);
+        return view('dashboard.index', ['mensagens'=>$mensagens, 'empresas' => $empresas, 'impostos' => $impostos, 'apuracoes' => $apuracoes_urgentes,'meses'=>$meses]);
     }
 
     public function acessar() {

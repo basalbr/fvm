@@ -10,9 +10,9 @@ class Plano extends Model {
 
     use SoftDeletes;
 
-    protected $rules = ['descricao' => 'required','valor'=>'required|numeric','nome'=>'required', 'duracao'=>'required|integer'];
+    protected $rules = ['descricao' => 'required', 'valor' => 'required|numeric', 'total_documentos' => 'required|numeric', 'pro_labores' => 'required|numeric', 'funcionarios' => 'required|numeric', 'nome' => 'required', 'duracao' => 'required|integer'];
     protected $errors;
-    protected $niceNames = ['descricao' => 'Descrição', 'valor'=>'Valor','nome'=>'Nome', 'duracao' => 'Duração'];
+    protected $niceNames = ['descricao' => 'Descrição', 'valor' => 'Valor', 'nome' => 'Nome', 'duracao' => 'Duração'];
 
     /**
      * The database table used by the model.
@@ -26,8 +26,7 @@ class Plano extends Model {
      *
      * @var array
      */
-    protected $fillable = ['duracao', 'valor', 'nome', 'descricao'];
-
+    protected $fillable = ['duracao', 'valor', 'nome', 'descricao', 'total_documentos', 'pro_labores', 'funcionarios'];
 
     public function validate($data) {
         // make a new validator object

@@ -30,6 +30,9 @@
         <li class='{{Request::is('empresas*') ? "active" : ""}}'>
             <a href="{{route('empresas')}}"><div class="icon"><span class="fa fa-building"></span></div>Empresas</a>
         </li>
+        <li class='{{Request::is('socios*') ? "active" : ""}}'>
+            <a href="{{route('listar-socios-apenas')}}"><div class="icon"><span class="fa fa-users"></span></div>sócios</a>
+        </li>
         <li class='{{Request::is('pro-labore*') ? "active" : ""}}'>
             <a href="{{route('listar-pro-labore-cliente')}}"><div class="icon"><span class="fa fa-dollar"></span></div>pró-labore</a>
         </li>

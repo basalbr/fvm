@@ -11,6 +11,7 @@
         </div>
         <div class='form-group'>
             <input type='submit' value="Continuar" class='btn btn-primary' />
+            <a href="{{route('home')}}" class='btn btn-warning'>Voltar para página inicial</a>
         </div>
     </form>
 </div>

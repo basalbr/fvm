@@ -79,7 +79,7 @@ $(function () {
                 <td>{{$chamado->titulo}}</td>
                 <td>{{date_format($chamado->created_at, 'd-m-Y')}}</td>
                 <td>{{date_format($chamado->updated_at, 'd-m-Y')}}</td>
-                <td><a href="{{route('responder-chamado-usuario', ['id' => $chamado->id])}}">Responder</a></td>
+                <td><a class="btn btn-primary" href="{{route('responder-chamado-usuario', ['id' => $chamado->id])}}">Responder</a></td>
             </tr>
             @endforeach
             @else

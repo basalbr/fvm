@@ -18,7 +18,7 @@
         <tr>
             <td>{{$plano->nome}}</td>
             <td>{{$plano->duracao}}</td>
-            <td>{{$plano->valor}}</td>
+            <td>R$ {{number_format($plano->valor, 2, ',','.')}}</td>
             <td><a class="btn btn-warning" href="{{route('editar-plano', ['id' => $plano->id])}}">Editar</a> <a class="btn btn-danger" href="{{$plano->id}}">Remover</a></td>
         </tr>
         @endforeach
