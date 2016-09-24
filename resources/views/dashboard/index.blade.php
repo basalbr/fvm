@@ -5,7 +5,7 @@
     var planos;
     var max_documentos;
     var max_pro_labores;
-    var maxValor = max_documentos;
+    var maxValor;
     $(function () {
         $.get("{{route('ajax-simular-plano')}}", function (data) {
             planos = data.planos;

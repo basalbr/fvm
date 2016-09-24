@@ -21,8 +21,9 @@
         <script type="text/javascript" src="{{url('public/js/mask.js')}}"></script>
         <script name="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.js"></script>
         <script type="text/javascript" src="{{url('public/js/pt-br.js')}}"></script>
-        <script type="text/javascript">
+        <script type="text/javascript"  language="javascript">
 $(function () {
+   
     $('a.page-scroll').bind('click', function (event) {
         var $anchor = $(this);
         $('html, body').stop().animate({
@@ -115,12 +116,12 @@ $(function () {
         </script>
         @show
     </head>
-    <body data-spy="scroll" data-target=".navbar" data-offset="400" class="{{Request::is('/') ? '' : 'bg-ltblue'}}">
+    <body data-spy="scroll" data-target="#navbar-main" data-offset="200" class="{{Request::is('/') ? '' : 'bg-ltblue'}}">
         <section id="navbar">
             <div class="navbar navbar-default navbar-fixed-top">
                 <div class="{{Request::is('/') ? 'container' : 'container-fluid'}}">
                     <div class="navbar-header">
-                        <a href="" class="navbar-brand">F.V.M</a>
+                        <a href="{{route('home')}}" class="navbar-brand"><img src="{{url('public/images/logotipo-pequeno.png')}}" /></a>
                         <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
@@ -128,7 +129,7 @@ $(function () {
                         </button>
                     </div>
                     <div class="navbar-collapse collapse" id="navbar-main">
-                        <ul class="nav navbar-nav navbar-right">
+                        <ul class="nav navbar-nav navbar-right" role="tablist">
                             @if(Request::is('/'))
                             <li class="dropdown">
                                 <a href="#inicio" id="nav-inicio">Início</a>

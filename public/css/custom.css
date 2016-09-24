@@ -13,6 +13,10 @@ body{
     font-family: Raleway,sans-serif;
 }
 
+body.relative{
+    position: relative;
+}
+
 .card{
     background-color: #fff;
     box-shadow: 1px 2px 3px rgba(0,0,0,.4);
@@ -71,30 +75,79 @@ button:active, button:focus{
     outline: 0!important;
 }
 
-#inicio .btn.btn-default{
+#inicio .btn{
     display: inline-block;
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 18px;
     letter-spacing: 1px;
-    line-height: 100%;
+    line-height: 50px;
     margin: 10px 0;
     outline: 0 none;
-    padding: 18px 36px;
+    height: 68px;
     position: relative;
     text-transform: uppercase;
-    white-space: nowrap;    color: #333;
-    border: 2px solid #333;
+    white-space: nowrap;   
     z-index: 1;
     position: relative;
     cursor: pointer;
+    border: 2px solid;
 }
 
+#inicio .btn-success{
+    border-color: #398439;
+}
+
+#inicio .btn-info{
+    border-color: #269abc;
+}
+
+#inicio img{
+    margin-top: 130px;
+    height: 160px;
+}
 #inicio h1{
     margin-top: 190px; position: relative; color: #fff; z-index: 1; color: #222222; font-size: 90px; font-weight: bold
 }
 
 #inicio h2{
-    margin-top: 5px; position: relative; color: #fff; z-index: 1; color: #222222; font-size: 50px; font-weight: bold;
+    margin-top: 190px; position: relative; color: white; z-index: 1; font-size: 50px; font-weight: bold;
+}
+
+.icon {
+    font-size: 70px;
+    text-align: center;
+    color: #407887;
+}
+#como-funciona h2{
+    font-size:24px
+}
+#como-funciona p, #contato p, #planos p{
+    font-size: 16px;
+}
+
+#como-funciona .btn, #planos .btn, #contato .btn{
+    box-shadow: 1px 2px 3px rgba(0,0,0,.4);
+    border-radius: 0;
+    color: #fff;
+    height: 50px;
+    z-index: 999;
+    font-size: 14px;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    line-height: 35px;
+}
+
+#contato label{
+    font-size: 16px;
+    color: #fff;
+}
+
+#contato p, #contato h2, #contato h1{
+    color: #fff;
+        
+}
+#contato hr{
+ background-image: linear-gradient(to left,rgba(255,255,255,0),rgba(255,255,255,.2),rgba(255,255,255,0))!important;   
 }
 
 #parallax{
@@ -267,6 +320,7 @@ label{
 #redes-sociais a{
     font-size: 55px;
     margin-right: 15px;
+    color: #fff;
 }
 
 .form-control, .btn{
@@ -1209,3 +1263,12 @@ ul.lista-impostos li:hover{
     font-size: 13px;
     width: 100%;
 }   
+
+
+.navbar-brand{
+    padding: 12px 15px;
+}
+
+.navbar-brand img{
+    height: 35px;
+}

@@ -2,7 +2,7 @@
 @section('header_title', 'Calendário de Impostos')
 @section('js')
 @parent
-<script type="text/javascript">
+<script type="text/javascript" language="javascript">
 $(function(){
     $('#calendar').fullCalendar({
         height:'auto',

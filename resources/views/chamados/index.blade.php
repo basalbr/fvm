@@ -4,7 +4,7 @@
 @parent()
 <script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.min.js')}}"></script>
 <script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.pt-BR.min.js')}}"></script>
-<script type="text/javascript">
+<script type="text/javascript" language="javascript">
 $(function () {
     $('.date-mask').on('keypress', function () {
         return false;

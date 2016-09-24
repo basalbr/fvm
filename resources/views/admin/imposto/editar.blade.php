@@ -2,7 +2,7 @@
 @section('header_title', 'Home')
 @section('js')
 @parent
-<script type="text/javascript">
+<script type="text/javascript" language="javascript">
     $(document).ready(function () {
         $("#todos").on('change', function () {
             if ($(this).prop("checked")) {
