@@ -11,9 +11,9 @@
   |
  */
 
-Route::get('/', ['as'=>'home', 'uses'=>function () {
-    return view('index');
-}]);
+Route::get('/', ['as' => 'home', 'uses' => function () {
+        return view('index');
+    }]);
 
 Route::get('/admin', ['as' => 'admin', 'uses' => 'AdminController@index', 'middleware' => 'admin']);
 
@@ -155,3 +155,13 @@ Route::post('/ajax/consulta/', ['as' => 'ajax-simples', 'uses' => 'DashboardCont
 Route::post('/ajax/cnae/', ['as' => 'ajax-cnae', 'uses' => 'CnaeController@ajax', 'middleware' => 'auth']);
 Route::post('/ajax/calendar/', ['as' => 'ajax-calendar', 'uses' => 'ImpostoController@ajaxCalendar', 'middleware' => 'auth']);
 Route::get('/ajax/instrucoes/', ['as' => 'ajax-instrucoes', 'uses' => 'ImpostoController@ajaxInstrucoes', 'middleware' => 'auth']);
+Route::post('/ajax/enviar-contato/', ['as' => 'ajax-enviar-contato', 'uses' => 'HomeController@ajaxContato']);
+
+
+Route::get('/ajax/enviar-contat2o', ['as' => 'ajax2-enviar-contato', 'uses' => function () {
+        $user = App\Usuario::findOrFail(2);
+        Mail::send('emails.novo-usuario', ['nome' => $user->nome], function ($m) use ($user) {
+            $m->to($user->email, $user->nome)->subject('Bem Vindo à WEBContabilidade');
+        });
+    }]);
+        

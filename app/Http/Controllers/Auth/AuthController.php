@@ -45,9 +45,31 @@ use AuthenticatesAndRegistersUsers,
 
     public function getLogin(Request $request) {
         if ($request->old('email') && $request->old('nome')) {
-            return view('login.index',['email' => $request->old('email'), 'nome' => $request->old('nome')]);
+            return view('login.index', ['email' => $request->old('email'), 'nome' => $request->old('nome')]);
         }
         return redirect()->back();
+    }
+
+    public function postRegister(Request $request) {
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                    $request, $validator
+            );
+        }
+
+        Auth::login($this->create($request->all()));
+        $usuario = Auth::user();
+        \Illuminate\Support\Facades\Mail::send('emails.novo-usuario', ['nome' => $usuario->nome], function ($m) use ($usuario) {
+            $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+            $m->to($usuario->email)->subject('Seja bem vindo à WEBContabilidade');
+        });
+        \Illuminate\Support\Facades\Mail::send('emails.novo-usuario-admin', ['nome' => $usuario->nome], function ($m) use ($usuario) {
+            $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+            $m->to('admin@webcontabilidade.com')->subject('Novo usuário cadastrado');
+        });
+        return redirect($this->redirectPath());
     }
 
     public function postLogin(Request $request) {

@@ -42,9 +42,25 @@ $(document).ready(function () {
         @endif
         <form method="POST" action="">
             {{ csrf_field() }}
-            <div class='form-group'>
+           <div class='form-group'>
                 <label>Nome</label>
                 <input type='text' class='form-control' name='nome' value="{{$plano->nome}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Quantidade Total de Documentos Fiscais</label>
+                <input type='text' class='form-control numero-mask' name='total_documentos' value="{{$plano->total_documentos}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Quantidade Total de Documentos Contábeis</label>
+                <input type='text' class='form-control numero-mask' name='total_documentos_contabeis' value="{{$plano->total_documentos_contabeis}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Quantidade Total de Pró-labores</label>
+                <input type='text' class='form-control numero-mask' name='pro_labores' value="{{$plano->pro_labores}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Quantidade Total de Funcionários</label>
+                <input type='text' class='form-control numero-mask' name='funcionarios' value="{{$plano->funcionarios}}"/>
             </div>
             <div class='form-group'>
                 <label>Duração</label>
@@ -52,7 +68,7 @@ $(document).ready(function () {
             </div>
             <div class='form-group'>
                 <label>Valor</label>
-                <input type='text' class='form-control' name='valor' value="{{$plano->valor}}"/>
+                <input type='text' class='form-control dinheiro-mask' name='valor' value="{{$plano->valor}}"/>
             </div>
             <div class='form-group'>
                 <label>Descrição</label>

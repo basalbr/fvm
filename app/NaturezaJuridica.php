@@ -10,9 +10,9 @@ class NaturezaJuridica extends Model {
 
     use SoftDeletes;
 
-    protected $rules = ['descricao' => 'required','representante'=>'required','qualificacao'=>'required'];
+    protected $rules = ['descricao' => 'required','representante'=>'required','qualificacao'=>'required','codigo'=>'required'];
     protected $errors;
-    protected $niceNames = ['descricao' => 'Descrição', 'representante'=>'Representante','qualificacao'=>'Qualificação'];
+    protected $niceNames = ['descricao' => 'Descrição', 'representante'=>'Representante','qualificacao'=>'Qualificação','codigo'=>'Código'];
 
     /**
      * The database table used by the model.
@@ -26,7 +26,7 @@ class NaturezaJuridica extends Model {
      *
      * @var array
      */
-    protected $fillable = ['descricao','representante','qualificacao'];
+    protected $fillable = ['descricao','representante','qualificacao','codigo'];
 
 
     public function validate($data) {

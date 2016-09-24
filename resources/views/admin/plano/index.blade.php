@@ -29,6 +29,7 @@
         @endif
     </tbody>
 </table>
+{!! str_replace('/?', '?', $planos->render()) !!}
 <a class='btn btn-primary' href='{{route('cadastrar-plano')}}'>Cadastrar um plano de pagamento</a><br />
 
 @stop

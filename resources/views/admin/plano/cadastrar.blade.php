@@ -52,6 +52,10 @@ $(document).ready(function () {
                 <input type='text' class='form-control numero-mask' name='total_documentos' value="{{Input::old('total_documentos')}}"/>
             </div>
             <div class='form-group'>
+                <label>Quantidade Total de Documentos Contábeis</label>
+                <input type='text' class='form-control numero-mask' name='total_documentos_contabeis' value="{{Input::old('total_documentos_contabeis')}}"/>
+            </div>
+            <div class='form-group'>
                 <label>Quantidade Total de Pró-labores</label>
                 <input type='text' class='form-control numero-mask' name='pro_labores' value="{{Input::old('pro_labores')}}"/>
             </div>

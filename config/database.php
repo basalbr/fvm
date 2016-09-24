@@ -63,6 +63,18 @@ return [
             'prefix'    => '',
             'strict'    => false,
         ],
+        
+         'mysql2' => [
+            'driver'    => 'mysql',
+            'host'      => env('DB_HOST', 'webcontabilidade.com'),
+            'database'  => env('DB_DATABASE', 'webco609_webcontabilidade'),
+            'username'  => env('DB_USERNAME', 'webco609_admin'),
+            'password'  => env('DB_PASSWORD', 'razer156084'),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+        ],
 
         'pgsql' => [
             'driver'   => 'pgsql',

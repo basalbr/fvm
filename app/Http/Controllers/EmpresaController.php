@@ -35,7 +35,7 @@ class EmpresaController extends Controller {
             'id_tipo_tributacao' => 1,
             'telefone' => '123456',
             'qtde_funcionarios' => 0,
-            'id_uf'=>24
+            'id_uf' => 24
         ]);
         if ($empresa->validate($request->except('_token'))) {
 
@@ -43,11 +43,11 @@ class EmpresaController extends Controller {
             $empresa = $empresa->create($request->except('_token', 'cnaes', 'socio'));
             if (count($request->get('socio'))) {
                 $socio = new \App\Socio;
-                
+
                 $socioData = $request->get('socio');
                 $socioData['id_pessoa'] = $empresa->id;
                 if ($request->get('socio')['pro_labore']) {
-                    $socioData['pro_labore'] = str_replace(',','.',preg_replace('#[^\d\,]#is','',$request->get('socio')['pro_labore']));
+                    $socioData['pro_labore'] = str_replace(',', '.', preg_replace('#[^\d\,]#is', '', $request->get('socio')['pro_labore']));
                 }
                 $request->merge([
                     'socio' => $socioData
@@ -62,6 +62,15 @@ class EmpresaController extends Controller {
                     $pessoaCnae->save();
                 }
             }
+            $usuario = Auth::user();
+            \Illuminate\Support\Facades\Mail::send('emails.nova-empresa', ['nome' => $usuario->nome, 'empresa'=>$empresa], function ($m) use ($usuario) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to($usuario->email)->subject('Nova empresa cadastrada');
+            });
+            \Illuminate\Support\Facades\Mail::send('emails.nova-empresa-admin', ['nome' => $usuario->nome, 'empresa'=>$empresa], function ($m) use ($usuario) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to('admin@webcontabilidade.com')->subject('Novo usuário cadastrado');
+            });
             return redirect(route('empresas'));
         } else {
             return redirect(route('cadastrar-empresa'))->withInput()->withErrors($empresa->errors());
@@ -101,6 +110,11 @@ class EmpresaController extends Controller {
                     $pessoaCnae->save();
                 }
             }
+            $usuario = Auth::user();
+            \Illuminate\Support\Facades\Mail::send('emails.editar-empresa', ['nome' => $usuario->nome, 'empresa'=>$empresa], function ($m) use ($usuario) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to($usuario->email)->subject('Nova empresa cadastrada');
+            });
             return redirect(route('empresas'));
         } else {
             return redirect(route('editar-empresa', [$id]))->withInput()->withErrors($empresa->errors());

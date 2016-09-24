@@ -20,6 +20,10 @@
         <form method="POST" action="">
             {{ csrf_field() }}
             <div class='form-group'>
+                <label>Código</label>
+                <input type='text' class='form-control' name='codigo' value="{{$natureza_juridica->codigo}}"/>
+            </div>
+            <div class='form-group'>
                 <label>Descrição</label>
                 <input type='text' class='form-control' name='descricao' value="{{$natureza_juridica->descricao}}"/>
             </div>

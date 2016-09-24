@@ -19,8 +19,8 @@ class NaturezaJuridicaController extends Controller {
 
     public function store(Request $request) {
         $natureza_juridica = new NaturezaJuridica;
-        if ($natureza_juridica->validate($request->only('descricao', 'representante', 'qualificacao'))) {
-            $natureza_juridica->create($request->only('descricao', 'representante', 'qualificacao'));
+        if ($natureza_juridica->validate($request->all())) {
+            $natureza_juridica->create($request->all());
             return redirect(route('listar-natureza-juridica'));
         } else {
             return redirect(route('cadastrar-natureza-juridica'))->withInput()->withErrors($natureza_juridica->errors());
@@ -34,8 +34,8 @@ class NaturezaJuridicaController extends Controller {
 
     public function update($id, Request $request) {
         $natureza_juridica = NaturezaJuridica::where('id', '=', $id)->first();
-        if ($natureza_juridica->validate($request->only('descricao', 'representante', 'qualificacao'))) {
-            $natureza_juridica->update($request->only('descricao', 'representante', 'qualificacao'));
+        if ($natureza_juridica->validate($request->all())) {
+            $natureza_juridica->update($request->all());
             return redirect(route('listar-natureza-juridica'));
         } else {
             return redirect(route('editar-natureza-juridica'))->withInput()->withErrors($natureza_juridica->errors());

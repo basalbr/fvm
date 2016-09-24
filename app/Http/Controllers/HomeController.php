@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
+
 class HomeController extends Controller {
 
     public function index() {
@@ -30,21 +31,32 @@ class HomeController extends Controller {
     public function acessar() {
         return view('acessar.index');
     }
-    
+
     public function register() {
         return view('register.index');
     }
-    
+
     public function checkEmail(Request $request) {
-        $usuario = \App\Usuario::where('email','=',$request->input('email'))->first();
-        if($usuario instanceof \App\Usuario){
-            return redirect(route('login'))->withInput(['email' => $request->input('email'), 'nome'=>$usuario->nome]);
-        }else{
+        $usuario = \App\Usuario::where('email', '=', $request->input('email'))->first();
+        if ($usuario instanceof \App\Usuario) {
+            return redirect(route('login'))->withInput(['email' => $request->input('email'), 'nome' => $usuario->nome]);
+        } else {
             return redirect(route('registrar'))->with('email', $request->input('email'));
         }
     }
-   
-    public function curl(){
+
+    public function ajaxContato(Request $request) {
+        $nome = $request->get('nome');
+        $assunto = $request->get('assunto');
+        $email = $request->get('email');
+        $mensagem = $request->get('mensagem');
+        \Illuminate\Support\Facades\Mail::send('emails.novo-contato-site', ['nome' => $nome, 'assunto' => $assunto, 'email' => $email, 'mensagem' => $mensagem], function ($m) use ($assunto) {
+            $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+            $m->to(['admin@webcontabilidade.com', 'silmara@i9ge.com.br', 'sil0511@gmail.com'])->subject($assunto);
+        });
+    }
+
+    public function curl() {
         return 'IT WORKZ';
     }
 

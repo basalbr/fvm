@@ -1272,3 +1272,25 @@ ul.lista-impostos li:hover{
 .navbar-brand img{
     height: 35px;
 }
+
+.corpo-email{
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    width: 600px;
+    margin: 0 auto;
+}
+
+.corpo-email h1{
+    padding: 15px;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.corpo-email p{
+    padding: 17px;
+    font-size: 16px;
+    color: #34495e;
+}
+
+.corpo-email a{
+    color: #47D178
+}

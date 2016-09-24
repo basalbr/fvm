@@ -9,40 +9,11 @@
     var max_pro_labores;
     var maxValor;
     var minValor;
+    function validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
     function updateChat() {
-        $.get("{{route('ajax-simular-plano')}}", function (data) {
-            planos = data.planos;
-            max_documentos = data.max_documentos;
-            max_pro_labores = data.max_pro_labores;
-            maxValor = data.max_valor;
-            contabilidade = parseFloat($('#contabilidade').val().replace(RegExp, "$1.$2"));
-            console.log(contabilidade)
-            economia = (contabilidade * 12) - (parseFloat(data.min_valor) * 12);
-            $('#mensalidade').text('R$' + parseFloat(data.min_valor).toFixed(2));
-            $('#economia').text('R$' + economia.toFixed(2));
-        });
-        $('#total_documentos, #contabilidade, #pro_labores').on('keyup', function () {
-
-            var minValor = maxValor;
-            if ($('#pro_labores').val() > max_pro_labores) {
-                $('#pro_labores').val(max_pro_labores);
-            }
-            if ($('#total_documentos').val() > max_documentos) {
-                $('#total_documentos').val(max_documentos);
-            }
-            for (i in planos) {
-
-                if ($('#total_documentos').val() <= planos[i].total_documentos && $('#pro_labores').val() <= planos[i].pro_labores && planos[i].valor < minValor) {
-                    minValor = parseFloat(planos[i].valor);
-                }
-            }
-            $('#mensalidade').text('R$' + minValor.toFixed(2));
-            var RegExp = /^([\d]+)[,.]([\d]{2})$/;
-            contabilidade = $('#contabilidade').val().replace(".", "");
-            contabilidade = parseFloat(contabilidade.replace(",", "."));
-            totalDesconto = (contabilidade * 12) - (minValor * 12) > 0 ? (contabilidade * 12) - (minValor * 12) : 0;
-            $('#economia').html('R$' + totalDesconto.toFixed(2));
-        });
         $.post('{{route("atualiza-mensagens-chat")}}', {'chat_id': chat_id, 'chat_message_last_id': chat_message_last_id}, function (data) {
             console.log(data)
             if (data) {
@@ -68,6 +39,33 @@
         });
     }
     $(function () {
+        $('#contato-form').on('submit', function (e) {
+            e.preventDefault();
+            var nome = $('#contato-form input[name="nome"]').val();
+            var assunto = $('#contato-form input[name="assunto"]').val();
+            var email = $('#contato-form input[name="email"]').val();
+            var mensagem = $('#contato-form textarea[name="mensagem"]').val();
+
+            if (nome != '' && assunto != '' && email != '' && mensagem != '' && validateEmail(email)) {
+                $.post("{{route('ajax-enviar-contato')}}", {nome: nome, assunto: assunto, email: email, mensagem: mensagem}, function (data) {
+                    if (!data) {
+                        $('#email-modal .modal-title').text('Sucesso');
+                        $('#email-modal .modal-body').text('Mensagem enviada com sucesso, em breve responderemos para ' + email);
+                        $('#email-modal').modal('show');
+                    } else {
+                        $('#email-modal .modal-title').text('Atenção');
+                        $('#email-modal .modal-body').text('Ocorreu um erro ao tentar enviar a mensagem, por favor tente mais tarde.');
+                        $('#email-modal').modal('show');
+                    }
+                });
+            } else {
+                $('#email-modal .modal-title').text('Atenção');
+                $('#email-modal .modal-body').text('Todos os campos devem estar preenchidos corretamente.');
+                $('#email-modal').modal('show');
+            }
+
+        });
+
         $.get("{{route('ajax-simular-plano')}}", function (data) {
             planos = data.planos;
             max_documentos = parseInt(data.max_documentos);
@@ -246,7 +244,11 @@
                 </div>
                 <div class="form-group">
                     <label>Assunto</label>
-                    <textarea class="form-control" placeholder="Digite o assunto" name="assunto"></textarea>
+                    <input type="text" class="form-control" value="" name="assunto" placeholder="Digite o assunto"/>
+                </div>
+                <div class="form-group">
+                    <label>Assunto</label>
+                    <textarea class="form-control" placeholder="Digite a mensagem" name="mensagem"></textarea>
                 </div>
                 <div class="form-group ">
                     <button id="contato-enviar" type="submit" class="btn btn-success">Enviar mensagem</button>
@@ -325,6 +327,22 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Ok, entendi</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="email-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar Janela</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

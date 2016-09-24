@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class PlanoController extends Controller {
 
     public function index() {
-        $planos = Plano::orderBy('descricao', 'asc')->get();
+        $planos = Plano::orderBy('descricao', 'asc')->paginate(5);
         return view('admin.plano.index', ['planos' => $planos]);
     }
 

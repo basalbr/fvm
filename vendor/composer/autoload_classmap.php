@@ -6,11 +6,13 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AddCodigoFieldNaturezaJuridica' => $baseDir . '/database/migrations/2016_09_24_145721_add_codigo_field_natureza_juridica.php',
     'AddGuiaFieldToProcessoTable' => $baseDir . '/database/migrations/2016_09_03_101427_add_guia_field_to_processo_table.php',
     'AddIdChamadoChamadoRespostaTable' => $baseDir . '/database/migrations/2016_04_08_194400_add_id_chamado_chamado_resposta_table.php',
     'AddOrgaoExpedidorColumnToSocio' => $baseDir . '/database/migrations/2016_08_19_201641_add_orgao_expedidor_column_to_socio.php',
     'AddStatusFieldToChatTable' => $baseDir . '/database/migrations/2016_09_05_084959_add_status_field_to_chat_table.php',
     'AddTelefoneToSocioTable' => $baseDir . '/database/migrations/2016_09_11_213047_add_telefone_to_socio_table.php',
+    'AddTotalDocumentosContabilToPlanoTable' => $baseDir . '/database/migrations/2016_09_24_163216_add_total_documentos_contabil_to_plano_table.php',
     'AddVencimentoFieldToProcesso' => $baseDir . '/database/migrations/2016_09_01_102154_add_vencimento_field_to_processo.php',
     'ChangeCepToStringInPessoaTable' => $baseDir . '/database/migrations/2016_09_11_192233_change_cep_to_string_in_pessoa_table.php',
     'ChangeCpfCnpjToVarcharInPessoa' => $baseDir . '/database/migrations/2016_08_31_104042_change_cpf_cnpj_to_varchar_in_pessoa.php',
