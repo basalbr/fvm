@@ -120,6 +120,9 @@ Route::post('/apuracoes/enviar_informacoes/{id}', ['as' => 'enviar-informacoes-p
 Route::get('/apuracoes/responder/{id}', ['as' => 'responder-processo-usuario', 'uses' => 'ProcessoController@editUsuario', 'middleware' => 'auth']);
 Route::post('/apuracoes/responder/{id}', ['as' => 'responder-processo-usuario', 'uses' => 'ProcessoController@update', 'middleware' => 'auth']);
 
+Route::get('/usuario', ['as' => 'editar-usuario', 'uses' => 'UsuarioController@edit', 'middleware' => 'auth']);
+Route::post('/usuario', ['uses' => 'UsuarioController@update', 'middleware' => 'auth']);
+
 // Empresa routes...
 Route::get('/empresas', ['as' => 'empresas', 'uses' => 'EmpresaController@index', 'middleware' => 'auth']);
 Route::get('/empresas/cadastrar', ['as' => 'cadastrar-empresa', 'uses' => 'EmpresaController@create', 'middleware' => 'auth']);

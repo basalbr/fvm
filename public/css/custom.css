@@ -1294,3 +1294,8 @@ ul.lista-impostos li:hover{
 .corpo-email a{
     color: #47D178
 }
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+    background-color: #4da6ff;
+}
+

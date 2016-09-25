@@ -47,10 +47,11 @@ class PlanoController extends Controller {
     public function simular() {
         $planos = Plano::orderBy('total_documentos','asc')->get();
         $max_documentos = Plano::max('total_documentos');
+        $max_contabeis = Plano::max('total_documentos');
         $max_pro_labores = Plano::max('pro_labores');
         $max_valor = Plano::max('valor');
         $min_valor = Plano::min('valor');
-        return response()->json(['planos' => $planos, 'max_documentos' => $max_documentos, 'max_pro_labores' => $max_pro_labores, 'max_valor' => $max_valor, 'min_valor' => $min_valor]);
+        return response()->json(['planos' => $planos, 'max_documentos' => (int)$max_documentos, 'max_pro_labores' => (int)$max_pro_labores, 'max_valor' => (float)$max_valor, 'min_valor' => (int)$min_valor,'max_contabeis'=>(int)$max_contabeis]);
     }
 
 }

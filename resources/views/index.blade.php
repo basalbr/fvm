@@ -6,6 +6,7 @@
     var chat_id, chat_message_last_id = 0;
     var planos;
     var max_documentos;
+    var max_contabeis;
     var max_pro_labores;
     var maxValor;
     var minValor;
@@ -69,6 +70,7 @@
         $.get("{{route('ajax-simular-plano')}}", function (data) {
             planos = data.planos;
             max_documentos = parseInt(data.max_documentos);
+            max_contabeis = parseInt(data.max_contabeis);
             max_pro_labores = parseInt(data.max_pro_labores);
             maxValor = parseFloat(data.max_valor);
             contabilidade = parseFloat($('#contabilidade').val().replace(RegExp, "$1.$2"));
@@ -77,10 +79,11 @@
             $('#mensalidade').text('R$' + parseFloat(data.min_valor).toFixed(2));
             $('#economia').text('R$' + economia.toFixed(2));
         });
-        $('#total_documentos, #contabilidade, #pro_labores').on('keyup', function () {
+        $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores').on('keyup', function () {
 
             var pro_labores = $('#pro_labores').val();
             var total_documentos = $('#total_documentos').val();
+            var total_contabeis = $('#total_contabeis').val();
             minValor = maxValor;
             if (pro_labores > max_pro_labores) {
                 $('#pro_labores').val(max_pro_labores);
@@ -88,14 +91,16 @@
             if (total_documentos > max_documentos) {
                 $('#total_documentos').val(max_documentos);
             }
+            if (total_contabeis > max_contabeis) {
+                $('#total_contabeis').val(max_contabeis);
+            }
             for (i in planos) {
 
-                if (total_documentos <= parseInt(planos[i].total_documentos) && pro_labores <= parseInt(planos[i].pro_labores) && parseFloat(planos[i].valor) < minValor) {
+                if (total_contabeis <= parseInt(planos[i].total_documentos_contabeis) && total_documentos <= parseInt(planos[i].total_documentos) && pro_labores <= parseInt(planos[i].pro_labores) && parseFloat(planos[i].valor) < minValor) {
                     minValor = parseFloat(planos[i].valor);
                 }
             }
             $('#mensalidade').text('R$' + parseFloat(minValor).toFixed(2));
-            var RegExp = /^([\d]+)[,.]([\d]{2})$/;
             contabilidade = $('#contabilidade').val().replace(".", "");
             contabilidade = parseFloat(contabilidade.replace(",", "."));
             totalDesconto = (contabilidade * 12) - (minValor * 12) > 0 ? (contabilidade * 12) - (minValor * 12) : 0;
@@ -146,6 +151,7 @@
                 }
             })
         });
+        $('[data-toggle="tooltip"]').tooltip()
     });
 </script>
 @stop
@@ -194,12 +200,16 @@
         <div class='col-xs-6'>
             <form>
                 <div class='form-group'>
-                    <label>Quantos sócios retiram pró-labore?</label>
+                    <label>Quantos sócios retiram pró-labore? <span data-trigger="hover" class="text-info" title="Pró-labore é o salário dos sócios que constam no contrato social da empresa, e recolhem o INSS mensalmente para a previdência social." data-toggle="tooltip" data-placement="top">(o que é isso?)</span></label>
                     <input type='text' class='form-control numero-mask2' id='pro_labores' data-mask-placeholder='0' />
                 </div>
                 <div class='form-group'>
-                    <label>Quantos documentos fiscais são emitidos por mês?</label>
+                    <label> Quantos documentos fiscais são emitidos e recebidos por mês? <span data-trigger="hover" class="text-info" title="Documentos fiscais, são as notas fiscais de venda ou prestação de serviço emitidas, e as notas fiscais de aquisição de mercadorias ou serviços." data-toggle="tooltip" data-placement="top" >(o que é isso?)</span></label>
                     <input type='text' class='form-control numero-mask2' id='total_documentos' data-mask-placeholder='0'/>
+                </div>
+                <div class='form-group'>
+                    <label> Quantos documentos contábeis são emitidos por mês? <span data-trigger="hover" class="text-info" title="Neste item estão a movimentação bancária, em que cada transação corresponde a um documento contábil, assim como recibos de aluguel. Cada valor corresponderá a um documento contábil." data-toggle="tooltip" data-placement="top" >(o que é isso?)</span></label>
+                    <input type='text' class='form-control numero-mask2' id='total_contabeis' data-mask-placeholder='0'/>
                 </div>
                 <div class='form-group'>
                     <label>Quanto você paga hoje por mês para sua contabilidade?</label>

@@ -38,6 +38,15 @@
         </li>
 
     </ul>
+    <ul>
+        <li class="sidebar-header">
+            Configurações
+        </li>
+        <li class='{{Request::is('usuario*') ? "active" : ""}}'>
+            <a href="{{route('editar-usuario')}}"><div class="icon"><span class="fa fa-user"></span></div>editar meus dados</a>
+        </li>
+
+    </ul>
 </div>
 <div id="dash-container" class='bg-ltblue'>
     <div class="container-fluid">

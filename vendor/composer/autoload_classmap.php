@@ -11,6 +11,7 @@ return array(
     'AddIdChamadoChamadoRespostaTable' => $baseDir . '/database/migrations/2016_04_08_194400_add_id_chamado_chamado_resposta_table.php',
     'AddOrgaoExpedidorColumnToSocio' => $baseDir . '/database/migrations/2016_08_19_201641_add_orgao_expedidor_column_to_socio.php',
     'AddStatusFieldToChatTable' => $baseDir . '/database/migrations/2016_09_05_084959_add_status_field_to_chat_table.php',
+    'AddTelefoneFieldToUsuarioTable' => $baseDir . '/database/migrations/2016_09_24_221616_add_telefone_field_to_usuario_table.php',
     'AddTelefoneToSocioTable' => $baseDir . '/database/migrations/2016_09_11_213047_add_telefone_to_socio_table.php',
     'AddTotalDocumentosContabilToPlanoTable' => $baseDir . '/database/migrations/2016_09_24_163216_add_total_documentos_contabil_to_plano_table.php',
     'AddVencimentoFieldToProcesso' => $baseDir . '/database/migrations/2016_09_01_102154_add_vencimento_field_to_processo.php',

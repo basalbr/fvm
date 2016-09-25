@@ -138,7 +138,7 @@ $(function () {
                                 <a href="#como-funciona">Como funciona</a>
                             </li>
                             <li>
-                                <a href="#planos">Planos</a>
+                                <a href="#planos">Simulação</a>
                             </li>
                             <li>
                                 <a href="#contato">Contato</a>

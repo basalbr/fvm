@@ -44,12 +44,6 @@ class Admin {
             return $next($request);
         }
 
-        if ($this->auth->check()) {
-           return $next($request);
-        }
-
-
-
         return redirect()->guest(route('acessar'));
     }
 
