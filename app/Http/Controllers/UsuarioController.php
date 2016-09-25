@@ -16,9 +16,16 @@ class UsuarioController extends Controller {
 
     public function update(Request $request) {
         $usuario = Usuario::findOrFail(Auth::user()->id);
-        $request->merge(['id'=>$usuario->id]);
+        $request->merge(['id' => $usuario->id]);
+
         if ($usuario->validate($request->all(), true)) {
-            $usuario->update($request->all());
+            if ($request->get('senha') == '') {
+                $usuario->update($request->except('senha'));
+            } else {
+                $nova_senha = \Illuminate\Support\Facades\Hash::make($request->get('senha'));
+                $request->merge(['senha' => $nova_senha]);
+                $usuario->update($request->all());
+            }
             return redirect(route('editar-usuario'));
         } else {
             return redirect(route('editar-usuario'))->withInput()->withErrors($usuario->errors());

@@ -48,7 +48,7 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
       public function validate($data, $update = false) {
         // make a new validator object
         if($update){
-            $this->rules['senha'] = '';
+            $this->rules['senha'] = 'confirmed';
             $this->rules['email'] = 'required|unique:usuario,email,'.$data['id'];
         }
         $v = Validator::make($data, $this->rules);
