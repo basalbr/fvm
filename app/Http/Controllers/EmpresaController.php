@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Processo;
 
 class EmpresaController extends Controller {
 
@@ -20,6 +21,7 @@ class EmpresaController extends Controller {
     }
 
     public function store(Request $request) {
+//        dd($request->all());
         $empresa = new \App\Pessoa;
         $request->merge(['id_usuario' => Auth::user()->id]);
         if (count($request->get('cnaes'))) {
@@ -63,14 +65,49 @@ class EmpresaController extends Controller {
                 }
             }
             $usuario = Auth::user();
-            \Illuminate\Support\Facades\Mail::send('emails.nova-empresa', ['nome' => $usuario->nome, 'empresa'=>$empresa], function ($m) use ($usuario) {
+            \Illuminate\Support\Facades\Mail::send('emails.nova-empresa', ['nome' => $usuario->nome, 'empresa' => $empresa], function ($m) use ($usuario) {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                 $m->to($usuario->email)->subject('Nova empresa cadastrada');
             });
-            \Illuminate\Support\Facades\Mail::send('emails.nova-empresa-admin', ['nome' => $usuario->nome, 'empresa'=>$empresa], function ($m) use ($usuario) {
+            \Illuminate\Support\Facades\Mail::send('emails.nova-empresa-admin', ['nome' => $usuario->nome, 'empresa' => $empresa], function ($m) use ($usuario) {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                 $m->to('admin@webcontabilidade.com')->subject('Novo usuário cadastrado');
             });
+            
+            $impostos_mes = \App\ImpostoMes::where('mes', '=', date('n'))->get();
+            $competencia = date('Y-m-d', strtotime(date('Y-m') . " -1 month"));
+            foreach ($impostos_mes as $imposto_mes) {
+                if($imposto_mes->imposto->vencimento > ((int)date('d'))){
+                    $imposto = $imposto_mes->imposto;
+                    $processo = new Processo;
+                    $processo->create([
+                        'id_pessoa' => $empresa->id,
+                        'competencia' => $competencia,
+                        'id_imposto' => $imposto_mes->id_imposto,
+                        'vencimento' => $imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento, 'Y-m-d'),
+                        'status' => 'novo'
+                    ]);
+                }
+            }
+            
+            $plano = \App\Plano::where('total_documentos','>=',$request->get('total_documentos'))->where('total_documentos_contabeis','>=',$request->get('total_contabeis'))->where('pro_labores','>=',$request->get('pro_labores'))->orderBy('valor','asc')->first();
+            
+            $mensalidade = new \App\Mensalidade;
+            $mensalidade->id_usuario = Auth::user()->id;
+            $mensalidade->id_pessoa = $empresa->id;
+            $mensalidade->duracao = $plano->duracao;
+            $mensalidade->valor = $plano->valor;
+            $mensalidade->documentos_fiscais = $plano->total_documentos;
+            $mensalidade->documentos_contabeis = $plano->total_documentos_contabeis;
+            $mensalidade->pro_labores = $plano->pro_labores;
+            $mensalidade->funcionarios = $plano->funcionarios;
+            $mensalidade->save();
+            
+            $pagamento = new \App\Pagamento;
+            $pagamento->id_mensalidade = $mensalidade->id;
+            $pagamento->status = 'pago';
+            $pagamento->vencimento = date('Y-m-d H:i:s');
+            $pagamento->save();
             return redirect(route('empresas'));
         } else {
             return redirect(route('cadastrar-empresa'))->withInput()->withErrors($empresa->errors());
@@ -111,7 +148,7 @@ class EmpresaController extends Controller {
                 }
             }
             $usuario = Auth::user();
-            \Illuminate\Support\Facades\Mail::send('emails.editar-empresa', ['nome' => $usuario->nome, 'empresa'=>$empresa], function ($m) use ($usuario) {
+            \Illuminate\Support\Facades\Mail::send('emails.editar-empresa', ['nome' => $usuario->nome, 'empresa' => $empresa], function ($m) use ($usuario) {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                 $m->to($usuario->email)->subject('Nova empresa cadastrada');
             });

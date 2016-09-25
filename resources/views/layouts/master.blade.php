@@ -141,6 +141,9 @@ $(function () {
                                 <a href="#planos">Simulação</a>
                             </li>
                             <li>
+                                <a href="#faq">Perguntas Frequentes</a>
+                            </li>
+                            <li>
                                 <a href="#contato">Contato</a>
                             </li>
                             @endif

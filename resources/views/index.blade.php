@@ -94,6 +94,7 @@
             if (total_contabeis > max_contabeis) {
                 $('#total_contabeis').val(max_contabeis);
             }
+
             for (i in planos) {
 
                 if (total_contabeis <= parseInt(planos[i].total_documentos_contabeis) && total_documentos <= parseInt(planos[i].total_documentos) && pro_labores <= parseInt(planos[i].pro_labores) && parseFloat(planos[i].valor) < minValor) {
@@ -229,6 +230,31 @@
             <a href="{{route('acessar')}}" class="btn btn-success">Cadastre-se agora mesmo</a>
         </div>
         <div class="clearfix"></div>
+    </div>
+</section>
+<section id="faq" class="bg-white">
+    <div class="container">
+        <hr>
+        <h1 class="title">Perguntas Frequentes</h1>
+        <hr>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            @foreach(\App\Faq::where('local','=','site')->get() as $k => $faq)
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="heading{{$faq->id}}">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{$faq->id}}" aria-controls="collapse{{$faq->id}}">
+                            {{$faq->pergunta}}
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse{{$faq->id}}" class="panel-collapse collapse {{$k==0 ? 'in':''}}" role="tabpanel" aria-labelledby="heading{{$faq->id}}">
+                    <div class="panel-body">
+                    {{$faq->resposta}}
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
     </div>
 </section>
 <section id="contato" class="bg-dark">

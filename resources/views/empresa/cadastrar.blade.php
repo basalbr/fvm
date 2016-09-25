@@ -3,8 +3,63 @@
 @section('js')
 @parent
 <script type='text/javascript'>
+    var planos;
+    var max_documentos;
+    var max_contabeis;
+    var max_pro_labores;
+    var maxValor;
+    var minValor;
     $(function () {
+        $.get("{{route('ajax-simular-plano')}}", function (data) {
+            planos = data.planos;
+            max_documentos = parseInt(data.max_documentos);
+            max_contabeis = parseInt(data.max_contabeis);
+            max_pro_labores = parseInt(data.max_pro_labores);
+            maxValor = parseFloat(data.max_valor);
+            contabilidade = parseFloat($('#contabilidade').val().replace(RegExp, "$1.$2"));
 
+            economia = (contabilidade * 12) - (parseFloat(data.min_valor) * 12);
+            $('#mensalidade').text('R$' + parseFloat(data.min_valor).toFixed(2));
+            $('#economia').text('R$' + economia.toFixed(2));
+        });
+        $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores').on('keyup', function () {
+
+            var pro_labores = $('#pro_labores').val();
+            var total_documentos = $('#total_documentos').val();
+            var total_contabeis = $('#total_contabeis').val();
+            minValor = maxValor;
+            if (pro_labores > max_pro_labores) {
+                $('#pro_labores').val(max_pro_labores);
+            }
+            if (total_documentos > max_documentos) {
+                $('#total_documentos').val(max_documentos);
+            }
+            if (total_contabeis > max_contabeis) {
+                $('#total_contabeis').val(max_contabeis);
+            }
+            if (!pro_labores) {
+                $('#pro_labores').val(0);
+            }
+            if (!total_documentos) {
+                $('#total_documentos').val(0);
+            }
+            if (!total_contabeis) {
+                $('#total_contabeis').val(0);
+            }
+            for (i in planos) {
+
+                if (total_contabeis <= parseInt(planos[i].total_documentos_contabeis) && total_documentos <= parseInt(planos[i].total_documentos) && pro_labores <= parseInt(planos[i].pro_labores) && parseFloat(planos[i].valor) < minValor) {
+                    minValor = parseFloat(planos[i].valor);
+                }
+            }
+            $('#mensalidade').text('R$' + parseFloat(minValor).toFixed(2));
+            contabilidade = $('#contabilidade').val().replace(".", "");
+            contabilidade = parseFloat(contabilidade.replace(",", "."));
+            totalDesconto = (contabilidade * 12) - (minValor * 12) > 0 ? (contabilidade * 12) - (minValor * 12) : 0;
+
+            $('#economia').html('R$' + totalDesconto.toFixed(2));
+
+        });
         $('.cnae-search').on('keyup', function () {
             $("#adicionar-cnae").prop('disabled', true);
             if ($(this).val().length == 9) {
@@ -118,6 +173,17 @@
             $(this).html('Adicionado');
         });
 
+        $('#mostrar-simulador').on('click', function (e) {
+            e.preventDefault();
+            $('#mensalidade-modal').modal('show');
+        });
+
+        $('#cadastrar-empresa').on('click', function (e) {
+            e.preventDefault();
+            $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores').clone().appendTo('#principal-form');
+            $('#principal-form').submit();
+        });
+
     });
 </script>
 @stop
@@ -140,178 +206,175 @@
             {{ csrf_field() }}
             <input type="hidden" value="J" name='tipo' />
 
-                <div class='form-group'>
-                    <label>Nome Fantasia</label>
-                    <input type='text' class='form-control' name='nome_fantasia' value="{{Input::old('nome_fantasia')}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>Razão Social</label>
-                    <input type='text' class='form-control' name='razao_social' value="{{Input::old('razao_social')}}" />
-                </div>
-                <div class='form-group'>
-                    <label>Natureza Jurídica</label>
-                    <select class="form-control" name="id_natureza_juridica">
-                        <option value="">Selecione uma opção</option>
-                        @foreach($naturezasJuridicas as $natureza_juridica)
-                        <option value="{{$natureza_juridica->id}}">{{$natureza_juridica->descricao}}</option>
-                        @endforeach
-                    </select>
-                </div>
+            <div class='form-group'>
+                <label>Nome Fantasia</label>
+                <input type='text' class='form-control' name='nome_fantasia' value="{{Input::old('nome_fantasia')}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Razão Social</label>
+                <input type='text' class='form-control' name='razao_social' value="{{Input::old('razao_social')}}" />
+            </div>
+            <div class='form-group'>
+                <label>Natureza Jurídica</label>
+                <select class="form-control" name="id_natureza_juridica">
+                    <option value="">Selecione uma opção</option>
+                    @foreach($naturezasJuridicas as $natureza_juridica)
+                    <option value="{{$natureza_juridica->id}}" {{Input::old('id_natureza_juridica') == $natureza_juridica->id ? 'selected' : ''}}>{{$natureza_juridica->descricao}}</option>
+                    @endforeach
+                </select>
+            </div>
 
-                <div class='form-group'>
-                    <label>CNPJ</label>
-                    <input type='text' class='form-control cnpj-mask' name='cpf_cnpj' value="{{Input::old('cpf_cnpj')}}"/>
-                </div>
+            <div class='form-group'>
+                <label>CNPJ</label>
+                <input type='text' class='form-control cnpj-mask' name='cpf_cnpj' value="{{Input::old('cpf_cnpj')}}"/>
+            </div>
 
-                <div class='form-group'>
-                    <label>Inscrição Estadual</label>
-                    <input type='text' class='form-control' name='inscricao_estadual'  value="{{Input::old('inscricao_estadual')}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>Inscrição Municipal</label>
-                    <input type='text' class='form-control' name='inscricao_municipal' value="{{Input::old('inscricao_municipal')}}" />
-                </div>
-                <div class='form-group'>
-                    <label>IPTU</label>
-                    <input type='text' class='form-control' name='iptu'  value="{{Input::old('iptu')}}"/>
-                </div>
-                <h3>Endereço</h3>
-                <p>Complete os campos abaixo com o endereço da sua empresa.</p>
-                <div class='form-group'>
-                    <label>CEP</label>
-                    <input type='text' class='form-control cep-mask' name='cep' value="{{Input::old('cep')}}" />
-                </div>
-                <div class='form-group'>
-                    <label>Estado</label>
-                    <select class="form-control" name='id_uf'>
-                        <option value="24">Santa Catarina</option>
-                    </select> 
-                </div>
-                <div class='form-group'>
-                    <label>Cidade</label>
-                    <input type='text' class='form-control' name='cidade'  value="{{Input::old('cidade')}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>Endereço</label>
-                    <input type='text' class='form-control' name='endereco'  value="{{Input::old('endereco')}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>Bairro</label>
-                    <input type='text' class='form-control' name='bairro'  value="{{Input::old('bairro')}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>Número</label>
-                    <input type='text' class='form-control numero-mask' name='numero' value="{{Input::old('numero')}}"/>
-                </div>
+            <div class='form-group'>
+                <label>Inscrição Estadual</label>
+                <input type='text' class='form-control' name='inscricao_estadual'  value="{{Input::old('inscricao_estadual')}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Inscrição Municipal</label>
+                <input type='text' class='form-control' name='inscricao_municipal' value="{{Input::old('inscricao_municipal')}}" />
+            </div>
+            <div class='form-group'>
+                <label>IPTU</label>
+                <input type='text' class='form-control' name='iptu'  value="{{Input::old('iptu')}}"/>
+            </div>
+            <h3>Endereço</h3>
+            <p>Complete os campos abaixo com o endereço da sua empresa.</p>
+            <div class='form-group'>
+                <label>CEP</label>
+                <input type='text' class='form-control cep-mask' name='cep' value="{{Input::old('cep')}}" />
+            </div>
+            <div class='form-group'>
+                <label>Estado</label>
+                <select class="form-control" name='id_uf'>
+                    <option value="24">Santa Catarina</option>
+                </select> 
+            </div>
+            <div class='form-group'>
+                <label>Cidade</label>
+                <input type='text' class='form-control' name='cidade'  value="{{Input::old('cidade')}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Endereço</label>
+                <input type='text' class='form-control' name='endereco'  value="{{Input::old('endereco')}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Bairro</label>
+                <input type='text' class='form-control' name='bairro'  value="{{Input::old('bairro')}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Número</label>
+                <input type='text' class='form-control numero-mask' name='numero' value="{{Input::old('numero')}}"/>
+            </div>
 
-                <h3>Sócio Responsável</h3>
-                <p>Complete os campos abaixo com as informações do <b>sócio responsável pela empresa perante a Receita Federal</b><br />
-                    <b>Atenção:</b> Essas informações são importantes para automatizarmos processos contábeis junto com os sistemas do governo.</p>
-                <div class='form-group'>
-                    <label>Nome do responsável</label>
-                    <input type='text' class='form-control' name='socio[nome]' value="{{Input::old('socio')['nome']}}" />
-                </div> 
+            <h3>Sócio Responsável</h3>
+            <p>Complete os campos abaixo com as informações do <b>sócio responsável pela empresa perante a Receita Federal</b><br />
+                <b>Atenção:</b> Essas informações são importantes para automatizarmos processos contábeis junto com os sistemas do governo.</p>
+            <div class='form-group'>
+                <label>Nome do responsável</label>
+                <input type='text' class='form-control' name='socio[nome]' value="{{Input::old('socio')['nome']}}" />
+            </div> 
 
-                <div class='form-group'>
-                    <label>Telefone do responsável</label>
-                    <input type='text' class='form-control fone-mask' name='socio[telefone]' value="{{Input::old('socio')['telefone']}}" />
-                </div>
+            <div class='form-group'>
+                <label>Telefone do responsável</label>
+                <input type='text' class='form-control fone-mask' name='socio[telefone]' value="{{Input::old('socio')['telefone']}}" />
+            </div>
 
-                <div class='form-group'>
-                    <label>CPF</label>
-                    <input type='text' class='form-control cpf-mask' name='socio[cpf]' value="{{Input::old('socio')['cpf']}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>RG</label>
-                    <input type='text' class='form-control' name='socio[rg]' value="{{Input::old('socio')['rg']}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>Código de Acesso do Simples Nacional</label>
-                    <input type='text' class='form-control' name='codigo_acesso_simples_nacional' value="{{Input::old('codigo_acesso_simples_nacional')}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>Órgão Expedidor do RG (Ex: SSP/SC)</label>
-                    <input type='text' class='form-control' name='socio[orgao_expedidor]' value="{{Input::old('socio')['orgao_expedidor']}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>Nº Título de Eleitor</label>
-                    <input type='text' class='form-control' name='socio[titulo_eleitor]' value="{{Input::old('socio')['titulo_eleitor']}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>Nº do Último Recibo do Imposto de Renda (Deixe em branco caso não tenha declarado)</label>
-                    <input type='text' class='form-control irpf-mask' name='socio[recibo_ir]' value="{{Input::old('socio')['recibo_ir']}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>PIS</label>
-                    <input type='text' class='form-control pis-mask' name='socio[pis]' value="{{Input::old('socio')['pis']}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>CEP</label>
-                    <input type='text' class='form-control cep-mask' name='socio[cep]' value="{{Input::old('socio')['cep']}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>Estado</label>
+            <div class='form-group'>
+                <label>CPF</label>
+                <input type='text' class='form-control cpf-mask' name='socio[cpf]' value="{{Input::old('socio')['cpf']}}"/>
+            </div>
+            <div class='form-group'>
+                <label>RG</label>
+                <input type='text' class='form-control' name='socio[rg]' value="{{Input::old('socio')['rg']}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Código de Acesso do Simples Nacional</label>
+                <input type='text' class='form-control' name='codigo_acesso_simples_nacional' value="{{Input::old('codigo_acesso_simples_nacional')}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Órgão Expedidor do RG (Ex: SSP/SC)</label>
+                <input type='text' class='form-control' name='socio[orgao_expedidor]' value="{{Input::old('socio')['orgao_expedidor']}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Nº Título de Eleitor</label>
+                <input type='text' class='form-control' name='socio[titulo_eleitor]' value="{{Input::old('socio')['titulo_eleitor']}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Nº do Último Recibo do Imposto de Renda (Deixe em branco caso não tenha declarado)</label>
+                <input type='text' class='form-control irpf-mask' name='socio[recibo_ir]' value="{{Input::old('socio')['recibo_ir']}}"/>
+            </div>
+            <div class='form-group'>
+                <label>PIS</label>
+                <input type='text' class='form-control pis-mask' name='socio[pis]' value="{{Input::old('socio')['pis']}}"/>
+            </div>
+            <div class='form-group'>
+                <label>CEP</label>
+                <input type='text' class='form-control cep-mask' name='socio[cep]' value="{{Input::old('socio')['cep']}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Estado</label>
 
-                    <select class="form-control" name='socio[id_uf]'>
-                        <option value="">Selecione uma opção</option>
-                        @foreach(\App\Uf::get() as $uf)
-                        <option value="{{$uf->id}}" {{Input::old('socio')['id_uf'] == $uf->id ? 'selected' : null}}>{{$uf->nome}}</option>
-                        @endforeach
-                    </select> 
-                </div>
-                <div class='form-group'>
-                    <label>Cidade</label>
-                    <input type='text' class='form-control' name='socio[cidade]' value="{{Input::old('socio')['cidade']}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>Endereço</label>
-                    <input type='text' class='form-control' name='socio[endereco]' value="{{Input::old('socio')['endereco']}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>Bairro</label>
-                    <input type='text' class='form-control' name='socio[bairro]' value="{{Input::old('socio')['bairro']}}"/>
-                </div>
-                <div class='form-group'>
-                    <label>Valor de Pró-Labore (Deixe em branco caso não receba pró-labore)</label>
-                    <input type='text' class='form-control dinheiro-mask' name='socio[pro_labore]' value="{{Input::old('socio')['pro_labore']}}"/>
-                </div>
-                <input type='hidden' name='socio[principal]' value="1"/>
+                <select class="form-control" name='socio[id_uf]'>
+                    <option value="">Selecione uma opção</option>
+                    @foreach(\App\Uf::get() as $uf)
+                    <option value="{{$uf->id}}" {{Input::old('socio')['id_uf'] == $uf->id ? 'selected' : null}}>{{$uf->nome}}</option>
+                    @endforeach
+                </select> 
+            </div>
+            <div class='form-group'>
+                <label>Cidade</label>
+                <input type='text' class='form-control' name='socio[cidade]' value="{{Input::old('socio')['cidade']}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Endereço</label>
+                <input type='text' class='form-control' name='socio[endereco]' value="{{Input::old('socio')['endereco']}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Bairro</label>
+                <input type='text' class='form-control' name='socio[bairro]' value="{{Input::old('socio')['bairro']}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Valor de Pró-Labore (Deixe em branco caso não receba pró-labore)</label>
+                <input type='text' class='form-control dinheiro-mask' name='socio[pro_labore]' value="{{Input::old('socio')['pro_labore']}}"/>
+            </div>
+            <input type='hidden' name='socio[principal]' value="1"/>
 
-                <h3>CNAEs</h3>
-                <p>Adicione os CNAEs relacionados à sua empresa. Caso não saiba os códigos, clique em Pesquisar CNAE.</p>
-                <div class='form-group'>
-                    <label>CNAE</label>
-                    <div class='input-group col-md-6'>
-                        <input type='text' class='form-control cnae-search cnae-mask'/>
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-success" id='adicionar-cnae' disabled="disabled"><span class="fa fa-plus"></span> Adicionar</button>
-                        </span>
-                    </div>
-                    <br />
-                    <button type="button" class="btn btn-info" id='abrir-modal-cnae'><span class="fa fa-search"></span> Pesquisar CNAE</button>
-                    <div class="cnae-search-box"><div class="result"></div></div>
+            <h3>CNAEs</h3>
+            <p>Adicione os CNAEs relacionados à sua empresa. Caso não saiba os códigos, clique em Pesquisar CNAE.</p>
+            <div class='form-group'>
+                <label>CNAE</label>
+                <div class='input-group col-md-6'>
+                    <input type='text' class='form-control cnae-search cnae-mask'/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-success" id='adicionar-cnae' disabled="disabled"><span class="fa fa-plus"></span> Adicionar</button>
+                    </span>
                 </div>
-                <table class='table table-striped'>
-                    <legend>Lista de CNAEs adicionados</legend>
-                    <thead>
-                        <tr>
-                            <th>Descrição</th>
-                            <th>Código</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id='lista-cnaes'>
-                        <tr>
-                            <td colspan="3" class="nenhum-cnae">Por favor adicione pelo menos um CNAE.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class='form-group'>
-                    <input type='submit' value="Cadastrar Empresa" class='btn btn-primary' />
-                </div>
-
-
-
+                <br />
+                <button type="button" class="btn btn-info" id='abrir-modal-cnae'><span class="fa fa-search"></span> Pesquisar CNAE</button>
+                <div class="cnae-search-box"><div class="result"></div></div>
+            </div>
+            <table class='table table-striped'>
+                <legend>Lista de CNAEs adicionados</legend>
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Código</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id='lista-cnaes'>
+                    <tr>
+                        <td colspan="3" class="nenhum-cnae">Por favor adicione pelo menos um CNAE.</td>
+                    </tr>
+                </tbody>
+            </table>                        
+            <div class='form-group'>
+                <a href="" id="mostrar-simulador" class='btn btn-primary'>Cadastrar Empresa</a>
+            </div>
         </form>
         <div class='clearfix'></div>
     </div>
@@ -319,6 +382,50 @@
 @stop
 
 @section('modal')
+
+<div class="modal fade" id="mensalidade-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document"  style="width: 1000px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Mensalidade</h4>
+            </div>
+            <div class="modal-body">
+                <p>Complete os campos abaixo e confira os valores de nossas mensalidades.
+                    <br />Ao cadastrar sua empresa você receberá <b>30 dias grátis</b> em nosso sistema, somente após esse período de 30 dias é que começaremos a cobrar mensalidade.</p>
+                <div class='col-xs-6'>
+                    <div class='form-group'>
+                        <label>Quantos sócios retiram pró-labore? <span data-trigger="hover" class="text-info" title="Pró-labore é o salário dos sócios que constam no contrato social da empresa, e recolhem o INSS mensalmente para a previdência social." data-toggle="tooltip" data-placement="top">(o que é isso?)</span></label>
+                        <input type='text' class='form-control numero-mask2' id='pro_labores' name="pro_labores" data-mask-placeholder='0' value="0"/>
+                    </div>
+                    <div class='form-group'>
+                        <label> Quantos documentos fiscais são emitidos e recebidos por mês? <span data-trigger="hover" class="text-info" title="Documentos fiscais, são as notas fiscais de venda ou prestação de serviço emitidas, e as notas fiscais de aquisição de mercadorias ou serviços." data-toggle="tooltip" data-placement="top" >(o que é isso?)</span></label>
+                        <input type='text' class='form-control numero-mask2' id='total_documentos' name="total_documentos" data-mask-placeholder='0' value="0"/>
+                    </div>
+                    <div class='form-group'>
+                        <label> Quantos documentos contábeis são emitidos por mês? <span data-trigger="hover" class="text-info" title="Neste item estão a movimentação bancária, em que cada transação corresponde a um documento contábil, assim como recibos de aluguel. Cada valor corresponderá a um documento contábil." data-toggle="tooltip" data-placement="top" >(o que é isso?)</span></label>
+                        <input type='text' class='form-control numero-mask2' id='total_contabeis' name="total_contabeis" data-mask-placeholder='0' value="0"/>
+                    </div>
+                    <div class='form-group'>
+                        <label>Quanto você paga hoje por mês para sua contabilidade?</label>
+                        <input type='text' class='form-control dinheiro-mask2' id='contabilidade' name="contabilidade" data-mask-placeholder='0' value="499,99"/>
+                    </div>
+                </div>
+                <div class='col-xs-6'>
+                    <h2 class='text-center'>Sua mensalidade será:</h2>
+                    <div id='mensalidade' class='text-center text-info' style="font-size:45px; font-weight: bold;">R$0,00</div>
+                    <h2 class='text-center'>Você <b>economizará</b> por ano:</h2>
+                    <div id='economia' class='text-center text-success' style="font-size:45px; font-weight: bold;">R$0,00</div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="cadastrar-empresa">Confirmar dados e continuar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar Janela</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <div class="modal fade" id="cnae-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document"  style="width: 900px;">
         <div class="modal-content">
@@ -340,7 +447,7 @@
                     </div>
                 </form>
                 <table class='table table-striped'>
-                    
+
                     <thead>
                         <tr>
                             <th>Descrição</th>

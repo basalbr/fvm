@@ -1,5 +1,28 @@
 @extends('layouts.master')
 @section('header_title', 'Home')
+@section('js')
+@parent
+<script type="text/javascript" src="{{url('public/ckeditor/ckeditor.js')}}"></script>
+<script type="text/javascript" src="{{url('public/ckfinder/ckfinder.js')}}"></script>
+<script type="text/javascript" language="javascript">
+$(document).ready(function () {
+    //CKFinder.setupCKEditor();
+    CKEDITOR.editorConfig = function( config ) {
+	// Define changes to default configuration here. For example:
+	// config.language = 'fr';
+	// config.uiColor = '#AADC6E';
+	 config.filebrowserBrowseUrl = '{{url("public/kcfinder/browse.php?opener=ckeditor&type=files")}}';
+   config.filebrowserImageBrowseUrl =  '{{url("public/kcfinder/browse.php?opener=ckeditor&type=images")}}';
+   config.filebrowserFlashBrowseUrl = '{{url("public/kcfinder/browse.php?opener=ckeditor&type=flash")}}';
+   config.filebrowserUploadUrl = '{{url("public/kcfinder/upload.php?opener=ckeditor&type=files")}}';
+   config.filebrowserImageUploadUrl = '{{url("public/kcfinder/upload.php?opener=ckeditor&type=images")}}';
+   config.filebrowserFlashUploadUrl = '{{url("public/kcfinder/upload.php?opener=ckeditor&type=flash")}}';
+   config.contentsCss = '{{url("public/css/custom.css")}}'
+};
+    CKEDITOR.replace('ckeditor');
+});
+</script>
+@stop
 @section('content')
 <section id='page-header' style="margin-top: 55px" class="page-header">
     <div class='container'>
@@ -33,7 +56,7 @@
             </div>
             <div class='form-group'>
                 <label>Resposta</label>
-                <textarea class='form-control' name='resposta'>{{$faq->resposta}}</textarea>
+                <textarea id='ckeditor' class='form-control' name='resposta'>{{$faq->resposta}}</textarea>
             </div>
 
             <div class='form-group'>

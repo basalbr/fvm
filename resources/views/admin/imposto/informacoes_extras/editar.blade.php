@@ -65,6 +65,9 @@
         <label>
             <input  type='checkbox' name='extensao[]' {{count($informacao_extra->extensoes()->where('extensao','=','xml')->first())>0 ? 'checked="checked"' : ''}} value="xml"/> XML
         </label>
+        <label>
+            <input  type='checkbox' name='extensao[]' {{count($informacao_extra->extensoes()->where('extensao','=','zip')->first())>0 ? 'checked="checked"' : ''}} value="zip"/> ZIP
+        </label>
     </div>
     @endif
     @if($informacao_extra->tipo == 'dado_integrado')

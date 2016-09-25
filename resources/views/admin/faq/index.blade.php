@@ -18,7 +18,7 @@
             <td>{{$faq->local}}</td>
             <td>{{$faq->pergunta}}</td>
             <td>{{$faq->resposta}}</td>
-            <td><a class="btn btn-warning" href="{{route('editar-faq', ['id' => $faq->id])}}">Editar</a> <a class="btn btn-danger" href="{{$faq->id}}">Remover</a></td>
+            <td style="width: 200px;"><a class="btn btn-warning" href="{{route('editar-faq', ['id' => $faq->id])}}">Editar</a> <a class="btn btn-danger" href="{{$faq->id}}">Remover</a></td>
         </tr>
         @endforeach
         @else

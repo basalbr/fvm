@@ -84,6 +84,9 @@
         <label>
             <input disabled="disabled" type='checkbox' name='extensao[]' value="xml"/> XML
         </label>
+        <label>
+            <input disabled="disabled" type='checkbox' name='extensao[]' value="zip"/> ZIP
+        </label>
     </div>
     <div class='form-group dado-integrado hidden'>
         <label>Tabela</label>

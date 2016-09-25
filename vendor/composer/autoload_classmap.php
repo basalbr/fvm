@@ -48,6 +48,8 @@ return array(
     'CreateTabelaSimplesNacionalValorTable' => $baseDir . '/database/migrations/2016_08_16_153736_create_tabela_simples_nacional_valor_table.php',
     'CreateTabelaTipoTributacaoTable' => $baseDir . '/database/migrations/2015_12_14_085317_create_tabela_tipo_tributacao_table.php',
     'CreateUfTable' => $baseDir . '/database/migrations/2014_08_16_152315_create_uf_table.php',
+    'CreateUsuarioMensalidadeTable' => $baseDir . '/database/migrations/2016_09_25_191222_create_usuario_mensalidade_table.php',
+    'CreateUsuarioPagamentoTable' => $baseDir . '/database/migrations/2016_09_25_191236_create_usuario_pagamento_table.php',
     'CreateUsuarioTable' => $baseDir . '/database/migrations/2015_11_25_114553_create_usuario_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
