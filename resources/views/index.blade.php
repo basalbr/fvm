@@ -155,6 +155,16 @@
         $('[data-toggle="tooltip"]').tooltip()
     });
 </script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-84798442-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 @stop
 @section('content')
 <img id="parallax" src="{{url('public/images/banner.jpg')}}"/>
@@ -249,7 +259,7 @@
                 </div>
                 <div id="collapse{{$faq->id}}" class="panel-collapse collapse {{$k==0 ? 'in':''}}" role="tabpanel" aria-labelledby="heading{{$faq->id}}">
                     <div class="panel-body">
-                    {{$faq->resposta}}
+                    {!!$faq->resposta!!}
                     </div>
                 </div>
             </div>

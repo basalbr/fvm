@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>FVM - @yield('header_title')</title>
+        <title>WEBContabilidade - @yield('header_title')</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         @section('css')
@@ -23,7 +23,7 @@
         <script type="text/javascript" src="{{url('public/js/pt-br.js')}}"></script>
         <script type="text/javascript"  language="javascript">
 $(function () {
-   
+
     $('a.page-scroll').bind('click', function (event) {
         var $anchor = $(this);
         $('html, body').stop().animate({
@@ -110,7 +110,7 @@ $(function () {
      });
      }
      })*/
-})
+});
 
 
         </script>

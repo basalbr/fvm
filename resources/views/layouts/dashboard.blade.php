@@ -38,6 +38,21 @@
         </li>
 
     </ul>
+  <ul>
+        <li class="sidebar-header">
+            Financeiro
+        </li>
+        <li class='{{Request::is('mensalidades*') ? "active" : ""}}'>
+            <a href="{{route('listar-mensalidades')}}"><div class="icon"><span class="fa fa-book"></span></div>mensalidades ativas</a>
+        </li>
+        <li class='{{Request::is('usuario*') ? "active" : ""}}'>
+            <a href="{{route('editar-usuario')}}"><div class="icon"><span class="fa fa-exclamation"></span></div>pagamentos pendentes</a>
+        </li>
+        <li class='{{Request::is('usuario*') ? "active" : ""}}'>
+            <a href="{{route('editar-usuario')}}"><div class="icon"><span class="fa fa-cart-arrow-down"></span></div>histórico pagamentos</a>
+        </li>
+
+    </ul>
     <ul>
         <li class="sidebar-header">
             Configurações
@@ -47,6 +62,7 @@
         </li>
 
     </ul>
+  
 </div>
 <div id="dash-container" class='bg-ltblue'>
     <div class="container-fluid">

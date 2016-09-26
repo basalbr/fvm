@@ -98,6 +98,9 @@ Route::get('/admin/chamados/', ['as' => 'listar-chamados', 'uses' => 'ChamadosCo
 Route::get('/admin/chamados/visualizar/{id}', ['as' => 'visualizar-chamados', 'uses' => 'ChamadosController@edit', 'middleware' => 'admin']);
 Route::post('/admin/chamados/visualizar/{id}', ['as' => 'visualizar-chamados', 'uses' => 'ChamadosController@update', 'middleware' => 'admin']);
 
+
+Route::get('/mensalidades/', ['as' => 'listar-mensalidades', 'uses' => 'MensalidadeController@index', 'middleware' => 'auth']);
+
 Route::get('/admin/apuracoes/', ['as' => 'listar-processos-admin', 'uses' => 'ProcessoController@index', 'middleware' => 'admin']);
 Route::get('/admin/apuracoes/visualizar/{id}', ['as' => 'visualizar-processo-admin', 'uses' => 'ProcessoController@edit', 'middleware' => 'admin']);
 Route::post('/admin/apuracoes/visualizar/{id}', ['as' => 'visualizar-processo-admin', 'uses' => 'ProcessoController@update', 'middleware' => 'admin']);
