@@ -26,7 +26,7 @@ class Pagamento extends Model {
      *
      * @var array
      */
-    protected $fillable = ['id_mensalidade', 'status', 'vencimento'];
+    protected $fillable = ['transaction_id', 'status', 'id_pagamento','forma_pagamento'];
 
     public function validate($data) {
         // make a new validator object

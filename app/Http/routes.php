@@ -17,6 +17,12 @@ Route::get('/', ['as' => 'home', 'uses' => function () {
 
 Route::get('/admin', ['as' => 'admin', 'uses' => 'AdminController@index', 'middleware' => 'admin']);
 
+Route::get('/pagseguro/teste', ['as' => 'pagseguro.teste', 'uses' => 'PagseguroController@teste']);
+Route::get('/pagseguro/redirect', ['as' => 'pagseguro.redirect', 'uses' => 'PagseguroController@redirect']);
+Route::post('/pagseguro/notification', [
+    'uses' => '\laravel\pagseguro\Platform\Laravel5\NotificationController@notification',
+    'as' => 'pagseguro.notification',
+]);
 
 Route::get('/testeimpostos', ['as' => 'testeimposto', 'uses' => 'ProcessoController@abreProcessos', 'middleware' => 'admin']);
 Route::get('/admin/chat/', ['as' => 'listar-chat', 'uses' => 'ChatController@index', 'middleware' => 'admin']);
