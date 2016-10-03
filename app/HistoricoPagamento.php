@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
 
-class Pagamento extends Model {
+class HistoricoPagamento extends Model {
 
     use SoftDeletes;
 
@@ -19,7 +19,7 @@ class Pagamento extends Model {
      *
      * @var string
      */
-    protected $table = 'pagamento';
+    protected $table = 'historico_pagamento';
 
     /**
      * The attributes that are mass assignable.

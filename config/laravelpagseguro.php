@@ -24,12 +24,10 @@ return [
      */
     'routes' => [
         'redirect' => [
-            'route-name' => 'pagseguro.redirect', // Criar uma rota com este nome
+            'route-name' => 'listar-pagamentos-pendentes', // Criar uma rota com este nome
         ],
         'notification' => [
-            'callback' => function ($information) { // Callable
-                \Log::debug(print_r($information, 1));
-            }, // Callable callback to Notification function (notificationInfo) : void {}
+            'callback' => ['\App\Http\Controllers\PagamentoController', 'notification'], // Callable callback to Notification function (notificationInfo) : void {}
             'credential' => 'default', // Callable resolve credential function (notificationCode) : Credentials {}
             'route-name' => 'pagseguro.notification', // Criar uma rota com este nome
         ],

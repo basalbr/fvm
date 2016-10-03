@@ -28,6 +28,7 @@
         @endif
     </tbody>
 </table>
+
 <a class='btn btn-primary' href='{{route('cadastrar-natureza-juridica')}}'>Cadastrar uma natureza jurídica</a><br />
 
 @stop

@@ -203,19 +203,20 @@
         <form method="POST" action="" id="principal-form">
             <h3>Informações</h3>
             <p>Preencha os campos abaixo e clique em "cadastrar" para registrar sua empresa em nosso sistema.</p>
+            <p>Campos com * são obrigatórios.</p>
             {{ csrf_field() }}
             <input type="hidden" value="J" name='tipo' />
 
             <div class='form-group'>
-                <label>Nome Fantasia</label>
+                <label>Nome Fantasia *</label>
                 <input type='text' class='form-control' name='nome_fantasia' value="{{Input::old('nome_fantasia')}}"/>
             </div>
             <div class='form-group'>
-                <label>Razão Social</label>
+                <label>Razão Social *</label>
                 <input type='text' class='form-control' name='razao_social' value="{{Input::old('razao_social')}}" />
             </div>
             <div class='form-group'>
-                <label>Natureza Jurídica</label>
+                <label>Natureza Jurídica *</label>
                 <select class="form-control" name="id_natureza_juridica">
                     <option value="">Selecione uma opção</option>
                     @foreach($naturezasJuridicas as $natureza_juridica)
@@ -225,7 +226,7 @@
             </div>
 
             <div class='form-group'>
-                <label>CNPJ</label>
+                <label>CNPJ *</label>
                 <input type='text' class='form-control cnpj-mask' name='cpf_cnpj' value="{{Input::old('cpf_cnpj')}}"/>
             </div>
 
@@ -244,29 +245,29 @@
             <h3>Endereço</h3>
             <p>Complete os campos abaixo com o endereço da sua empresa.</p>
             <div class='form-group'>
-                <label>CEP</label>
+                <label>CEP *</label>
                 <input type='text' class='form-control cep-mask' name='cep' value="{{Input::old('cep')}}" />
             </div>
             <div class='form-group'>
-                <label>Estado</label>
+                <label>Estado *</label>
                 <select class="form-control" name='id_uf'>
                     <option value="24">Santa Catarina</option>
                 </select> 
             </div>
             <div class='form-group'>
-                <label>Cidade</label>
+                <label>Cidade *</label>
                 <input type='text' class='form-control' name='cidade'  value="{{Input::old('cidade')}}"/>
             </div>
             <div class='form-group'>
-                <label>Endereço</label>
+                <label>Endereço *</label>
                 <input type='text' class='form-control' name='endereco'  value="{{Input::old('endereco')}}"/>
             </div>
             <div class='form-group'>
-                <label>Bairro</label>
+                <label>Bairro *</label>
                 <input type='text' class='form-control' name='bairro'  value="{{Input::old('bairro')}}"/>
             </div>
             <div class='form-group'>
-                <label>Número</label>
+                <label>Número *</label>
                 <input type='text' class='form-control numero-mask' name='numero' value="{{Input::old('numero')}}"/>
             </div>
 
@@ -274,49 +275,49 @@
             <p>Complete os campos abaixo com as informações do <b>sócio responsável pela empresa perante a Receita Federal</b><br />
                 <b>Atenção:</b> Essas informações são importantes para automatizarmos processos contábeis junto com os sistemas do governo.</p>
             <div class='form-group'>
-                <label>Nome do responsável</label>
+                <label>Nome do responsável *</label>
                 <input type='text' class='form-control' name='socio[nome]' value="{{Input::old('socio')['nome']}}" />
             </div> 
 
             <div class='form-group'>
-                <label>Telefone do responsável</label>
+                <label>Telefone do responsável *</label>
                 <input type='text' class='form-control fone-mask' name='socio[telefone]' value="{{Input::old('socio')['telefone']}}" />
             </div>
 
             <div class='form-group'>
-                <label>CPF</label>
+                <label>CPF do responsável *</label>
                 <input type='text' class='form-control cpf-mask' name='socio[cpf]' value="{{Input::old('socio')['cpf']}}"/>
             </div>
             <div class='form-group'>
-                <label>RG</label>
+                <label>RG do responsável *</label>
                 <input type='text' class='form-control' name='socio[rg]' value="{{Input::old('socio')['rg']}}"/>
             </div>
             <div class='form-group'>
-                <label>Código de Acesso do Simples Nacional</label>
-                <input type='text' class='form-control' name='codigo_acesso_simples_nacional' value="{{Input::old('codigo_acesso_simples_nacional')}}"/>
-            </div>
-            <div class='form-group'>
-                <label>Órgão Expedidor do RG (Ex: SSP/SC)</label>
+                <label>Órgão Expedidor do RG (Ex: SSP/SC) *</label>
                 <input type='text' class='form-control' name='socio[orgao_expedidor]' value="{{Input::old('socio')['orgao_expedidor']}}"/>
             </div>
             <div class='form-group'>
-                <label>Nº Título de Eleitor</label>
+                <label>Código de Acesso do Simples Nacional *</label>
+                <input type='text' class='form-control' name='codigo_acesso_simples_nacional' value="{{Input::old('codigo_acesso_simples_nacional')}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Nº Título de Eleitor do responsável *</label>
                 <input type='text' class='form-control' name='socio[titulo_eleitor]' value="{{Input::old('socio')['titulo_eleitor']}}"/>
             </div>
             <div class='form-group'>
-                <label>Nº do Último Recibo do Imposto de Renda (Deixe em branco caso não tenha declarado)</label>
+                <label>Nº do Último Recibo do Imposto de Renda do responsável (Deixe em branco caso não tenha declarado)</label>
                 <input type='text' class='form-control irpf-mask' name='socio[recibo_ir]' value="{{Input::old('socio')['recibo_ir']}}"/>
             </div>
             <div class='form-group'>
-                <label>PIS</label>
+                <label>PIS do responsável</label>
                 <input type='text' class='form-control pis-mask' name='socio[pis]' value="{{Input::old('socio')['pis']}}"/>
             </div>
             <div class='form-group'>
-                <label>CEP</label>
+                <label>CEP do responsável*</label>
                 <input type='text' class='form-control cep-mask' name='socio[cep]' value="{{Input::old('socio')['cep']}}"/>
             </div>
             <div class='form-group'>
-                <label>Estado</label>
+                <label>Estado do responsável *</label>
 
                 <select class="form-control" name='socio[id_uf]'>
                     <option value="">Selecione uma opção</option>
@@ -326,19 +327,19 @@
                 </select> 
             </div>
             <div class='form-group'>
-                <label>Cidade</label>
+                <label>Cidade do responsável *</label>
                 <input type='text' class='form-control' name='socio[cidade]' value="{{Input::old('socio')['cidade']}}"/>
             </div>
             <div class='form-group'>
-                <label>Endereço</label>
+                <label>Endereço do responsável *</label>
                 <input type='text' class='form-control' name='socio[endereco]' value="{{Input::old('socio')['endereco']}}"/>
             </div>
             <div class='form-group'>
-                <label>Bairro</label>
+                <label>Bairro do responsável *</label>
                 <input type='text' class='form-control' name='socio[bairro]' value="{{Input::old('socio')['bairro']}}"/>
             </div>
             <div class='form-group'>
-                <label>Valor de Pró-Labore (Deixe em branco caso não receba pró-labore)</label>
+                <label>Valor de Pró-Labore do responsável (Deixe em branco caso não receba pró-labore)</label>
                 <input type='text' class='form-control dinheiro-mask' name='socio[pro_labore]' value="{{Input::old('socio')['pro_labore']}}"/>
             </div>
             <input type='hidden' name='socio[principal]' value="1"/>
@@ -346,7 +347,7 @@
             <h3>CNAEs</h3>
             <p>Adicione os CNAEs relacionados à sua empresa. Caso não saiba os códigos, clique em Pesquisar CNAE.</p>
             <div class='form-group'>
-                <label>CNAE</label>
+                <label>CNAE *</label>
                 <div class='input-group col-md-6'>
                     <input type='text' class='form-control cnae-search cnae-mask'/>
                     <span class="input-group-btn">

@@ -14,9 +14,8 @@ class Pessoa extends Model {
         'id_usuario' => 'required',
         'id_natureza_juridica' => 'required',
         'cpf_cnpj' => 'required|unique:pessoa,cpf_cnpj|size:18',
-        'inscricao_estadual' => 'required|unique:pessoa,inscricao_estadual',
-        'inscricao_municipal' => 'required|unique:pessoa,inscricao_municipal',
-        'iptu' => 'required',
+        'inscricao_estadual' => 'unique:pessoa,inscricao_estadual',
+        'inscricao_municipal' => 'unique:pessoa,inscricao_municipal',
         'qtde_funcionarios' => 'required|numeric',
         'tipo' => 'required',
         'endereco' => 'required',
@@ -31,7 +30,24 @@ class Pessoa extends Model {
         'id_tipo_tributacao' => 'required'
     ];
     protected $errors;
-    protected $niceNames = ['descricao' => 'Descrição', 'representante' => 'Representante', 'qualificacao' => 'Qualificação'];
+    protected $niceNames = [
+        'id_natureza_juridica' => 'Natureza Jurídica',
+        'cpf_cnpj' => 'CNPJ',
+        'inscricao_estadual' => 'Inscrição Estadual',
+        'inscricao_municipal' => 'Inscrição Municipal',
+        'qtde_funcionarios' => 'Quantidade de Funcionários',
+        'tipo' => 'Quantidade de Funcionários',
+        'endereco' => 'Endereço',
+        'bairro' => 'Bairro',
+        'cep' => 'Cep',
+        'cidade' => 'Cidade',
+        'numero' => 'Número',
+        'id_uf' => 'Estado',
+        'codigo_acesso_simples_nacional' => 'Código de Acesso do Simples Nacional',
+        'nome_fantasia' => 'Nome Fantasia',
+        'razao_social' => 'Razão Social',
+        'id_tipo_tributacao' => 'Tipo de Tributação'
+    ];
 
     /**
      * The database table used by the model.
@@ -73,11 +89,11 @@ class Pessoa extends Model {
 
     public function validate($data, $update = false) {
         // make a new validator object
-        if($update){
-            $this->rules['cpf_cnpj'] = 'required|unique:pessoa,cpf_cnpj,'.$data['id'];
-            $this->rules['inscricao_municipal'] = 'required|unique:pessoa,inscricao_municipal,'.$data['id'];
-            $this->rules['inscricao_estadual'] = 'required|unique:pessoa,inscricao_estadual,'.$data['id'];
-            $this->rules['razao_social'] = 'required|unique:pessoa,razao_social,'.$data['id'];
+        if ($update) {
+            $this->rules['cpf_cnpj'] = 'required|unique:pessoa,cpf_cnpj,' . $data['id'];
+            $this->rules['inscricao_municipal'] = 'unique:pessoa,inscricao_municipal,' . $data['id'];
+            $this->rules['inscricao_estadual'] = 'unique:pessoa,inscricao_estadual,' . $data['id'];
+            $this->rules['razao_social'] = 'required|unique:pessoa,razao_social,' . $data['id'];
             $this->rules['id_usuario'] = '';
             $this->rules['id_natureza_juridica'] = '';
             $this->rules['id_tipo_tributacao'] = '';
@@ -114,6 +130,7 @@ class Pessoa extends Model {
     public function cnaes() {
         return $this->hasMany('App\PessoaCnae', 'id_pessoa');
     }
+
     public function socios() {
         return $this->hasMany('App\Socio', 'id_pessoa');
     }
@@ -121,7 +138,7 @@ class Pessoa extends Model {
     public function processos() {
         return $this->hasMany('App\Processo', 'id_pessoa');
     }
-    
+
     public function usuario() {
         return $this->belongsTo('App\Usuario', 'id_usuario');
     }

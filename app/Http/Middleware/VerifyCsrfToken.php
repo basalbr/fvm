@@ -17,6 +17,7 @@ class VerifyCsrfToken extends BaseVerifier
         'login',
         'curl',
         'chat*',
-        'ajax*'
+        'ajax*',
+        'pagseguro*'
     ];
 }

@@ -39,8 +39,8 @@ use AuthenticatesAndRegistersUsers,
         $this->middleware('guest', ['except' => 'getLogout']);
     }
 
-    public function getRegister() {
-        return view('register.index');
+    public function getRegister(Request $request) {
+        return view('register.index',['email' => $request->get('email')]);
     }
 
     public function getLogin(Request $request) {

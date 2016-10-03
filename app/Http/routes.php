@@ -106,6 +106,8 @@ Route::post('/admin/chamados/visualizar/{id}', ['as' => 'visualizar-chamados', '
 
 
 Route::get('/mensalidades/', ['as' => 'listar-mensalidades', 'uses' => 'MensalidadeController@index', 'middleware' => 'auth']);
+Route::get('/pagamentos-pendentes/', ['as' => 'listar-pagamentos-pendentes', 'uses' => 'PagamentoController@index', 'middleware' => 'auth']);
+Route::get('/historico-pagamentos/', ['as' => 'listar-historico-pagamentos', 'uses' => 'PagamentoController@historico', 'middleware' => 'auth']);
 
 Route::get('/admin/apuracoes/', ['as' => 'listar-processos-admin', 'uses' => 'ProcessoController@index', 'middleware' => 'admin']);
 Route::get('/admin/apuracoes/visualizar/{id}', ['as' => 'visualizar-processo-admin', 'uses' => 'ProcessoController@edit', 'middleware' => 'admin']);

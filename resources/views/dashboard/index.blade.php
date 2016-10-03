@@ -1,49 +1,4 @@
 @extends('layouts.dashboard')
-@section('js')
-@parent
-<script type="text/javascript">
-    var planos;
-    var max_documentos;
-    var max_pro_labores;
-    var maxValor;
-    $(function () {
-        $.get("{{route('ajax-simular-plano')}}", function (data) {
-            planos = data.planos;
-            max_documentos = data.max_documentos;
-            max_pro_labores = data.max_pro_labores;
-            maxValor = data.max_valor;
-            contabilidade = parseFloat($('#contabilidade').val().replace(RegExp, "$1.$2"));
-            console.log(contabilidade)
-            economia = (contabilidade*12) - (parseFloat(data.min_valor) * 12); 
-            $('#mensalidade').text('R$' + data.min_valor.toFixed(2));
-            $('#economia').text('R$' + economia.toFixed(2));
-        });
-        $('#total_documentos, #contabilidade, #pro_labores').on('keyup', function () {
-
-            var minValor = maxValor;
-            if ($('#pro_labores').val() > max_pro_labores) {
-                $('#pro_labores').val(max_pro_labores);
-            }
-            if ($('#total_documentos').val() > max_documentos) {
-                $('#total_documentos').val(max_documentos);
-            }
-            for (i in planos) {
-
-                if ($('#total_documentos').val() <= planos[i].total_documentos && $('#pro_labores').val() <= planos[i].pro_labores && planos[i].valor < minValor) {
-                    minValor = parseFloat(planos[i].valor);
-                }
-            }
-            $('#mensalidade').text('R$' + minValor.toFixed(2));
-            var RegExp = /^([\d]+)[,.]([\d]{2})$/;
-            contabilidade = $('#contabilidade').val().replace(".", "");
-            contabilidade = parseFloat(contabilidade.replace(",","."));
-            totalDesconto = (contabilidade*12)-(minValor * 12) > 0 ? (contabilidade*12)-(minValor * 12) : 0;
-            $('#economia').html('R$' + totalDesconto.toFixed(2));
-        });
-
-    });
-</script>
-@stop
 @section('main')
 <h1>Central do Cliente</h1>
 <p>Seja bem vindo {{Auth::user()->nome}}, utilize os botões no menu esquerdo para navegar em nosso sistema.</p>
@@ -118,38 +73,6 @@
         @endif
     </div>
 </div>
-<div class='col-xs-8'>
-    <div class='card'>
-        <h3>Simulação de Mensalidade</h3> 
-
-        <p>Complete os campos abaixo e confira os valores de nossas mensalidades. <b>Atenção:</b> valor individual por empresa cadastrada no sistema.</p>
-        <div class='col-xs-6'>
-            <form>
-                <div class='form-group'>
-                    <label>Quantos sócios retiram pró-labore?</label>
-                    <input type='text' class='form-control numero-mask2' id='pro_labores' data-mask-placeholder='0' />
-                </div>
-                <div class='form-group'>
-                    <label>Quantos documentos fiscais são emitidos por mês?</label>
-                    <input type='text' class='form-control numero-mask2' id='total_documentos' data-mask-placeholder='0'/>
-                </div>
-                <div class='form-group'>
-                    <label>Quanto você paga hoje por mês para sua contabilidade?</label>
-                    <input type='text' class='form-control dinheiro-mask2' id='contabilidade' data-mask-placeholder='0' value="499,99"/>
-                </div>
-                <a class='btn btn-success' href='{{route('cadastrar-empresa')}}'>Cadastrar Empresa</a>
-            </form>
-        </div>
-        <div class='col-xs-6'>
-            <h2 class='text-center'>Sua mensalidade será:</h2>
-            <div id='mensalidade' class='text-center text-info' style="font-size:45px; font-weight: bold;">R$0,00</div>
-            <h2 class='text-center'>Você <b>economizará</b> por ano:</h2>
-            <div id='economia' class='text-center text-success' style="font-size:45px; font-weight: bold;">R$0,00</div>
-        </div>
-        <div class='clearfix'></div>
-    </div>
-</div>
-
 
 <div class='col-xs-4'>
     <div class='card'>

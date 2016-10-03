@@ -19,7 +19,7 @@ class Socio extends Model {
         'titulo_eleitor' => 'required',
         'endereco' => 'required',
         'bairro' => 'required',
-        'cep|size:9' => 'required',
+        'cep' => 'required|size:9',
         'cidade' => 'required',
         'numero' => 'numeric',
         'id_uf' => 'required',
@@ -28,8 +28,23 @@ class Socio extends Model {
         'pis'=>'size:14'
     ];
     protected $errors;
-    protected $niceNames = ['descricao' => 'Descrição', 'representante' => 'Representante', 'qualificacao' => 'Qualificação'];
-
+    protected $niceNames = [
+        'nome' => 'Nome',
+        'principal' => 'Sócio Principal',
+        'cpf' => 'CPF',
+        'rg' => 'RG',
+        'titulo_eleitor' => 'Título de Eleitor',
+        'endereco' => 'Endereço',
+        'bairro' => 'Bairro',
+        'cep' => 'CEP',
+        'cidade' => 'Cidade',
+        'numero' => 'Número',
+        'id_uf' => 'Estado',
+        'pro_labore' => 'Pró-Labore',
+        'orgao_expedidor' => 'Órgão Expedidor',
+        'pis'=>'PIS'
+        ];
+    
     /**
      * The database table used by the model.
      *

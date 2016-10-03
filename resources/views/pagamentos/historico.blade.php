@@ -34,6 +34,8 @@
             @endif
         </tbody>
     </table>
+    {!! str_replace('/?', '?', $pagamentos->render()) !!}
+    <div class="clear"></div>
 </div>
 
 @stop

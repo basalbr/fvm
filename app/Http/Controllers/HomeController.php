@@ -41,7 +41,7 @@ class HomeController extends Controller {
         if ($usuario instanceof \App\Usuario) {
             return redirect(route('login'))->withInput(['email' => $request->input('email'), 'nome' => $usuario->nome]);
         } else {
-            return redirect(route('registrar'))->with('email', $request->input('email'));
+            return redirect(route('registrar'))->withInput(['email' => $request->input('email')]);
         }
     }
 

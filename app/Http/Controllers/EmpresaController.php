@@ -105,7 +105,7 @@ class EmpresaController extends Controller {
             
             $pagamento = new \App\Pagamento;
             $pagamento->id_mensalidade = $mensalidade->id;
-            $pagamento->status = 'pago';
+            $pagamento->status = 'Paga';
             $pagamento->valor = 0.0;
             $pagamento->vencimento = date('Y-m-d H:i:s');
             $pagamento->save();
