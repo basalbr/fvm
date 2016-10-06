@@ -1,4 +1,50 @@
 @extends('layouts.dashboard')
+@section('js')
+@parent()
+<script type="text/javascript" language="javascript">
+$(function(){
+  $('.imposto-event').on('click', function(e){
+      e.preventDefault();
+      var title = $(this).data('title');
+            $.get("{{route('ajax-instrucoes')}}", {'id': $(this).data('id')}, function (data) {
+                if (data.length !== undefined) {
+                    if (data.length > 0) {
+                        $('.modal-header').text(title);
+                        var html = "<div class='col-xs-12'>\n\
+                                    <input type='hidden' id='instrucao-page' value='1' />\n\
+                                    <input type='hidden' id='instrucao-total' value='" + data.length + "' />";
+                        html += '<h2 style="margin-bottom:15px; margin-top:0; padding:0;">' + title + '</h2>';
+                        if (data.length > 1) {
+                            html += "<div id='paginacao-instrucao-container'>";
+                            html += "<div class='paginacao-instrucao'>Página <span id='pagina-atual' class='numero'>1</span> de <span class='numero'>" + data.length + "</span></div>";
+                            html += "<div class='paginacao-botoes'>";
+                            html += "<div class='btn btn-primary disabled btn-instrucao-voltar' style='margin-right: 5px'>Voltar</div>";
+                            html += "<div class='btn btn-primary btn-instrucao-avancar'>Avançar</div>";
+                            html += "</div>";
+                            html += "<div class='clearfix'></div>";
+                            html += "</div>";
+                        }
+                        html += "</div>";
+                        data.forEach(function (instrucao, key) {
+                            if (key == 0) {
+                                html += "<div class='col-xs-12 instrucao-descricao' style='display: block' data-pagina='" + (key + 1) + "'>";
+                            } else {
+                                html += "<div class='col-xs-12 instrucao-descricao' style='display: none' data-pagina='" + (key + 1) + "'>";
+                            }
+                            html += instrucao.descricao;
+                            html += "</div>";
+                        }, html);
+
+                        $('.modal-body > p').html(html);
+                        $('#imposto-modal').modal('show');
+                    }
+                }
+            })
+       })
+
+});
+</script>
+@stop
 @section('main')
 <h1>Central do Cliente</h1>
 <p>Seja bem vindo {{Auth::user()->nome}}, utilize os botões no menu esquerdo para navegar em nosso sistema.</p>
@@ -82,9 +128,9 @@
         <ul class='lista-apuracoes-urgentes'>
             @foreach($impostos as $imposto)
             <li>
-                <a href="{{route('responder-processo-usuario', ['id' => $imposto->id])}}">
+                <a class="imposto-event" data-title="{{$imposto->nome}}" data-id="{{$imposto->id}}" href="{{route('responder-processo-usuario', ['id' => $imposto->id])}}">
                     <div class='empresa'>{{$imposto->nome}}</div>
-                    <div class='imposto'>{{$imposto->vencimento.'/'.$meses[date('m')]}}</div>
+                    <div class='imposto'>Vencimento: {{$imposto->vencimento.'/'.$meses[date('m')]}}</div>
                 </a>
             </li>
             @endforeach
@@ -92,4 +138,25 @@
         <a class="btn btn-info" href="{{route('calendario')}}">Visualizar calendário de impostos</a>
     </div>
 </div>
+@stop
+@section('modal')
+<div class="modal fade" id="imposto-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-body">
+                <p></p>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar Janela</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 @stop
