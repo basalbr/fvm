@@ -124,7 +124,7 @@ button:active, button:focus{
     font-size: 16px;
 }
 
-#como-funciona .btn, #planos .btn, #contato .btn{
+#como-funciona .btn, #planos .btn, #contato .btn, #noticias .btn,#noticia .btn{
     box-shadow: 1px 2px 3px rgba(0,0,0,.4);
     border-radius: 0;
     color: #fff;
@@ -144,10 +144,10 @@ button:active, button:focus{
 
 #contato p, #contato h2, #contato h1{
     color: #fff;
-        
+
 }
 #contato hr{
- background-image: linear-gradient(to left,rgba(255,255,255,0),rgba(255,255,255,.2),rgba(255,255,255,0))!important;   
+    background-image: linear-gradient(to left,rgba(255,255,255,0),rgba(255,255,255,.2),rgba(255,255,255,0))!important;   
 }
 
 #parallax{
@@ -1299,3 +1299,68 @@ ul.lista-impostos li:hover{
     background-color: #4da6ff;
 }
 
+.noticias .noticia{
+    position: relative;
+    float: left;
+    padding: 5px;
+}
+
+.noticias .noticia a{
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    display: block;
+    color: #fff;
+}
+
+.noticias .noticia .black{
+    background-color: rgba(0,0,0,1);
+    opacity: 0.15;
+    z-index: 2;
+    position: absolute;
+    top:5px;
+    bottom: 5px;
+    left:5px;
+    right:5px;
+}
+
+.noticias .noticia img{
+    filter: brightness(70%);
+    z-index: 1;
+    width: 100%;
+    transition: transform 0.2s ease-in;
+}
+
+.noticias .noticia img:hover{
+    transform: scale(1.10);
+}
+
+.noticias .noticia .titulo{
+    z-index:3;
+    position: absolute;
+    left: 15px;
+    bottom: 40px;
+    font-size: 15px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.noticias .noticia.destaque .titulo{
+    font-size: 25px;
+}
+
+.noticias .noticia .data{
+    z-index:3;
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+}
+
+.noticias .noticia.destaque{
+    width: 50%;
+    height: 370px;
+}
+.noticias .noticia{
+    width: 25%;
+    height: 185px;
+}

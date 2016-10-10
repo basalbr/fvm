@@ -13,6 +13,10 @@ class EmpresaController extends Controller {
         $empresas = \App\Pessoa::where('id_usuario', '=', Auth::user()->id)->orderBy('nome_fantasia')->get();
         return view('empresa.index', ['empresas' => $empresas]);
     }
+    public function indexAdmin() {
+        $empresas = \App\Pessoa::orderBy('nome_fantasia')->get();
+        return view('admin.empresa.index', ['empresas' => $empresas]);
+    }
 
     public function create() {
         $tipoTributacoes = \App\TipoTributacao::orderBy('descricao', 'asc')->get();
@@ -120,6 +124,13 @@ class EmpresaController extends Controller {
         $tipoTributacoes = \App\TipoTributacao::orderBy('descricao', 'asc')->get();
         $naturezasJuridicas = \App\NaturezaJuridica::orderBy('descricao', 'asc')->get();
         return view('empresa.editar', [ 'tipoTributacoes' => $tipoTributacoes, 'naturezasJuridicas' => $naturezasJuridicas, 'empresa' => $empresa]);
+    }
+    
+    public function editAdmin($id) {
+        $empresa = \App\Pessoa::where('id', '=', $id)->first();
+        $tipoTributacoes = \App\TipoTributacao::orderBy('descricao', 'asc')->get();
+        $naturezasJuridicas = \App\NaturezaJuridica::orderBy('descricao', 'asc')->get();
+        return view('admin.empresa.editar', [ 'tipoTributacoes' => $tipoTributacoes, 'naturezasJuridicas' => $naturezasJuridicas, 'empresa' => $empresa]);
     }
 
     public function update($id, Request $request) {

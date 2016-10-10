@@ -94,6 +94,15 @@ Route::post('/admin/natureza-juridica/cadastrar', ['as' => 'cadastrar-natureza-j
 Route::get('/admin/natureza-juridica/editar/{id}', ['as' => 'editar-natureza-juridica', 'uses' => 'NaturezaJuridicaController@edit', 'middleware' => 'admin']);
 Route::post('/admin/natureza-juridica/editar/{id}', ['as' => 'editar-natureza-juridica', 'uses' => 'NaturezaJuridicaController@update', 'middleware' => 'admin']);
 
+Route::get('/noticias/', ['as' => 'listar-noticias-site', 'uses' => 'NoticiaController@indexSite']);
+Route::get('/noticias/{id}/{slug}', ['as' => 'ler-noticia', 'uses' => 'NoticiaController@ler']);
+
+Route::get('/admin/noticias/', ['as' => 'listar-noticias', 'uses' => 'NoticiaController@index', 'middleware' => 'admin']);
+Route::get('/admin/noticias/cadastrar', ['as' => 'cadastrar-noticia', 'uses' => 'NoticiaController@create', 'middleware' => 'admin']);
+Route::post('/admin/noticias/cadastrar', ['as' => 'cadastrar-noticia', 'uses' => 'NoticiaController@store', 'middleware' => 'admin']);
+Route::get('/admin/noticias/editar/{id}', ['as' => 'editar-noticia', 'uses' => 'NoticiaController@edit', 'middleware' => 'admin']);
+Route::post('/admin/noticias/editar/{id}', ['as' => 'editar-noticia', 'uses' => 'NoticiaController@update', 'middleware' => 'admin']);
+
 Route::get('/admin/cnae/', ['as' => 'listar-cnae', 'uses' => 'CnaeController@index', 'middleware' => 'admin']);
 Route::get('/admin/cnae/cadastrar', ['as' => 'cadastrar-cnae', 'uses' => 'CnaeController@create', 'middleware' => 'admin']);
 Route::post('/admin/cnae/cadastrar', ['as' => 'cadastrar-cnae', 'uses' => 'CnaeController@store', 'middleware' => 'admin']);
@@ -106,6 +115,7 @@ Route::post('/admin/chamados/visualizar/{id}', ['as' => 'visualizar-chamados', '
 
 
 Route::get('/mensalidades/', ['as' => 'listar-mensalidades', 'uses' => 'MensalidadeController@index', 'middleware' => 'auth']);
+Route::get('/admin/mensalidades/', ['as' => 'listar-mensalidades-admin', 'uses' => 'MensalidadeController@indexAdmin', 'middleware' => 'admin']);
 Route::get('/pagamentos-pendentes/', ['as' => 'listar-pagamentos-pendentes', 'uses' => 'PagamentoController@index', 'middleware' => 'auth']);
 Route::get('/historico-pagamentos/', ['as' => 'listar-historico-pagamentos', 'uses' => 'PagamentoController@historico', 'middleware' => 'auth']);
 
@@ -140,6 +150,9 @@ Route::get('/empresas/cadastrar', ['as' => 'cadastrar-empresa', 'uses' => 'Empre
 Route::post('/empresas/cadastrar', ['uses' => 'EmpresaController@store', 'middleware' => 'auth']);
 Route::get('/empresas/editar/{id}', ['as' => 'editar-empresa', 'uses' => 'EmpresaController@edit', 'middleware' => 'auth']);
 Route::post('/empresas/editar/{id}', ['uses' => 'EmpresaController@update', 'middleware' => 'auth']);
+
+Route::get('/admin/empresas', ['as' => 'empresas-admin', 'uses' => 'EmpresaController@indexAdmin', 'middleware' => 'admin']);
+Route::get('/admin/empresas/editar/{id}', ['as' => 'editar-empresa-admin', 'uses' => 'EmpresaController@editAdmin', 'middleware' => 'admin']);
 
 // Registration routes...
 Route::get('/registrar', ['uses' => 'Auth\AuthController@getRegister', 'as' => 'registrar']);

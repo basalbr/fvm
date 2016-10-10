@@ -12,6 +12,9 @@ class MensalidadeController extends Controller {
         $mensalidades = Mensalidade::where('id_usuario','=',Auth::user()->id)->get();
         return view('mensalidades.index', ['mensalidades' => $mensalidades]);
     }
-
+ public function indexAdmin() {
+        $mensalidades = Mensalidade::get();
+        return view('admin.mensalidades.index', ['mensalidades' => $mensalidades]);
+    }
 
 }

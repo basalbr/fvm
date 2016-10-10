@@ -119,7 +119,7 @@ $(function () {
     <body data-spy="scroll" data-target="#navbar-main" data-offset="200" class="{{Request::is('/') ? '' : 'bg-ltblue'}}">
         <section id="navbar">
             <div class="navbar navbar-default navbar-fixed-top">
-                <div class="{{Request::is('/') ? 'container' : 'container-fluid'}}">
+                <div class="{{Request::is('/') || Request::is('noticias*') ? 'container' : 'container-fluid'}}">
                     <div class="navbar-header">
                         <a href="{{route('home')}}" class="navbar-brand"><img src="{{url('public/images/logotipo-pequeno.png')}}" /></a>
                         <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
@@ -144,7 +144,30 @@ $(function () {
                                 <a href="#faq">Perguntas Frequentes</a>
                             </li>
                             <li>
+                                <a href="#noticias">Notícias</a>
+                            </li>
+                            <li>
                                 <a href="#contato">Contato</a>
+                            </li>
+                            @endif
+                            @if(Request::is('noticias*'))
+                            <li class="dropdown">
+                                <a href="{{url('/')}}#inicio" id="nav-inicio">Início</a>
+                            </li>
+                            <li>
+                                <a href="{{url('/')}}#como-funciona">Como funciona</a>
+                            </li>
+                            <li>
+                                <a href="{{url('/')}}#planos">Simulação</a>
+                            </li>
+                            <li>
+                                <a href="{{url('/')}}#faq">Perguntas Frequentes</a>
+                            </li>
+                            <li>
+                                <a href="{{url('/')}}#noticias">Notícias</a>
+                            </li>
+                            <li>
+                                <a href="/#contato">Contato</a>
                             </li>
                             @endif
                             @if(Auth::user())
