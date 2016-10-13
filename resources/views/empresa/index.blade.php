@@ -51,13 +51,12 @@ $(function(){
                     <a class='btn btn-warning' href="{{route('editar-empresa', ['id' => $empresa->id])}}">Editar</a>
                     <a class='btn btn-info' href="{{route('cadastrar-socio', [$empresa->id])}}">Cadastrar Sócio</a>
                     <a class='btn btn-primary' href="{{route('listar-socios', [$empresa->id])}}">Listar Sócios</a>
-                    <a class='btn btn-danger' href="{{$empresa->id}}">Remover</a>
                 </td>
             </tr>
             @endforeach
             @else
             <tr>
-                <td colspan="2">Nenhum registro cadastrado</td>
+                <td colspan="5">Nenhum registro cadastrado</td>
             </tr>
             @endif
         </tbody>

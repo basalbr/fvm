@@ -28,8 +28,12 @@
         <hr>
         <h1 class="title">{{$noticia->titulo}}</h1>
         <hr>
-        <img src="{{asset('uploads/noticias/'.$noticia->imagem)}}" style="max-width: 100%"/> 
-        <small>Publicado em {{$noticia->created_at->format('d/m/Y')}}</small>
+        <div class='col-xs-12 text-center'>
+            <img src="{{asset('uploads/noticias/'.$noticia->imagem)}}" style="max-width: 100%"/> 
+        </div>
+        <small><b>Publicado em {{$noticia->created_at->format('d/m/Y')}}</b></small>
+        <div class="clearfix"></div>
+        <br />
         {!!$noticia->texto!!}
         <div class="clearfix"></div>
         <hr>
@@ -39,6 +43,7 @@
             <div class="noticia">
                 <a href="{{route('ler-noticia',[$noticia->id, str_slug($noticia->titulo)])}}">
                     <img src="{{ asset('uploads/noticias/thumb/'.$noticia->imagem) }}" />
+
                     <div class="titulo">{{$noticia->titulo}}</div>
                     <div class="data">{{date_format($noticia->created_at, 'd/m/Y')}}</div>
                 </a>
@@ -52,7 +57,7 @@
         <div class="text-center">
             <a href="{{route('listar-noticias-site')}}" class="btn btn-info">clique para ver mais notícias</a>
         </div>
-<br />
+        <br />
     </div>
 </section>
 

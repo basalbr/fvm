@@ -154,6 +154,12 @@ Route::post('/empresas/editar/{id}', ['uses' => 'EmpresaController@update', 'mid
 Route::get('/admin/empresas', ['as' => 'empresas-admin', 'uses' => 'EmpresaController@indexAdmin', 'middleware' => 'admin']);
 Route::get('/admin/empresas/editar/{id}', ['as' => 'editar-empresa-admin', 'uses' => 'EmpresaController@editAdmin', 'middleware' => 'admin']);
 
+Route::get('/abertura-empresa', ['as' => 'abertura-empresa', 'uses' => 'AberturaEmpresaController@index', 'middleware' => 'auth']);
+Route::get('/abertura-empresa/cadastrar', ['as' => 'cadastrar-abertura-empresa', 'uses' => 'AberturaEmpresaController@create', 'middleware' => 'auth']);
+Route::post('/abertura-empresa/cadastrar', ['uses' => 'AberturaEmpresaController@store', 'middleware' => 'auth']);
+Route::get('/abertura-empresa/editar/{id}', ['as' => 'editar-abertura-empresa', 'uses' => 'AberturaEmpresaController@edit', 'middleware' => 'auth']);
+Route::post('/abertura-empresa/editar/{id}', ['uses' => 'AberturaEmpresaController@update', 'middleware' => 'auth']);
+
 // Registration routes...
 Route::get('/registrar', ['uses' => 'Auth\AuthController@getRegister', 'as' => 'registrar']);
 Route::post('/registrar', ['uses' => 'Auth\AuthController@postRegister', 'as' => 'registrar']);
