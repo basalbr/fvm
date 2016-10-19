@@ -22,37 +22,95 @@ $(function () {
     });
     $('#mostrar-socio').on('click', function () {
         $('#socio-modal').modal('show');
-    })
-    $('#adicionar-socio').on('click', function () {
-        var id = 0;
-        var arrSocio = $('#socio-form').serializeArray();
+    });
+    $('#lista-socios').on('click', '.remover-socio', function () {
+
+        var id = parseInt($(this).data('id'));
+        $(this).parent().parent().remove();
         $('#socios input').each(function () {
-            if (parseInt($(this).data('id')) >= id) {
-                id = parseInt($(this).data('id')) + 1;
+            if (parseInt($(this).data('id')) == id) {
+                $(this).remove();
             }
         });
-        var listaRow = '<tr>';
-        for (i in arrSocio) {
-            $('#socios').append('<input type="hidden" name="socio[' + id + ']' + arrSocio[i].name + '" value="' + arrSocio[i].value + '" data-id="' + id + '" />');
-            if (arrSocio[i].name == 'nome' || arrSocio[i].name == 'cpf') {
-                listaRow += "<td>" + arrSocio[i].value + "</td>";
-            }
+        if ($('#lista-socios tr').length == 1) {
+            $('.nenhum-socio').show();
         }
-        listaRow += "<td><button type='button' class='btn btn-warning editar-socio' data-id='" + id + "'><span class='fa fa-edit'></span> Editar</button> <button type='button' class='btn btn-danger remover-socio' data-id='" + id + "'><span class='fa fa-remove'></span> Remover</button></td></tr>";
-        $('#lista-socios').append(listaRow);
     });
-    $.get("{{route('ajax-simular-plano')}}", function (data) {
-        planos = data.planos;
-        max_documentos = parseInt(data.max_documentos);
-        max_contabeis = parseInt(data.max_contabeis);
-        max_pro_labores = parseInt(data.max_pro_labores);
-        maxValor = parseFloat(data.max_valor);
-        contabilidade = parseFloat($('#contabilidade').val().replace(RegExp, "$1.$2"));
 
-        economia = (contabilidade * 12) - (parseFloat(data.min_valor) * 12);
-        $('#mensalidade').text('R$' + parseFloat(data.min_valor).toFixed(2));
-        $('#economia').text('R$' + economia.toFixed(2));
+    $('#adicionar-socio').on('click', function (e) {
+        $('#adicionar-socio').text('Adicionar Sócio');
+        var id = 0;
+        var arrSocio = $('#socio-form').serializeArray();
+        $.post("{{route('ajax-validar-socio')}}", arrSocio, function (data) {
+            if (data.length) {
+                var html = '<ul>';
+                for (i in data) {
+                    html += '<li>' + data[i] + '</li>';
+                }
+                html += '</ul>';
+                $('#socio-erros').html(html);
+                $('#socio-modal').animate({
+                    scrollTop: $("#socio-erros").offset().top
+                }, 1000);
+                $('#socio-form .alert').show();
+                e.preventDefault();
+            } else {
+
+                $('#socio-form .alert').hide();
+                if ($(this).data('id')) {
+                    id = parseInt($(this).data('id'));
+                    $("#socios socio['" + id + "']").remove();
+                    $(this).removeData('id');
+                    $('#lista-socios .editar-socio').each(function () {
+                        if (parseInt($(this).data('id')) == id) {
+                            $(this).parent().parent().remove();
+                        }
+                    });
+                } else {
+                    $('#socios input').each(function () {
+                        if (parseInt($(this).data('id')) >= id) {
+                            id = parseInt($(this).data('id')) + 1;
+                        }
+                    });
+                }
+                var listaRow = '<tr>';
+                for (i in arrSocio) {
+                    $('#socios').append('<input type="hidden" name="socio[' + id + ']' + arrSocio[i].name + '" value="' + arrSocio[i].value + '" data-id="' + id + '" />');
+                    if (arrSocio[i].name == 'nome' || arrSocio[i].name == 'cpf') {
+                        listaRow += "<td>" + arrSocio[i].value + "</td>";
+                    }
+                }
+                listaRow += "<td><button type='button' class='btn btn-warning editar-socio' data-id='" + id + "'><span class='fa fa-edit'></span> Editar</button> <button type='button' class='btn btn-danger remover-socio' data-id='" + id + "'><span class='fa fa-remove'></span> Remover</button></td></tr>";
+                $('#lista-socios').append(listaRow);
+                $('.nenhum-socio').hide();
+                $('#socio-modal').modal('hide');
+                $('#socio-modal form')[0].reset();
+            }
+        });
     });
+    $('#lista-socios').on('click', '.editar-socio', function () {
+        var id = parseInt($(this).data('id'));
+        $('#adicionar-socio').text('Alterar Informações');
+        $('#socio-form').data('id', id);
+        $('#socios input').each(function () {
+            if (parseInt($(this).data('id')) == id) {
+                if ($(this).attr('name') != 'principal') {
+                    $('#socio-form input[name="' + $(this).attr('name') + '"]').val($(this).val());
+                } else {
+                    if ($(this).val() == '1') {
+                        $('#principal-sim').prop('checked', true);
+                        $('#principal-nao').prop('checked', false);
+                    } else {
+                        $('#principal-sim').prop('checked', false);
+                        $('#principal-nao').prop('checked', true);
+                    }
+                }
+            }
+        });
+        $('#socio-modal').modal('show');
+    }
+    );
+
     $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores').on('keyup', function () {
 
         var pro_labores = $('#pro_labores').val();
@@ -87,10 +145,9 @@ $(function () {
         contabilidade = $('#contabilidade').val().replace(".", "");
         contabilidade = parseFloat(contabilidade.replace(",", "."));
         totalDesconto = (contabilidade * 12) - (minValor * 12) > 0 ? (contabilidade * 12) - (minValor * 12) : 0;
-
         $('#economia').html('R$' + totalDesconto.toFixed(2));
-
     });
+
     $('.cnae-search').on('keyup', function () {
         $("#adicionar-cnae").prop('disabled', true);
         if ($(this).val().length == 9) {
@@ -143,7 +200,6 @@ $(function () {
             $('.nenhum-cnae').show();
         }
     });
-
     $('.cnae-search-box .result').on('click', '.cnae-item', function () {
         $('.cnae-search').after('<input type="hidden" value="' + $(this).data('id') + '" name="cnaes[]"/>');
         $('.cnae-search').after('<div class="col-xs-12"><a data-id="' + $(this).data('id') + '" class="remove-cnae">' + $(this).data('val') + '</a></div>');
@@ -151,21 +207,17 @@ $(function () {
         $('.cnae-search-box .result').empty();
         $('.cnae-search-box').hide();
     });
-
     $("#abrir-modal-cnae").on('click', function () {
         $("#cnae-modal").modal('show');
     });
-
     $("#cnae-search").on('keyup', function () {
 
         if ($(this).val().length > 0) {
             $(this).parent().parent().find('button').prop("disabled", false);
-
         } else {
             $(this).parent().parent().find('button').prop("disabled", true);
         }
     });
-
     $("#cnae-form").on('submit', function (e) {
         e.preventDefault();
         $.post("{{route('ajax-cnae')}}", {tipo: 'descricao', search: $("#cnae-search").val()}, function (data) {
@@ -192,7 +244,6 @@ $(function () {
             }
         });
     });
-
     $("#lista-cnaes-modal").on('click', 'button', function () {
         var descricao = $(this).data('descricao');
         var codigo = $(this).data('codigo');
@@ -203,18 +254,16 @@ $(function () {
         $(this).prop('disabled', true);
         $(this).html('Adicionado');
     });
-
     $('#mostrar-simulador').on('click', function (e) {
         e.preventDefault();
         $('#mensalidade-modal').modal('show');
     });
-
     $('#cadastrar-empresa').on('click', function (e) {
         e.preventDefault();
         $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores').clone().appendTo('#principal-form');
         $('#principal-form').submit();
     });
-$('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip()
 });
 </script>
 @stop
@@ -269,7 +318,7 @@ $('[data-toggle="tooltip"]').tooltip()
             </div>
             <div class='form-group'>
                 <label>Capital Social * <span data-trigger="hover" class="text-info" title="Capital Social é o valor, a integralizar ou integralizado, correspondente à contra-partida do titular, sócios ou acionistas de um empreendimento, para o início ou a manutenção dos negócios. Para fins de registro do comércio, deverá constar, no documento de constituição empresarial, o montante da subscrição, e como sera feita a conferência do valor: em moeda corrente, bens ou direitos." data-toggle="tooltip" data-placement="top">(o que é isso?)</span></label>
-               
+                <p>Descreva o capital social da empresa</p>
                 <textarea class='form-control' name='capital_social'>{{Input::old('capital_social')}}</textarea>
             </div>
             <h3>Endereço</h3>
@@ -301,20 +350,20 @@ $('[data-toggle="tooltip"]').tooltip()
                 <input type='text' class='form-control numero-mask' name='numero' value="{{Input::old('numero')}}"/>
             </div>
             <div class='form-group'>
-                <label>Complemento *</label>
+                <label>Complemento</label>
                 <input type='text' class='form-control' name='complemento'  value="{{Input::old('complemento')}}"/>
             </div>
-             <div class='form-group'>
+            <div class='form-group'>
                 <label>Inscrição IPTU *</label>
                 <input type='text' class='form-control' name='iptu'  value="{{Input::old('iptu')}}"/>
             </div>
             <div class='form-group'>
                 <label>Área total ocupada em m² *</label>
-                <input type='text' class='form-control' name='area_total'  value="{{Input::old('area_ocupada')}}"/>
+                <input type='text' class='form-control' name='area_ocupada'  value="{{Input::old('area_ocupada')}}"/>
             </div>
             <div class='form-group'>
                 <label>Área total do imóvel m² *</label>
-                <input type='text' class='form-control' name='area_ocupada'  value="{{Input::old('area_total')}}"/>
+                <input type='text' class='form-control' name='area_total'  value="{{Input::old('area_total')}}"/>
             </div>
             <div class='form-group'>
                 <label>CPF ou CNPJ do proprietário do imóvel *</label>
@@ -336,13 +385,13 @@ $('[data-toggle="tooltip"]').tooltip()
                 </thead>
                 <tbody id='lista-socios'>
                     <tr>
-                        <td colspan="3" class="nenhum-cnae">Por favor adicione pelo menos um Sócio.</td>
+                        <td colspan="3" class="nenhum-socio">Por favor adicione pelo menos um Sócio.</td>
                     </tr>
                 </tbody>
             </table> 
             <h3>CNAEs</h3>
             <p>Adicione os CNAEs relacionados à sua empresa. Caso não saiba os códigos, clique em Pesquisar CNAE.</p>
-            <p><b>Atenção:</b> Caso você não saiba quais CNAEs você deseja ou se precisa de ajuda, deixe em branco que entraremos em contato contigo.</p>
+            <p><b>Atenção:</b> não adicione nenhum CNAE caso você não saiba quais CNAEs você deseja ou se precisa de ajuda.</p>
             <div class='form-group'>
                 <label>CNAE</label>
                 <div class='input-group col-md-6'>
@@ -365,13 +414,16 @@ $('[data-toggle="tooltip"]').tooltip()
                 </thead>
                 <tbody id='lista-cnaes'>
                     <tr>
-                        <td colspan="3" class="nenhum-cnae">Por favor adicione pelo menos um CNAE.</td>
+                        <td colspan="3" class="nenhum-cnae">Nenhum CNAE adicionado.</td>
                     </tr>
                 </tbody>
-            </table>             
-            <hr>
+            </table>
+            <div class="form-group">
+                <label>Caso tenha dúvida na escolha de seu CNAE, digite no campo abaixo a descrição detalhada da(s) atividade(s) que pretende realizar em sua empresa e retornaremos com a lista dos possíveis CNAE's.</label>
+                <textarea class="form-control" name="cnae_duvida"></textarea>
+            </div>
             <div class='form-group'>
-                <a href="" class='btn btn-primary'>Enviar solicitação</a>
+                <a href="" class='btn btn-success'>Enviar solicitação</a>
             </div>
         </form>
         <div class='clearfix'></div>
@@ -388,6 +440,10 @@ $('[data-toggle="tooltip"]').tooltip()
             </div>
             <div class="modal-body">
                 <form id='socio-form'>
+                    <div class="alert alert-warning animate shake" style="display: none">
+                        <b>Atenção</b><br />
+                        <div id="socio-erros"></div>
+                    </div>
                     <p>Complete os campos abaixo com as informações do <b>sócio.</b><br />
 
                     <div class='form-group'>
@@ -450,14 +506,6 @@ $('[data-toggle="tooltip"]').tooltip()
                     </div>
 
                     <div class='form-group'>
-                        <label>Nº Título de Eleitor *</label>
-                        <input type='text' class='form-control' name='titulo_eleitor' value=""/>
-                    </div>
-                    <div class='form-group'>
-                        <label>PIS *</label>
-                        <input type='text' class='form-control pis-mask' name='pis' value=""/>
-                    </div>
-                    <div class='form-group'>
                         <label>Nacionalidade *</label>
                         <input type='text' class='form-control' name='nacionalidade' value=""/>
                     </div>
@@ -468,7 +516,7 @@ $('[data-toggle="tooltip"]').tooltip()
                     <div class='form-group'>
                         <label>Estado *</label>
 
-                        <select class="form-control" name='socio[id_uf]'>
+                        <select class="form-control" name='id_uf'>
                             <option value="">Selecione uma opção</option>
                             @foreach(\App\Uf::get() as $uf)
                             <option value="{{$uf->id}}">{{$uf->nome}}</option>
@@ -480,18 +528,27 @@ $('[data-toggle="tooltip"]').tooltip()
                         <input type='text' class='form-control' name='cidade' value=""/>
                     </div>
                     <div class='form-group'>
+                        <label>Bairro *</label>
+                        <input type='text' class='form-control' name='bairro' value=""/>
+                    </div>
+                    <div class='form-group'>
                         <label>Endereço *</label>
                         <input type='text' class='form-control' name='endereco' value=""/>
                     </div>
                     <div class='form-group'>
-                        <label>Bairro *</label>
-                        <input type='text' class='form-control' name='bairro' value=""/>
+                        <label>Número *</label>
+                        <input type='text' class='form-control numero-mask' name='numero' value=""/>
                     </div>
+                    <div class='form-group'>
+                        <label>Complemento</label>
+                        <input type='text' class='form-control' name='complemento' value=""/>
+                    </div>
+
                     <div class="form-group">
                         <label>É o sócio principal? *</label>
                         <div class="clearfix"></div>
-                        <label class='form-control'><input type="radio" name="principal" value="1" checked/> Sim</label>
-                        <label class='form-control'><input type="radio" name="principal" value="0"/> Não</label>
+                        <label class='form-control'><input id="principal-sim" type="radio" name="principal" value="1" checked/> Sim</label>
+                        <label class='form-control'><input id="principal-nao" type="radio" name="principal" value="0"/> Não</label>
                     </div> 
                     <div class="clearfix"></div>
                 </form>

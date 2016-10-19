@@ -171,5 +171,18 @@ class AberturaEmpresaController extends Controller {
             return redirect(route('registrar'));
         }
     }
+    
+    public function validateSocio(Request $request){
+        $socio = new \App\AberturaEmpresaSocio;
+        if($request->get('data_nascimento')){
+           $old_date = explode('/',$request->get('data_nascimento'));
+           $new_date = $old_date[2].'-'.$old_date[1].'-'.$old_date[0];
+           $request->merge(['data_nascimento'=>$new_date]);
+        }
+        if(!$socio->validate($request->all())){
+            return $socio->errors();
+        }
+            
+    }
 
 }
