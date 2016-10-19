@@ -11,14 +11,14 @@ class AberturaEmpresa extends Model {
     use SoftDeletes;
 
     protected $rules = [
-        'id_usuario' => 'required',
+        'id_usuario' => 'sometimes|required',
         'nome_empresarial1' => 'required',
         'nome_empresarial2' => 'required',
         'nome_empresarial3' => 'required',
         'enquadramento' => 'required',
         'capital_social' => 'required',
         'id_natureza_juridica' => 'required',
-        'id_tipo_tributacao' => 'required',
+        'id_tipo_tributacao' => 'sometimes|required',
         'endereco' => 'required',
         'bairro' => 'required',
         'cep' => 'required|size:9',
@@ -28,11 +28,10 @@ class AberturaEmpresa extends Model {
         'iptu' => 'required',
         'area_total' => 'required|numeric',
         'area_ocupada' => 'required|numeric',
-        'cpf_cnpj_proprietario' => 'required|size:18',
+        'cpf_cnpj_proprietario' => 'required',
     ];
     protected $errors;
     protected $niceNames = [
-        'id_usuario' => 'required',
         'nome_empresarial1' => 'Nome Empresarial Preferencial',
         'nome_empresarial2' => 'Nome Empresarial Alternativo 1',
         'nome_empresarial3' => 'Nome Empresarial Alternativo 2',

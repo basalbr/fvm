@@ -22,93 +22,49 @@ class AberturaEmpresaController extends Controller {
 
     public function store(Request $request) {
 //        dd($request->all());
-        $empresa = new \App\Pessoa;
+        $empresa = new \App\AberturaEmpresa;
         $request->merge(['id_usuario' => Auth::user()->id]);
         if (count($request->get('cnaes'))) {
             foreach ($request->get('cnaes') as $cnae) {
                 if (\App\Cnae::where('id', '=', $cnae)->first()->id_tabela_simples_nacional == null) {
-                    return redirect(route('cadastrar-empresa'))->withInput()->withErrors(['Não foi possível cadastrar sua empresa pois um de seus CNAEs não está apto para o Simples Nacional.\nNesse momento só trabalhamos com Simples Nacional.']);
+                    return redirect(route('cadastrar-abertura-empresa'))->withInput()->withErrors(['Não foi possível cadastrar sua empresa pois um de seus CNAEs não está apto para o Simples Nacional.\nNesse momento só trabalhamos com Simples Nacional.']);
                 }
             }
         }
-
+        if (!count($request->get('socio'))) {
+            return redirect(route('cadastrar-abertura-empresa'))->withInput()->withErrors(['É necessário cadastrar pelo menos um sócio']);
+        }
         //atencao, arrumar telefone!!!!!!!!!!!!!!!!!!!!
         $request->merge([
-            'id_tipo_tributacao' => 1,
-            'telefone' => '123456',
-            'qtde_funcionarios' => 0,
-            'id_uf' => 24
+            'id_tipo_tributacao' => 1
         ]);
-        if ($empresa->validate($request->except('_token'))) {
-
-
-            $empresa = $empresa->create($request->except('_token', 'cnaes', 'socio'));
+        if ($empresa->validate($request->all())) {
+            $empresa = $empresa->create($request->all());
             if (count($request->get('socio'))) {
-                $socio = new \App\Socio;
-
-                $socioData = $request->get('socio');
-                $socioData['id_pessoa'] = $empresa->id;
-                if ($request->get('socio')['pro_labore']) {
-                    $socioData['pro_labore'] = str_replace(',', '.', preg_replace('#[^\d\,]#is', '', $request->get('socio')['pro_labore']));
+                foreach ($request->get('socio') as $obj) {
+                    $socio = new \App\AberturaEmpresaSocio;
+                    $obj['id_abertura_empresa'] = $empresa->id;
+                     $old_date = explode('/', $obj['data_nascimento']);
+            $new_date = $old_date[2] . '-' . $old_date[1] . '-' . $old_date[0];
+                    $obj['data_nascimento'] = $new_date;
+                    if($socio->validate($obj)){
+                        $socio = $socio->create($obj);
+                    }else{
+                        \App\AberturaEmpresa::find($empresa->id)->delete();
+                        return redirect(route('cadastrar-abertura-empresa'))->withInput()->withErrors($socio->errors());
+                    }
+                    
                 }
-                $request->merge([
-                    'socio' => $socioData
-                ]);
-                $socio = $socio->create($request->get('socio'));
             }
             if (count($request->get('cnaes'))) {
                 foreach ($request->get('cnaes') as $cnae) {
-                    $pessoaCnae = new \App\PessoaCnae;
-                    $pessoaCnae->id_pessoa = $empresa->id;
+                    $pessoaCnae = new \App\AberturaEmpresaCnae;
+                    $pessoaCnae->id_abertura_empresa = $empresa->id;
                     $pessoaCnae->id_cnae = $cnae;
                     $pessoaCnae->save();
                 }
             }
-            $usuario = Auth::user();
-            \Illuminate\Support\Facades\Mail::send('emails.nova-empresa', ['nome' => $usuario->nome, 'empresa' => $empresa], function ($m) use ($usuario) {
-                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
-                $m->to($usuario->email)->subject('Nova empresa cadastrada');
-            });
-            \Illuminate\Support\Facades\Mail::send('emails.nova-empresa-admin', ['nome' => $usuario->nome, 'empresa' => $empresa], function ($m) use ($usuario) {
-                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
-                $m->to('admin@webcontabilidade.com')->subject('Novo usuário cadastrado');
-            });
-            
-            $impostos_mes = \App\ImpostoMes::where('mes', '=', date('n'))->get();
-            $competencia = date('Y-m-d', strtotime(date('Y-m') . " -1 month"));
-            foreach ($impostos_mes as $imposto_mes) {
-                if($imposto_mes->imposto->vencimento > ((int)date('d'))){
-                    $imposto = $imposto_mes->imposto;
-                    $processo = new Processo;
-                    $processo->create([
-                        'id_pessoa' => $empresa->id,
-                        'competencia' => $competencia,
-                        'id_imposto' => $imposto_mes->id_imposto,
-                        'vencimento' => $imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento, 'Y-m-d'),
-                        'status' => 'novo'
-                    ]);
-                }
-            }
-            
-            $plano = \App\Plano::where('total_documentos','>=',$request->get('total_documentos'))->where('total_documentos_contabeis','>=',$request->get('total_contabeis'))->where('pro_labores','>=',$request->get('pro_labores'))->orderBy('valor','asc')->first();
-            
-            $mensalidade = new \App\Mensalidade;
-            $mensalidade->id_usuario = Auth::user()->id;
-            $mensalidade->id_pessoa = $empresa->id;
-            $mensalidade->duracao = $plano->duracao;
-            $mensalidade->valor = $plano->valor;
-            $mensalidade->documentos_fiscais = $plano->total_documentos;
-            $mensalidade->documentos_contabeis = $plano->total_documentos_contabeis;
-            $mensalidade->pro_labores = $plano->pro_labores;
-            $mensalidade->funcionarios = $plano->funcionarios;
-            $mensalidade->save();
-            
-            $pagamento = new \App\Pagamento;
-            $pagamento->id_mensalidade = $mensalidade->id;
-            $pagamento->status = 'Paga';
-            $pagamento->valor = 0.0;
-            $pagamento->vencimento = date('Y-m-d H:i:s');
-            $pagamento->save();
+           
             return redirect(route('empresas'));
         } else {
             return redirect(route('cadastrar-empresa'))->withInput()->withErrors($empresa->errors());
@@ -171,18 +127,27 @@ class AberturaEmpresaController extends Controller {
             return redirect(route('registrar'));
         }
     }
-    
-    public function validateSocio(Request $request){
+
+    public function validateSocio(Request $request) {
         $socio = new \App\AberturaEmpresaSocio;
-        if($request->get('data_nascimento')){
-           $old_date = explode('/',$request->get('data_nascimento'));
-           $new_date = $old_date[2].'-'.$old_date[1].'-'.$old_date[0];
-           $request->merge(['data_nascimento'=>$new_date]);
+        if ($request->get('data_nascimento')) {
+            $old_date = explode('/', $request->get('data_nascimento'));
+            $new_date = $old_date[2] . '-' . $old_date[1] . '-' . $old_date[0];
+            $request->merge(['data_nascimento' => $new_date]);
         }
-        if(!$socio->validate($request->all())){
+        if (!$socio->validate($request->all())) {
             return $socio->errors();
         }
-            
+    }
+
+    public function validateAberturaEmpresa(Request $request) {
+        $empresa = new \App\AberturaEmpresa;
+        if (!$empresa->validate($request->all())) {
+            if (!$request->get('socio')) {
+                return array_merge($empresa->errors(), ['É necessário incluir ao menos um sócio']);
+            }
+            return $empresa->errors();
+        }
     }
 
 }

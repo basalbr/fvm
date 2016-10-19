@@ -55,12 +55,11 @@ $(function () {
                 $('#socio-form .alert').show();
                 e.preventDefault();
             } else {
-
                 $('#socio-form .alert').hide();
-                if ($(this).data('id')) {
-                    id = parseInt($(this).data('id'));
-                    $("#socios socio['" + id + "']").remove();
-                    $(this).removeData('id');
+                if ($('#socio-form').data('id') >= 0) {
+                    id = parseInt($('#socio-form').data('id'));
+                    $("#socios socio[" + id + "]").remove();
+                    $('#socio-form').removeData('id');
                     $('#lista-socios .editar-socio').each(function () {
                         if (parseInt($(this).data('id')) == id) {
                             $(this).parent().parent().remove();
@@ -75,7 +74,12 @@ $(function () {
                 }
                 var listaRow = '<tr>';
                 for (i in arrSocio) {
-                    $('#socios').append('<input type="hidden" name="socio[' + id + ']' + arrSocio[i].name + '" value="' + arrSocio[i].value + '" data-id="' + id + '" />');
+                    if (arrSocio[i].name == 'principal' && parseInt(arrSocio[i].value) == 1) {
+                        for (a = 0; a <= id; a++) {
+                            $('input[name="socio[' + a + ']principal"]').val(0);
+                        }
+                    }
+                    $('#socios').append('<input type="hidden" name="socio[' + id + '][' + arrSocio[i].name + ']" value="' + arrSocio[i].value + '" data-id="' + id + '" />');
                     if (arrSocio[i].name == 'nome' || arrSocio[i].name == 'cpf') {
                         listaRow += "<td>" + arrSocio[i].value + "</td>";
                     }
@@ -88,14 +92,26 @@ $(function () {
             }
         });
     });
+
     $('#lista-socios').on('click', '.editar-socio', function () {
         var id = parseInt($(this).data('id'));
         $('#adicionar-socio').text('Alterar Informações');
         $('#socio-form').data('id', id);
         $('#socios input').each(function () {
             if (parseInt($(this).data('id')) == id) {
-                if ($(this).attr('name') != 'principal') {
-                    $('#socio-form input[name="' + $(this).attr('name') + '"]').val($(this).val());
+                var name = $(this).attr('name');
+                var value = $(this).val();
+                name = name.replace('socio[' + id + '][', '');
+                name = name.replace(']', '');
+                if (name != 'principal') {
+                    if (name == 'estado_civil' || name == 'regime_casamento' || name == 'id_uf') {
+                        $('select[name="' + name + '"] option').each(function () {
+                            if ($(this).val() == value) {
+                                $(this).prop('selected', true);
+                            }
+                        });
+                    }
+                    $('#socio-form input[name="' + name + '"]').val($(this).val());
                 } else {
                     if ($(this).val() == '1') {
                         $('#principal-sim').prop('checked', true);
@@ -188,6 +204,27 @@ $(function () {
         $("#principal-form").append('<input type="hidden" value="' + id + '" name="cnaes[]"></input>');
         $('.nenhum-cnae').hide();
     });
+
+    $("#cadastrar").on('click', function (e) {
+        var arrEmpresa = $('#principal-form').serializeArray();
+        $.post("{{route('ajax-validar-abertura-empresa')}}", arrEmpresa, function (data) {
+            if (data.length) {
+                var html = '<ul>';
+                for (i in data) {
+                    html += '<li>' + data[i] + '</li>';
+                }
+                html += '</ul>';
+                $('#empresa-erros').html(html);
+                $('#dash-container').animate({
+                    scrollTop: $("#empresa-erros").offset().top
+                }, 1000);
+                $('#principal-form .alert').show();
+            }else{
+                $('#principal-form').submit();
+            }
+        });
+    });
+
     $("#lista-cnaes").on('click', '.remover-cnae', function () {
         var id = parseInt($(this).data('id'));
         $(this).parent().parent().remove();
@@ -280,8 +317,14 @@ $(function () {
             @endforeach
         </div>
         @endif
-        <form method="POST" action="" id="principal-form">
+
+        <form method="POST" action="" id="principal-form"  enctype="multipart/form-data">
+
             <h3>Informações</h3>
+            <div class="alert alert-warning animate shake" style="display: none">
+                <b>Atenção</b><br />
+                <div id="empresa-erros"></div>
+            </div>
             <p>Preencha os campos abaixo e clique em "enviar solicitação" para que possamos dar início ao processo de abertura de empresa.Se precisarmos de mais alguma informação entraremos diretamente em contato com você.</p>
             <p>Campos com * são obrigatórios.</p>
             {{ csrf_field() }}
@@ -423,7 +466,7 @@ $(function () {
                 <textarea class="form-control" name="cnae_duvida"></textarea>
             </div>
             <div class='form-group'>
-                <a href="" class='btn btn-success'>Enviar solicitação</a>
+                <button type="button" id="cadastrar" class='btn btn-success'>Enviar solicitação</button>
             </div>
         </form>
         <div class='clearfix'></div>
