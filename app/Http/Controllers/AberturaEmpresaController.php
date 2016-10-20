@@ -10,7 +10,7 @@ use App\Processo;
 class AberturaEmpresaController extends Controller {
 
     public function index() {
-        $empresas = \App\Pessoa::where('id_usuario', '=', Auth::user()->id)->orderBy('nome_fantasia')->get();
+        $empresas = \App\AberturaEmpresa::where('id_usuario', '=', Auth::user()->id)->orderBy('nome_empresarial1')->get();
         return view('abertura_empresa.index', ['empresas' => $empresas]);
     }
 
@@ -36,7 +36,9 @@ class AberturaEmpresaController extends Controller {
         }
         //atencao, arrumar telefone!!!!!!!!!!!!!!!!!!!!
         $request->merge([
-            'id_tipo_tributacao' => 1
+            'id_tipo_tributacao' => 1,
+            'status_pagamento'=>'Aguardando pagamento',
+            'status'=>'Novo'
         ]);
         if ($empresa->validate($request->all())) {
             $empresa = $empresa->create($request->all());
@@ -65,17 +67,15 @@ class AberturaEmpresaController extends Controller {
                 }
             }
            
-            return redirect(route('empresas'));
+            return redirect(route('abertura-empresa'));
         } else {
             return redirect(route('cadastrar-empresa'))->withInput()->withErrors($empresa->errors());
         }
     }
 
     public function edit($id) {
-        $empresa = \App\Pessoa::where('id', '=', $id)->where('id_usuario', '=', Auth::user()->id)->first();
-        $tipoTributacoes = \App\TipoTributacao::orderBy('descricao', 'asc')->get();
-        $naturezasJuridicas = \App\NaturezaJuridica::orderBy('descricao', 'asc')->get();
-        return view('empresa.editar', [ 'tipoTributacoes' => $tipoTributacoes, 'naturezasJuridicas' => $naturezasJuridicas, 'empresa' => $empresa]);
+        $empresa = \App\AberturaEmpresa::where('id', '=', $id)->where('id_usuario', '=', Auth::user()->id)->first();
+        return view('abertura_empresa.editar', ['empresa' => $empresa]);
     }
 
     public function update($id, Request $request) {

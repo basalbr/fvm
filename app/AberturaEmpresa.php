@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
-
+use laravel\pagseguro\Platform\Laravel5\PagSeguro;
 class AberturaEmpresa extends Model {
 
     use SoftDeletes;
@@ -123,9 +123,42 @@ class AberturaEmpresa extends Model {
     public function socios() {
         return $this->hasMany('App\AberturaEmpresaSocio', 'id_abertura_empresa');
     }
+    public function mensagens() {
+        return $this->hasMany('App\AberturaEmpresaComentario', 'id_abertura_empresa');
+    }
 
     public function usuario() {
         return $this->belongsTo('App\Usuario', 'id_usuario');
+    }
+    
+     public function botao_pagamento() {
+        if ($this->status_pagamento == 'Devolvida' || $this->status_pagamento == 'Cancelada' || $this->status_pagamento == 'Pendente' || $this->status_pagamento == 'Aguardando pagamento') {
+            $data = [
+                'items' => [
+                    [
+                        'id' => $this->id,
+                        'description' => 'Abertura de Empresa',
+                        'quantity' => '1',
+                        'amount' => 49.99,
+                    ],
+                ],
+                'notificationURL' => 'http://www.webcontabilidade.com/pagseguro',
+                'reference' => $this->id,
+                'sender' => [
+                    'email' => $this->usuario->email,
+                    'name' => $this->usuario->nome,
+                    'phone' => $this->usuario->telefone
+                ]
+            ];
+            $checkout = Pagseguro::checkout()->createFromArray($data);
+            $credentials = PagSeguro::credentials()->get();
+            $information = $checkout->send($credentials); // Retorna um objeto de laravel\pagseguro\Checkout\Information\Information
+            return '<a href="'.$information->getLink().'" class="btn btn-success">Clique para pagar</a>';
+        }
+        if ($this->status == 'Disponível' || $this->status == 'Em análise') {
+            return '<a href="" class="btn btn-success" disabled>Em processamento</a>';
+        }
+        return null;
     }
 
 }
