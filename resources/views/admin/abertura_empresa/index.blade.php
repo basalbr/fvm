@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.admin')
 @section('header_title', 'Abertura de Empresas')
 @section('js')
 @parent
@@ -48,8 +48,8 @@ $(function(){
                 <td>{{$empresa->socios()->where('principal','=',1)->first()->nome}}</td>
                 <td>{{$empresa->status}}</td>
                 <td>{{$empresa->pagamento->status}}</td>
-                    <a class='btn btn-primary' href="{{route('editar-abertura-empresa', ['id' => $empresa->id])}}">Visualizar Processo</a>
-                    {!!$empresa->botao_pagamento()!!}
+                <td>
+                    <a class='btn btn-primary' href="{{route('editar-abertura-empresa-admin', ['id' => $empresa->id])}}">Visualizar Processo</a>
                     <a class='btn btn-danger' href="">Cancelar Processo</a>
                 </td>
             </tr>

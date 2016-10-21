@@ -1364,3 +1364,8 @@ ul.lista-impostos li:hover{
     width: 25%;
     height: 185px;
 }
+
+th,td{
+        white-space: nowrap;
+        vertical-align: middle;
+}

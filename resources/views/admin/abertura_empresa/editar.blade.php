@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.admin')
 @section('header_title', 'Abertura de Empresa')
 @section('js')
 @parent
@@ -55,6 +55,16 @@
         <form method="POST" action="" enctype="multipart/form-data">
             {{ csrf_field() }}
             <h3>Nova Mensagem</h3>
+            <div class='form-group'>
+                <label>Status</label>
+                <select class='form-control' name='status'>
+                    <option {{$empresa->status == 'Novo' ? 'selected' : ''}} value="Novo">Novo</option>
+                    <option {{$empresa->status == 'Atenção' ? 'selected' : ''}} value="Atenção">Atenção</option>
+                    <option {{$empresa->status == 'Em Processamento' ? 'selected' : ''}} value="Em Processamento">Em Processamento</option>
+                    <option {{$empresa->status == 'Cancelado' ? 'selected' : ''}} value="Cancelado">Cancelado</option>
+                    <option {{$empresa->status == 'Concluído' ? 'selected' : ''}} value="Concluído">Concluído</option>
+                </select>
+            </div>
             <div class='form-group'>
                 <label>Anexar arquivo</label>
                 <input type='file' class='form-control' value="" name='anexo'/>

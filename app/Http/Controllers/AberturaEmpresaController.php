@@ -14,6 +14,11 @@ class AberturaEmpresaController extends Controller {
         return view('abertura_empresa.index', ['empresas' => $empresas]);
     }
 
+    public function indexAdmin() {
+        $empresas = \App\AberturaEmpresa::orderBy('nome_empresarial1')->get();
+        return view('admin.abertura_empresa.index', ['empresas' => $empresas]);
+    }
+
     public function create() {
         $tipoTributacoes = \App\TipoTributacao::orderBy('descricao', 'asc')->get();
         $naturezasJuridicas = \App\NaturezaJuridica::orderBy('descricao', 'asc')->get();
@@ -37,8 +42,8 @@ class AberturaEmpresaController extends Controller {
         //atencao, arrumar telefone!!!!!!!!!!!!!!!!!!!!
         $request->merge([
             'id_tipo_tributacao' => 1,
-            'status_pagamento'=>'Aguardando pagamento',
-            'status'=>'Novo'
+            'status_pagamento' => 'Aguardando pagamento',
+            'status' => 'Novo'
         ]);
         if ($empresa->validate($request->all())) {
             $empresa = $empresa->create($request->all());
@@ -46,16 +51,15 @@ class AberturaEmpresaController extends Controller {
                 foreach ($request->get('socio') as $obj) {
                     $socio = new \App\AberturaEmpresaSocio;
                     $obj['id_abertura_empresa'] = $empresa->id;
-                     $old_date = explode('/', $obj['data_nascimento']);
-            $new_date = $old_date[2] . '-' . $old_date[1] . '-' . $old_date[0];
+                    $old_date = explode('/', $obj['data_nascimento']);
+                    $new_date = $old_date[2] . '-' . $old_date[1] . '-' . $old_date[0];
                     $obj['data_nascimento'] = $new_date;
-                    if($socio->validate($obj)){
+                    if ($socio->validate($obj)) {
                         $socio = $socio->create($obj);
-                    }else{
+                    } else {
                         \App\AberturaEmpresa::find($empresa->id)->delete();
                         return redirect(route('cadastrar-abertura-empresa'))->withInput()->withErrors($socio->errors());
                     }
-                    
                 }
             }
             if (count($request->get('cnaes'))) {
@@ -66,10 +70,16 @@ class AberturaEmpresaController extends Controller {
                     $pessoaCnae->save();
                 }
             }
-           
+            $pagamento = new \App\Pagamento;
+            $pagamento->tipo = 'abertura_empresa';
+            $pagamento->id_abertura_empresa = $empresa->id;
+            $pagamento->valor = 49.99;
+            $pagamento->status = 'Pendente';
+            $pagamento->vencimento = date('Y-m-d H:i:s', strtotime("+7 day"));
+            $pagamento->save();
             return redirect(route('abertura-empresa'));
         } else {
-            return redirect(route('cadastrar-empresa'))->withInput()->withErrors($empresa->errors());
+            return redirect(route('cadastrar-abertura-empresa'))->withInput()->withErrors($empresa->errors());
         }
     }
 
@@ -77,42 +87,50 @@ class AberturaEmpresaController extends Controller {
         $empresa = \App\AberturaEmpresa::where('id', '=', $id)->where('id_usuario', '=', Auth::user()->id)->first();
         return view('abertura_empresa.editar', ['empresa' => $empresa]);
     }
+    
+    public function editAdmin($id) {
+        $empresa = \App\AberturaEmpresa::where('id', '=', $id)->first();
+        return view('admin.abertura_empresa.editar', ['empresa' => $empresa]);
+    }
 
     public function update($id, Request $request) {
-
-        $empresa = \App\Pessoa::where('id', '=', $id)->where('id_usuario', '=', Auth::user()->id)->first();
-        $request->merge(['id' => $empresa->id]);
-        if (count($request->get('cnaes'))) {
-            foreach ($request->get('cnaes') as $cnae) {
-                if (\App\Cnae::where('id', '=', $cnae)->first()->id_tabela_simples_nacional == null) {
-                    return redirect(route('editar-empresa', $id))->withInput()->withErrors(['Não foi possível cadastrar sua empresa pois um de seus CNAEs não está apto para o Simples Nacional.\nNesse momento só trabalhamos com Simples Nacional.']);
-                }
+        $mensagem = new \App\AberturaEmpresaComentario;
+        if ($mensagem->validate($request->all())) {
+            if ($request->file('anexo')) {
+                $anexo = date('dmyhis') . '.' . $request->file('anexo')->guessClientExtension();
+                $request->file('anexo')->move(getcwd() . '/uploads/abertura_empresa/', $anexo);
+                $request->merge(['anexo' => $anexo]);
+                $mensagem->anexo = $anexo;
             }
+            $mensagem->mensagem = $request->get('mensagem');
+            $mensagem->id_abertura_empresa = $id;
+            $mensagem->id_usuario = Auth::user()->id;
+            $mensagem->save();
+            return redirect(route('editar-abertura-empresa', [$id]));
         }
-
-        if ($empresa->validate($request->except('_token'), true)) {
-
-            $empresa->update($request->except('_token', 'cnaes', 'socio'));
-            if (count($request->get('cnaes'))) {
-                foreach ($empresa->cnaes()->get() as $cnae) {
-                    $cnae->delete();
-                }
-                foreach ($request->get('cnaes') as $cnae) {
-                    $pessoaCnae = new \App\PessoaCnae;
-                    $pessoaCnae->id_pessoa = $id;
-                    $pessoaCnae->id_cnae = $cnae;
-                    $pessoaCnae->save();
-                }
+        return redirect(route('cadastrar-abertura-empresa'))->withInput()->withErrors($mensagem->errors());
+    }
+    
+    public function updateAdmin($id, Request $request) {
+        $mensagem = new \App\AberturaEmpresaComentario;
+        $empresa = \App\AberturaEmpresa::where('id', '=', $id)->first();
+        if ($mensagem->validate($request->all())) {
+            if ($request->file('anexo')) {
+                $anexo = date('dmyhis') . '.' . $request->file('anexo')->guessClientExtension();
+                $request->file('anexo')->move(getcwd() . '/uploads/abertura_empresa/', $anexo);
+                $request->merge(['anexo' => $anexo]);
+                $mensagem->anexo = $anexo;
             }
-            $usuario = Auth::user();
-            \Illuminate\Support\Facades\Mail::send('emails.editar-empresa', ['nome' => $usuario->nome, 'empresa' => $empresa], function ($m) use ($usuario) {
-                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
-                $m->to($usuario->email)->subject('Nova empresa cadastrada');
-            });
-            return redirect(route('empresas'));
-        } else {
-            return redirect(route('editar-empresa', [$id]))->withInput()->withErrors($empresa->errors());
+            
+            $empresa->status = $request->get('status');
+            $empresa->save();
+            $mensagem->mensagem = $request->get('mensagem');
+            $mensagem->id_abertura_empresa = $id;
+            $mensagem->id_usuario = Auth::user()->id;
+            $mensagem->save();
+            return redirect(route('editar-abertura-empresa-admin', [$id]));
         }
+        return redirect(route('cadastrar-abertura-empresa-admin'))->withInput()->withErrors($mensagem->errors());
     }
 
     public function register() {

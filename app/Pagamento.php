@@ -52,6 +52,10 @@ class Pagamento extends Model {
         return $this->belongsTo('App\Mensalidade', 'id_mensalidade');
     }
 
+    public function abertura_empresa() {
+        return $this->belongsTo('App\AberturaEmpresa', 'id_abertura_empresa');
+    }
+    
     public function historico_pagamentos() {
         return $this->hasMany('App\Pagamento', 'id_mensalidade');
     }

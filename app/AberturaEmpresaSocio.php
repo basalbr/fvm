@@ -10,6 +10,9 @@ class AberturaEmpresaSocio extends Model {
 
     use SoftDeletes;
 
+    protected $dates = ['data_nascimento','created_at','updated_at','deleted_at'];
+
+
     protected $rules = [
         'id_abertura_empresa' => 'sometimes|required',
         'nome' => 'required',
@@ -124,6 +127,10 @@ class AberturaEmpresaSocio extends Model {
 
     public function pro_labores() {
         return $this->hasMany('App\Prolabore', 'id_abertura_empresa_socio');
+    }
+    
+     public function uf() {
+        return $this->hasOne('App\Uf','id', 'id_uf');
     }
     
     public function pro_labore_formatado(){

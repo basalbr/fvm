@@ -5,6 +5,9 @@
         <li class='{{Route::is('admin') ? "active" : ""}}'>
             <a href="{{route('admin')}}"><div class="icon"><span class="fa fa-home"></span></div>Início</a>
         </li>
+        <li class='{{Request::is('admin/abertura-empresa*') ? "active" : ""}}'>
+            <a href="{{route('abertura-empresa-admin')}}"><div class="icon"><span class="fa fa-building"></div>Abertura de Empresas</a>
+        </li>
         <li class='{{Request::is('admin/empresas*') ? "active" : ""}}'>
             <a href="{{route('empresas-admin')}}"><div class="icon"><span class="fa fa-building"></div>Empresas</a>
         </li>
@@ -50,7 +53,7 @@
     </ul>
 </div>
 <div id="dash-container" class='bg-ltblue'>
-    <div class="container-fluid bg-white">
+    <div class="container-fluid">
         @yield('main')
         <div class="clearfix"></div>
     </div>

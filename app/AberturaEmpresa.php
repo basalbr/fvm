@@ -119,6 +119,16 @@ class AberturaEmpresa extends Model {
     public function cnaes() {
         return $this->hasMany('App\AberturaEmpresaCnae', 'id_abertura_empresa');
     }
+    
+    public function uf() {
+        return $this->hasOne('App\Uf','id', 'id_uf');
+    }
+    public function pagamento() {
+        return $this->hasOne('App\Pagamento','id_abertura_empresa');
+    }
+    public function natureza_juridica() {
+        return $this->hasOne('App\NaturezaJuridica', 'id', 'id_natureza_juridica');
+    }
 
     public function socios() {
         return $this->hasMany('App\AberturaEmpresaSocio', 'id_abertura_empresa');
@@ -126,7 +136,7 @@ class AberturaEmpresa extends Model {
     public function mensagens() {
         return $this->hasMany('App\AberturaEmpresaComentario', 'id_abertura_empresa');
     }
-
+   
     public function usuario() {
         return $this->belongsTo('App\Usuario', 'id_usuario');
     }
@@ -139,11 +149,11 @@ class AberturaEmpresa extends Model {
                         'id' => $this->id,
                         'description' => 'Abertura de Empresa',
                         'quantity' => '1',
-                        'amount' => 49.99,
+                        'amount' => $this->pagamento->valor,
                     ],
                 ],
                 'notificationURL' => 'http://www.webcontabilidade.com/pagseguro',
-                'reference' => $this->id,
+                'reference' => $this->pagamento->id,
                 'sender' => [
                     'email' => $this->usuario->email,
                     'name' => $this->usuario->nome,
