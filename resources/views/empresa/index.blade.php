@@ -61,7 +61,8 @@ $(function(){
             @endif
         </tbody>
     </table>
-    <a class='btn btn-primary' id="verificar-empresa">Cadastrar uma empresa</a><br />
+    <a class='btn btn-primary' id="verificar-empresa">Transferir Empresa para webcontabilidade</a>
+    <a class='btn btn-success' href='{{route('cadastrar-abertura-empresa')}}'>solicitar abertura de empresa</a>
 </div>
 @stop
 @section('modal')
@@ -94,13 +95,11 @@ $(function(){
                         <label class='form-control'><input type="radio" name="santa_catarina" value="sim"/> Sim</label>
                         <label class='form-control'><input type="radio" name="santa_catarina" value="nao"/> Não</label>
                     </div> 
-                    <div class="form-group">
-                        <a id='validar-empresa' href='{{route('cadastrar-empresa')}}' class="btn btn-success">Continuar</a>
-                    </div>
                 </form>
                 <div class="clearfix"></div>
             </div>
             <div class="modal-footer">
+                <a id='validar-empresa' href='{{route('cadastrar-empresa')}}' class="btn btn-success">Continuar</a>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fechar Janela</button>
             </div>
         </div><!-- /.modal-content -->

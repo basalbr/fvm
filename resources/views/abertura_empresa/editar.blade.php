@@ -25,7 +25,7 @@
                 </div>
                 <div class="pull-left">
                     <div class="titulo">Status do Pagamento</div>
-                    <div class='text-success info'>{{$empresa->pagamento->status_pagamento}}</div>
+                    <div class='text-success info'>{{$empresa->pagamento->status}}</div>
                 </div>
                 <div class="pull-left">
                     <div class="titulo">Nome Preferencial</div>
@@ -52,9 +52,12 @@
             @endforeach
         </div>
         @endif
+        @if($empresa->status != 'Cancelado' && $empresa->status != 'Concluído')
         <form method="POST" action="" enctype="multipart/form-data">
-            {{ csrf_field() }}
             <h3>Nova Mensagem</h3>
+            <div class='col-xs-12'>
+            {{ csrf_field() }}
+            
             <div class='form-group'>
                 <label>Anexar arquivo</label>
                 <input type='file' class='form-control' value="" name='anexo'/>
@@ -65,8 +68,11 @@
             <div class='form-group'>
                 <input type='submit' value="Enviar mensagem" class='btn btn-primary' />
             </div>
+            </div>
         </form>
+        @endif
         <h3>Últimas mensagens:</h3>
+        <div class='col-xs-12'>
         @if($empresa->mensagens->count())
         @foreach($empresa->mensagens()->orderBy('updated_at', 'desc')->get() as $resposta)
         <div class='form-group'>
@@ -79,6 +85,7 @@
         @else
         <p>Nenhuma mensagem encontrada</p>
         @endif
+        </div>
         <div class="clearfix"></div>
     </div>
 </div>

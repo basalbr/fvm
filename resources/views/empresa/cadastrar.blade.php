@@ -457,7 +457,7 @@
                         </tr>
                     </thead>
                     <tbody id='lista-cnaes-modal'>
-                        <tr  class="nenhum-cnae-modal">
+                        <tr class="nenhum-cnae-modal">
                             <td colspan="3">Nenhum CNAE encontrado.</td>
                         </tr>
                     </tbody>

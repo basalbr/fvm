@@ -24,6 +24,13 @@ class AberturaEmpresaController extends Controller {
         $naturezasJuridicas = \App\NaturezaJuridica::orderBy('descricao', 'asc')->get();
         return view('abertura_empresa.cadastrar', [ 'tipoTributacoes' => $tipoTributacoes, 'naturezasJuridicas' => $naturezasJuridicas]);
     }
+    
+    public function remove($id){
+        $empresa = \App\AberturaEmpresa::where('id','=',$id)->where('id_usuario','=',Auth::user()->id)->first();
+        $empresa->status = 'Cancelado';
+        $empresa->save();
+        return redirect(route('abertura-empresa'));
+    }
 
     public function store(Request $request) {
 //        dd($request->all());
@@ -82,6 +89,55 @@ class AberturaEmpresaController extends Controller {
             return redirect(route('cadastrar-abertura-empresa'))->withInput()->withErrors($empresa->errors());
         }
     }
+    public function storeAdmin($id, Request $request) {
+//        dd($request->all());
+        $empresa = new \App\Pessoa;
+        $request->merge(['id_usuario' => Auth::user()->id]);
+        if (count($request->get('cnaes'))) {
+            foreach ($request->get('cnaes') as $cnae) {
+                if (\App\Cnae::where('id', '=', $cnae)->first()->id_tabela_simples_nacional == null) {
+                    return redirect(route('cadastrar-abertura-empresa-admin',[$id]))->withInput()->withErrors(['Não foi possível cadastrar sua empresa pois um de seus CNAEs não está apto para o Simples Nacional.\nNesse momento só trabalhamos com Simples Nacional.']);
+                }
+            }
+        }
+        if (!count($request->get('socio'))) {
+            return redirect(route('cadastrar-abertura-empresa',[$id]))->withInput()->withErrors(['É necessário cadastrar pelo menos um sócio']);
+        }
+        //atencao, arrumar telefone!!!!!!!!!!!!!!!!!!!!
+        $request->merge([
+            'id_tipo_tributacao' => 1
+        ]);
+        if ($empresa->validate($request->all())) {
+            $empresa = $empresa->create($request->all());
+            if (count($request->get('socio'))) {
+                foreach ($request->get('socio') as $obj) {
+                    $socio = new \App\Socio;
+                    $obj['id_pessoa'] = $empresa->id;
+                    if ($socio->validate($obj)) {
+                        $socio = $socio->create($obj);
+                    } else {
+                        \App\Socio::where('id_pessoa','=',$empresa->id)->delete();
+                        \App\Pessoa::find($empresa->id)->delete();
+                        return redirect(route('cadastrar-abertura-empresa-admin',[$id]))->withInput()->withErrors($socio->errors());
+                    }
+                }
+            }
+            if (count($request->get('cnaes'))) {
+                foreach ($request->get('cnaes') as $cnae) {
+                    $pessoaCnae = new \App\PessoaCnae;
+                    $pessoaCnae->id_pessoa = $empresa->id;
+                    $pessoaCnae->id_cnae = $cnae;
+                    $pessoaCnae->save();
+                }
+            }
+            $abertura_empresa = \App\AberturaEmpresa::find($id);
+            $abertura_empresa->status = 'Concluído';
+            $abertura_empresa->save();
+            return redirect(route('empresas-admin'));
+        } else {
+            return redirect(route('cadastrar-abertura-empresa',[$id]))->withInput()->withErrors($empresa->errors());
+        }
+    }
 
     public function edit($id) {
         $empresa = \App\AberturaEmpresa::where('id', '=', $id)->where('id_usuario', '=', Auth::user()->id)->first();
@@ -91,6 +147,11 @@ class AberturaEmpresaController extends Controller {
     public function editAdmin($id) {
         $empresa = \App\AberturaEmpresa::where('id', '=', $id)->first();
         return view('admin.abertura_empresa.editar', ['empresa' => $empresa]);
+    }
+    
+    public function createAdmin($id) {
+        $empresa = \App\AberturaEmpresa::where('id', '=', $id)->first();
+        return view('admin.abertura_empresa.cadastrar', ['empresa' => $empresa]);
     }
 
     public function update($id, Request $request) {
@@ -108,7 +169,7 @@ class AberturaEmpresaController extends Controller {
             $mensagem->save();
             return redirect(route('editar-abertura-empresa', [$id]));
         }
-        return redirect(route('cadastrar-abertura-empresa'))->withInput()->withErrors($mensagem->errors());
+        return redirect(route('editar-abertura-empresa', [$id]))->withInput()->withErrors($mensagem->errors());
     }
     
     public function updateAdmin($id, Request $request) {
@@ -130,7 +191,7 @@ class AberturaEmpresaController extends Controller {
             $mensagem->save();
             return redirect(route('editar-abertura-empresa-admin', [$id]));
         }
-        return redirect(route('cadastrar-abertura-empresa-admin'))->withInput()->withErrors($mensagem->errors());
+        return redirect(route('editar-abertura-empresa-admin', [$id]))->withInput()->withErrors($mensagem->errors());
     }
 
     public function register() {

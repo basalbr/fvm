@@ -48,9 +48,10 @@ $(function(){
                 <td>{{$empresa->socios()->where('principal','=',1)->first()->nome}}</td>
                 <td>{{$empresa->status}}</td>
                 <td>{{$empresa->pagamento->status}}</td>
+                <td>
                     <a class='btn btn-primary' href="{{route('editar-abertura-empresa', ['id' => $empresa->id])}}">Visualizar Processo</a>
                     {!!$empresa->botao_pagamento()!!}
-                    <a class='btn btn-danger' href="">Cancelar Processo</a>
+                    <a class='btn btn-danger remover-registro' href="{{route('deletar-abertura-empresa',[$empresa->id])}}">Cancelar Processo</a>
                 </td>
             </tr>
             @endforeach
@@ -61,6 +62,6 @@ $(function(){
             @endif
         </tbody>
     </table>
-    <a href='{{route('cadastrar-abertura-empresa')}}' class='btn btn-primary'>Nova Solicitação</a><br />
+    <a class='btn btn-success' href='{{route('cadastrar-abertura-empresa')}}'>solicitar abertura de empresa</a>
 </div>
 @stop

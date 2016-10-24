@@ -1,4 +1,16 @@
 @extends('layouts.master')
+@section('js')
+@parent
+<script type='text/javascript'>
+$(function(){
+            $('.remover-registro').on('click', function(e){
+               e.preventDefault();
+               $('#remove-register').attr('href',$(this).attr('href'));
+               $('#remover-modal').modal('show');
+            });
+});
+</script>
+@stop
 @section('content')
 <div id="sidebar-left">
     <ul>
@@ -27,7 +39,7 @@
         <li class="sidebar-header">
             Empresas e Sócios
         </li>
-        <li class='{{Request::is('abetura-empresa*') ? "active" : ""}}'>
+        <li class='{{Request::is('abertura-empresa*') ? "active" : ""}}'>
             <a href="{{route('abertura-empresa')}}"><div class="icon"><span class="fa fa-building"></span></div>Abertura de Empresa</a>
         </li>
         <li class='{{Request::is('empresas*') ? "active" : ""}}'>
@@ -75,6 +87,25 @@
     <div class="clearfix"></div>
 </div>
 <div>
+    <div class="modal fade" id="remover-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Remover Registro</h4>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja remover o registro?</p>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer">
+                <a href='' class="btn btn-danger" id='remove-register'>Sim, desejo remover o registro.</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar Janela</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
     @yield('modal')
 </div>
 @overwrite

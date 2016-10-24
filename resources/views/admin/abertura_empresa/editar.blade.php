@@ -25,7 +25,7 @@
                 </div>
                 <div class="pull-left">
                     <div class="titulo">Status do Pagamento</div>
-                    <div class='text-success info'>{{$empresa->pagamento->status_pagamento}}</div>
+                    <div class='text-success info'>{{$empresa->pagamento->status}}</div>
                 </div>
                 <div class="pull-left">
                     <div class="titulo">Nome Preferencial</div>
@@ -53,43 +53,53 @@
         </div>
         @endif
         <form method="POST" action="" enctype="multipart/form-data">
-            {{ csrf_field() }}
             <h3>Nova Mensagem</h3>
-            <div class='form-group'>
-                <label>Status</label>
-                <select class='form-control' name='status'>
-                    <option {{$empresa->status == 'Novo' ? 'selected' : ''}} value="Novo">Novo</option>
-                    <option {{$empresa->status == 'Atenção' ? 'selected' : ''}} value="Atenção">Atenção</option>
-                    <option {{$empresa->status == 'Em Processamento' ? 'selected' : ''}} value="Em Processamento">Em Processamento</option>
-                    <option {{$empresa->status == 'Cancelado' ? 'selected' : ''}} value="Cancelado">Cancelado</option>
-                    <option {{$empresa->status == 'Concluído' ? 'selected' : ''}} value="Concluído">Concluído</option>
-                </select>
+            <div class='col-xs-12'>
+                {{ csrf_field() }}
+
+                <div class='form-group'>
+                    <label>Status</label>
+                    <select class='form-control' name='status'>
+                        <option {{$empresa->status == 'Novo' ? 'selected' : ''}} value="Novo">Novo</option>
+                        <option {{$empresa->status == 'Atenção' ? 'selected' : ''}} value="Atenção">Atenção</option>
+                        <option {{$empresa->status == 'Em Processamento' ? 'selected' : ''}} value="Em Processamento">Em Processamento</option>
+                        <option {{$empresa->status == 'Cancelado' ? 'selected' : ''}} value="Cancelado">Cancelado</option>
+                        <option {{$empresa->status == 'Concluído' ? 'selected' : ''}} value="Concluído">Concluído</option>
+                    </select>
+                </div>
+                <div class='form-group'>
+                    <label>Anexar arquivo</label>
+                    <input type='file' class='form-control' value="" name='anexo'/>
+                </div>
+                <label>Mensagem</label>
+                <div class='form-group'>
+                    <textarea class="form-control" name='mensagem'></textarea>
+                </div>
+                <div class='form-group'>
+                    <input type='submit' value="Enviar mensagem" class='btn btn-primary' />
+                    <a href="{{route('cadastrar-abertura-empresa-admin',[$empresa->id])}}"class='btn btn-success'>Cadastrar nova empresa</a>
+                </div>
             </div>
-            <div class='form-group'>
-                <label>Anexar arquivo</label>
-                <input type='file' class='form-control' value="" name='anexo'/>
-            </div>
-            <div class='form-group'>
-                <textarea class="form-control" name='mensagem'></textarea>
-            </div>
-            <div class='form-group'>
-                <input type='submit' value="Enviar mensagem" class='btn btn-primary' />
-            </div>
+            <div class='clearfix'></div>
         </form>
+
         <h3>Últimas mensagens:</h3>
-        @if($empresa->mensagens->count())
-        @foreach($empresa->mensagens()->orderBy('updated_at', 'desc')->get() as $resposta)
-        <div class='form-group'>
-            <div class="mensagem {{$resposta->usuario->id == Auth::user()->id ? 'mensagem-usuario':'mensagem-admin'}}">
-                <p class='title'>{{$resposta->usuario->nome}} em {{date_format($resposta->updated_at, 'd/m/Y')}} às {{date_format($resposta->updated_at, 'H:i')}}</p>
-                {{$resposta->mensagem}}
+        <div class='col-xs-12'>
+            @if($empresa->mensagens->count())
+            @foreach($empresa->mensagens()->orderBy('updated_at', 'desc')->get() as $resposta)
+            <div class='form-group'>
+                <div class="mensagem {{$resposta->usuario->id == Auth::user()->id ? 'mensagem-usuario':'mensagem-admin'}}">
+                    <p class='title'>{{$resposta->usuario->nome}} em {{date_format($resposta->updated_at, 'd/m/Y')}} às {{date_format($resposta->updated_at, 'H:i')}}</p>
+                    {{$resposta->mensagem}}
+                </div>
             </div>
+            @endforeach
+            @else
+            <p>Nenhuma mensagem encontrada</p>
+            @endif
         </div>
-        @endforeach
-        @else
-        <p>Nenhuma mensagem encontrada</p>
-        @endif
         <div class="clearfix"></div>
+
     </div>
 </div>
 @stop

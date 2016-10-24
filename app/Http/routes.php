@@ -160,9 +160,12 @@ Route::post('/abertura-empresa/cadastrar', ['uses' => 'AberturaEmpresaController
 Route::get('/abertura-empresa/editar/{id}', ['as' => 'editar-abertura-empresa', 'uses' => 'AberturaEmpresaController@edit', 'middleware' => 'auth']);
 Route::post('/abertura-empresa/editar/{id}', ['uses' => 'AberturaEmpresaController@update', 'middleware' => 'auth']);
 
+Route::get('/abertura-empresa/cadastrar/{id}', ['as' => 'cadastrar-abertura-empresa-admin', 'uses' => 'AberturaEmpresaController@createAdmin', 'middleware' => 'auth']);
+Route::post('/abertura-empresa/cadastrar/{id}', ['uses' => 'AberturaEmpresaController@storeAdmin', 'middleware' => 'auth']);
 Route::get('/admin/abertura-empresa', ['as' => 'abertura-empresa-admin', 'uses' => 'AberturaEmpresaController@indexAdmin', 'middleware' => 'admin']);
 Route::get('/admin/abertura-empresa/editar/{id}', ['as' => 'editar-abertura-empresa-admin', 'uses' => 'AberturaEmpresaController@editAdmin', 'middleware' => 'admin']);
-Route::post('/admin/abertura-empresa/editar/{id}', ['uses' => 'AberturaEmpresaController@updateAdmin', 'middleware' => 'auth']);
+Route::post('/admin/abertura-empresa/editar/{id}', ['uses' => 'AberturaEmpresaController@updateAdmin', 'middleware' => 'admin']);
+Route::get('/abertura-empresa/excluir/{id}', ['as'=>'deletar-abertura-empresa', 'uses' => 'AberturaEmpresaController@remove', 'middleware' => 'auth']);
 
 // Registration routes...
 Route::get('/registrar', ['uses' => 'Auth\AuthController@getRegister', 'as' => 'registrar']);

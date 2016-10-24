@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
 use laravel\pagseguro\Platform\Laravel5\PagSeguro;
+
 class AberturaEmpresa extends Model {
 
     use SoftDeletes;
@@ -119,13 +120,15 @@ class AberturaEmpresa extends Model {
     public function cnaes() {
         return $this->hasMany('App\AberturaEmpresaCnae', 'id_abertura_empresa');
     }
-    
+
     public function uf() {
-        return $this->hasOne('App\Uf','id', 'id_uf');
+        return $this->hasOne('App\Uf', 'id', 'id_uf');
     }
+
     public function pagamento() {
-        return $this->hasOne('App\Pagamento','id_abertura_empresa');
+        return $this->hasOne('App\Pagamento', 'id_abertura_empresa');
     }
+
     public function natureza_juridica() {
         return $this->hasOne('App\NaturezaJuridica', 'id', 'id_natureza_juridica');
     }
@@ -133,16 +136,25 @@ class AberturaEmpresa extends Model {
     public function socios() {
         return $this->hasMany('App\AberturaEmpresaSocio', 'id_abertura_empresa');
     }
+
     public function mensagens() {
         return $this->hasMany('App\AberturaEmpresaComentario', 'id_abertura_empresa');
     }
-   
+
     public function usuario() {
         return $this->belongsTo('App\Usuario', 'id_usuario');
     }
-    
-     public function botao_pagamento() {
-        if ($this->status_pagamento == 'Devolvida' || $this->status_pagamento == 'Cancelada' || $this->status_pagamento == 'Pendente' || $this->status_pagamento == 'Aguardando pagamento') {
+
+    public function botao_pagamento() {
+        if (
+                ($this->status == 'Atenção' ||
+                $this->status == 'Em Processamento' ||
+                $this->status == 'Novo') &&
+                ($this->status_pagamento == 'Devolvida' ||
+                $this->status_pagamento == 'Cancelada' ||
+                $this->status_pagamento == 'Pendente' ||
+                $this->status_pagamento == 'Aguardando pagamento')
+        ) {
             $data = [
                 'items' => [
                     [
@@ -163,7 +175,7 @@ class AberturaEmpresa extends Model {
             $checkout = Pagseguro::checkout()->createFromArray($data);
             $credentials = PagSeguro::credentials()->get();
             $information = $checkout->send($credentials); // Retorna um objeto de laravel\pagseguro\Checkout\Information\Information
-            return '<a href="'.$information->getLink().'" class="btn btn-success">Clique para pagar</a>';
+            return '<a href="' . $information->getLink() . '" class="btn btn-success">Clique para pagar</a>';
         }
         if ($this->status == 'Disponível' || $this->status == 'Em análise') {
             return '<a href="" class="btn btn-success" disabled>Em processamento</a>';

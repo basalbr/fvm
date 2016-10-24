@@ -5,12 +5,7 @@
 <script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.min.js')}}"></script>
 <script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.pt-BR.min.js')}}"></script>
 <script type='text/javascript'>
-var planos;
-var max_documentos;
-var max_contabeis;
-var max_pro_labores;
-var maxValor;
-var minValor;
+
 $(function () {
     $('.date-mask').on('keypress', function () {
         return false;
@@ -126,43 +121,6 @@ $(function () {
         $('#socio-modal').modal('show');
     }
     );
-
-    $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores').on('keyup', function () {
-
-        var pro_labores = $('#pro_labores').val();
-        var total_documentos = $('#total_documentos').val();
-        var total_contabeis = $('#total_contabeis').val();
-        minValor = maxValor;
-        if (pro_labores > max_pro_labores) {
-            $('#pro_labores').val(max_pro_labores);
-        }
-        if (total_documentos > max_documentos) {
-            $('#total_documentos').val(max_documentos);
-        }
-        if (total_contabeis > max_contabeis) {
-            $('#total_contabeis').val(max_contabeis);
-        }
-        if (!pro_labores) {
-            $('#pro_labores').val(0);
-        }
-        if (!total_documentos) {
-            $('#total_documentos').val(0);
-        }
-        if (!total_contabeis) {
-            $('#total_contabeis').val(0);
-        }
-        for (i in planos) {
-
-            if (total_contabeis <= parseInt(planos[i].total_documentos_contabeis) && total_documentos <= parseInt(planos[i].total_documentos) && pro_labores <= parseInt(planos[i].pro_labores) && parseFloat(planos[i].valor) < minValor) {
-                minValor = parseFloat(planos[i].valor);
-            }
-        }
-        $('#mensalidade').text('R$' + parseFloat(minValor).toFixed(2));
-        contabilidade = $('#contabilidade').val().replace(".", "");
-        contabilidade = parseFloat(contabilidade.replace(",", "."));
-        totalDesconto = (contabilidade * 12) - (minValor * 12) > 0 ? (contabilidade * 12) - (minValor * 12) : 0;
-        $('#economia').html('R$' + totalDesconto.toFixed(2));
-    });
 
     $('.cnae-search').on('keyup', function () {
         $("#adicionar-cnae").prop('disabled', true);
@@ -290,15 +248,6 @@ $(function () {
         $('.nenhum-cnae').hide();
         $(this).prop('disabled', true);
         $(this).html('Adicionado');
-    });
-    $('#mostrar-simulador').on('click', function (e) {
-        e.preventDefault();
-        $('#mensalidade-modal').modal('show');
-    });
-    $('#cadastrar-empresa').on('click', function (e) {
-        e.preventDefault();
-        $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores').clone().appendTo('#principal-form');
-        $('#principal-form').submit();
     });
     $('[data-toggle="tooltip"]').tooltip()
 });
@@ -603,49 +552,7 @@ $(function () {
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<div class="modal fade" id="mensalidade-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document"  style="width: 1000px;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Mensalidade</h4>
-            </div>
-            <div class="modal-body">
-                <p>Complete os campos abaixo e confira os valores de nossas mensalidades.
-                    <br />Ao cadastrar sua empresa você receberá <b>30 dias grátis</b> em nosso sistema, somente após esse período de 30 dias é que começaremos a cobrar mensalidade.</p>
-                <div class='col-xs-6'>
-                    <div class='form-group'>
-                        <label>Quantos sócios retiram pró-labore? <span data-trigger="hover" class="text-info" title="Pró-labore é o salário dos sócios que constam no contrato social da empresa, e recolhem o INSS mensalmente para a previdência social." data-toggle="tooltip" data-placement="top">(o que é isso?)</span></label>
-                        <input type='text' class='form-control numero-mask2' id='pro_labores' name="pro_labores" data-mask-placeholder='0' value="0"/>
-                    </div>
-                    <div class='form-group'>
-                        <label> Quantos documentos fiscais são emitidos e recebidos por mês? <span data-trigger="hover" class="text-info" title="Documentos fiscais, são as notas fiscais de venda ou prestação de serviço emitidas, e as notas fiscais de aquisição de mercadorias ou serviços." data-toggle="tooltip" data-placement="top" >(o que é isso?)</span></label>
-                        <input type='text' class='form-control numero-mask2' id='total_documentos' name="total_documentos" data-mask-placeholder='0' value="0"/>
-                    </div>
-                    <div class='form-group'>
-                        <label> Quantos documentos contábeis são emitidos por mês? <span data-trigger="hover" class="text-info" title="Neste item estão a movimentação bancária, em que cada transação corresponde a um documento contábil, assim como recibos de aluguel. Cada valor corresponderá a um documento contábil." data-toggle="tooltip" data-placement="top" >(o que é isso?)</span></label>
-                        <input type='text' class='form-control numero-mask2' id='total_contabeis' name="total_contabeis" data-mask-placeholder='0' value="0"/>
-                    </div>
-                    <div class='form-group'>
-                        <label>Quanto você paga hoje por mês para sua contabilidade?</label>
-                        <input type='text' class='form-control dinheiro-mask2' id='contabilidade' name="contabilidade" data-mask-placeholder='0' value="499,99"/>
-                    </div>
-                </div>
-                <div class='col-xs-6'>
-                    <h2 class='text-center'>Sua mensalidade será:</h2>
-                    <div id='mensalidade' class='text-center text-info' style="font-size:45px; font-weight: bold;">R$0,00</div>
-                    <h2 class='text-center'>Você <b>economizará</b> por ano:</h2>
-                    <div id='economia' class='text-center text-success' style="font-size:45px; font-weight: bold;">R$0,00</div>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="cadastrar-empresa">Confirmar dados e continuar</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar Janela</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+
 <div class="modal fade" id="cnae-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document"  style="width: 900px;">
         <div class="modal-content">
