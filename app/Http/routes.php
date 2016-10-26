@@ -193,6 +193,7 @@ Route::controllers([
 Route::get('/ajax/simular-plano/', ['as' => 'ajax-simular-plano', 'uses' => 'PlanoController@simular']);
 Route::post('/ajax/consulta/', ['as' => 'ajax-simples', 'uses' => 'DashboardController@consultaAjax', 'middleware' => 'auth']);
 Route::post('/ajax/validar-socio/', ['as' => 'ajax-validar-socio', 'uses' => 'AberturaEmpresaController@validateSocio', 'middleware' => 'auth']);
+Route::post('/ajax/validar-socio-empresa/', ['as' => 'ajax-validar-socio-empresa', 'uses' => 'AberturaEmpresaController@validateSocioEmpresa', 'middleware' => 'auth']);
 Route::post('/ajax/validar-abertura-empresa/', ['as' => 'ajax-validar-abertura-empresa', 'uses' => 'AberturaEmpresaController@validateAberturaEmpresa', 'middleware' => 'auth']);
 Route::post('/ajax/cnae/', ['as' => 'ajax-cnae', 'uses' => 'CnaeController@ajax', 'middleware' => 'auth']);
 Route::post('/ajax/calendar/', ['as' => 'ajax-calendar', 'uses' => 'ImpostoController@ajaxCalendar', 'middleware' => 'auth']);

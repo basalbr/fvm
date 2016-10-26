@@ -36,7 +36,7 @@ class Pessoa extends Model {
         'inscricao_estadual' => 'Inscrição Estadual',
         'inscricao_municipal' => 'Inscrição Municipal',
         'qtde_funcionarios' => 'Quantidade de Funcionários',
-        'tipo' => 'Quantidade de Funcionários',
+        'tipo' => 'tipo',
         'endereco' => 'Endereço',
         'bairro' => 'Bairro',
         'cep' => 'Cep',

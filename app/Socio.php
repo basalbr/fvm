@@ -16,7 +16,6 @@ class Socio extends Model {
         'principal' => 'required',
         'cpf' => 'required|size:14|unique:socio,cpf',
         'rg' => 'required|unique:socio,rg',
-        'titulo_eleitor' => 'required',
         'endereco' => 'required',
         'bairro' => 'required',
         'cep' => 'required|size:9',

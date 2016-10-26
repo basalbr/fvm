@@ -3,7 +3,73 @@
 @section('js')
 @parent
 <script type='text/javascript'>
+    var planos;
+    var max_documentos;
+    var max_contabeis;
+    var max_pro_labores;
+    var maxValor;
+    var minValor;
     $(function () {
+        $.get("{{route('ajax-simular-plano')}}", function (data) {
+            planos = data.planos;
+            max_documentos = parseInt(data.max_documentos);
+            max_contabeis = parseInt(data.max_contabeis);
+            max_pro_labores = parseInt(data.max_pro_labores);
+            maxValor = parseFloat(data.max_valor);
+            contabilidade = parseFloat($('#contabilidade').val().replace(RegExp, "$1.$2"));
+
+            economia = (contabilidade * 12) - (parseFloat(data.min_valor) * 12);
+            $('#mensalidade').text('R$' + parseFloat(data.min_valor).toFixed(2));
+            $('#economia').text('R$' + economia.toFixed(2));
+        });
+        $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores').on('keyup', function () {
+
+            var pro_labores = $('#pro_labores').val();
+            var total_documentos = $('#total_documentos').val();
+            var total_contabeis = $('#total_contabeis').val();
+            minValor = maxValor;
+            if (pro_labores > max_pro_labores) {
+                $('#pro_labores').val(max_pro_labores);
+            }
+            if (total_documentos > max_documentos) {
+                $('#total_documentos').val(max_documentos);
+            }
+            if (total_contabeis > max_contabeis) {
+                $('#total_contabeis').val(max_contabeis);
+            }
+            if (!pro_labores) {
+                $('#pro_labores').val(0);
+            }
+            if (!total_documentos) {
+                $('#total_documentos').val(0);
+            }
+            if (!total_contabeis) {
+                $('#total_contabeis').val(0);
+            }
+            for (i in planos) {
+
+                if (total_contabeis <= parseInt(planos[i].total_documentos_contabeis) && total_documentos <= parseInt(planos[i].total_documentos) && pro_labores <= parseInt(planos[i].pro_labores) && parseFloat(planos[i].valor) < minValor) {
+                    minValor = parseFloat(planos[i].valor);
+                }
+            }
+            $('#mensalidade').text('R$' + parseFloat(minValor).toFixed(2));
+            contabilidade = $('#contabilidade').val().replace(".", "");
+            contabilidade = parseFloat(contabilidade.replace(",", "."));
+            totalDesconto = (contabilidade * 12) - (minValor * 12) > 0 ? (contabilidade * 12) - (minValor * 12) : 0;
+
+            $('#economia').html('R$' + totalDesconto.toFixed(2));
+
+        });
+        $('#mostrar-simulador').on('click', function (e) {
+            e.preventDefault();
+            $('#mensalidade-modal').modal('show');
+        });
+
+        $('#cadastrar-empresa').on('click', function (e) {
+            e.preventDefault();
+            $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores').clone().appendTo('#principal-form');
+            $('#principal-form').submit();
+        });
         $('#mostrar-socio').on('click', function () {
             $('#socio-modal').modal('show');
         });
@@ -24,7 +90,7 @@
             $('#adicionar-socio').text('Adicionar Sócio');
             var id = 0;
             var arrSocio = $('#socio-form').serializeArray();
-            $.post("{{route('ajax-validar-socio')}}", arrSocio, function (data) {
+            $.post("{{route('ajax-validar-socio-empresa')}}", arrSocio, function (data) {
                 if (data.length) {
                     var html = '<ul>';
                     for (i in data) {
@@ -245,6 +311,7 @@
             <p>Preencha os campos abaixo e clique em "salvar atelrações" para atualizar os dados de sua empresa em nosso sistema.</p>
             <div class='form-group'>
                 <label>Nome Fantasia</label>
+                <input type='hidden' name='tipo' value="J"/>
                 <input type='text' class='form-control' name='nome_fantasia' value="{{$empresa->nome_empresarial1}}"/>
             </div>
             <div class='form-group'>
@@ -277,6 +344,10 @@
             <div class='form-group'>
                 <label>IPTU</label>
                 <input type='text' class='form-control' name='iptu'  value="{{$empresa->iptu}}"/>
+            </div>
+            <div class='form-group'>
+                <label>Quantidade de Funcionários</label>
+                <input type='text' class='form-control' name='qtde_funcionarios'  value="{{Input::old('qtde_funcionarios')}}"/>
             </div>
             <div class='form-group'>
                 <label>Código de Acesso do Simples Nacional</label>
@@ -315,6 +386,7 @@
             <div id='socios'>
                 @foreach($empresa->socios as $socio)
                 <input type='hidden' name='socio[{{$socio->id}}][nome]' value="{{$socio->nome}}" data-id="{{$socio->id}}"/>
+                <input type='hidden' name='socio[{{$socio->id}}][email]' value="{{$socio->email}}" data-id="{{$socio->id}}"/>
                 <input type='hidden' name='socio[{{$socio->id}}][nome_mae]' value="{{$socio->nome_mae}}" data-id="{{$socio->id}}"/>
                 <input type='hidden' name='socio[{{$socio->id}}][nome_pai]' value="{{$socio->nome_pai}}" data-id="{{$socio->id}}"/>
                 <input type='hidden' name='socio[{{$socio->id}}][data_nascimento]' value="{{$socio->data_nascimento}}" data-id="{{$socio->id}}"/>
@@ -352,7 +424,10 @@
                     <tr>
                         <td>{{$socio->nome}}</td>
                         <td>{{$socio->cpf}}</td>
-                        <td><button type='button' class='btn btn-danger remover-socio' data-id='{{$socio->id}}'><span class='fa fa-remove'></span> Remover</button></td>
+                        <td>
+                            <button type='button' class='btn btn-warning editar-socio' data-id='{{$socio->id}}'><span class='fa fa-edit'></span> Editar</button> 
+                            <button type='button' class='btn btn-danger remover-socio' data-id='{{$socio->id}}'><span class='fa fa-remove'></span> Remover</button>
+                        </td>
                     </tr>
                     @endforeach
                     </tr>
@@ -387,19 +462,22 @@
                     <tr>
                         <td>{{$cnae->cnae->descricao}}</td>
                         <td>{{$cnae->cnae->codigo}}</td>
-                        <td><button type='button' class='btn btn-danger remover-cnae' data-id='{{$cnae->cnae->id}}'><span class='fa fa-remove'></span> Remover</button></td>
+                        <td>
+
+                            <button type='button' class='btn btn-danger remover-cnae' data-id='{{$cnae->cnae->id}}'><span class='fa fa-remove'></span> Remover</button>
+                        </td>
                 <input type="hidden" value="{{$cnae->cnae->id}}" name="cnaes[]"/>
                 </tr>
                 @endforeach
-                    @else
-                    <tr><td colspan="3" class="nenhum-cnae">Por favor adicione pelo menos um CNAE.</td><tr/>
-                    @endif
-                    
-                
+                @else
+                <tr><td colspan="3" class="nenhum-cnae">Por favor adicione pelo menos um CNAE.</td><tr/>
+                @endif
+
+
                 </tbody>
             </table>
             <div class='form-group'>
-                <input type='submit' value="Cadastrar" class='btn btn-primary' />
+                <button type='button' id="mostrar-simulador" class='btn btn-primary'>Cadastrar</button>
             </div>
             <div class='clearfix'></div>
         </form>
@@ -408,6 +486,49 @@
 @stop
 
 @section('modal')
+<div class="modal fade" id="mensalidade-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document"  style="width: 1000px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Mensalidade</h4>
+            </div>
+            <div class="modal-body">
+                <p>Complete os campos abaixo e confira os valores de nossas mensalidades.
+                    <br />Ao cadastrar sua empresa você receberá <b>30 dias grátis</b> em nosso sistema, somente após esse período de 30 dias é que começaremos a cobrar mensalidade.</p>
+                <div class='col-xs-6'>
+                    <div class='form-group'>
+                        <label>Quantos sócios retiram pró-labore? <span data-trigger="hover" class="text-info" title="Pró-labore é o salário dos sócios que constam no contrato social da empresa, e recolhem o INSS mensalmente para a previdência social." data-toggle="tooltip" data-placement="top">(o que é isso?)</span></label>
+                        <input type='text' class='form-control numero-mask2' id='pro_labores' name="pro_labores" data-mask-placeholder='0' value="0"/>
+                    </div>
+                    <div class='form-group'>
+                        <label> Quantos documentos fiscais são emitidos e recebidos por mês? <span data-trigger="hover" class="text-info" title="Documentos fiscais, são as notas fiscais de venda ou prestação de serviço emitidas, e as notas fiscais de aquisição de mercadorias ou serviços." data-toggle="tooltip" data-placement="top" >(o que é isso?)</span></label>
+                        <input type='text' class='form-control numero-mask2' id='total_documentos' name="total_documentos" data-mask-placeholder='0' value="0"/>
+                    </div>
+                    <div class='form-group'>
+                        <label> Quantos documentos contábeis são emitidos por mês? <span data-trigger="hover" class="text-info" title="Neste item estão a movimentação bancária, em que cada transação corresponde a um documento contábil, assim como recibos de aluguel. Cada valor corresponderá a um documento contábil." data-toggle="tooltip" data-placement="top" >(o que é isso?)</span></label>
+                        <input type='text' class='form-control numero-mask2' id='total_contabeis' name="total_contabeis" data-mask-placeholder='0' value="0"/>
+                    </div>
+                    <div class='form-group'>
+                        <label>Quanto você paga hoje por mês para sua contabilidade?</label>
+                        <input type='text' class='form-control dinheiro-mask2' id='contabilidade' name="contabilidade" data-mask-placeholder='0' value="499,99"/>
+                    </div>
+                </div>
+                <div class='col-xs-6'>
+                    <h2 class='text-center'>Sua mensalidade será:</h2>
+                    <div id='mensalidade' class='text-center text-info' style="font-size:45px; font-weight: bold;">R$0,00</div>
+                    <h2 class='text-center'>Você <b>economizará</b> por ano:</h2>
+                    <div id='economia' class='text-center text-success' style="font-size:45px; font-weight: bold;">R$0,00</div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="cadastrar-empresa">Confirmar dados e continuar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar Janela</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <div class="modal fade" id="cnae-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document"  style="width: 900px;">
         <div class="modal-content">
@@ -470,14 +591,25 @@
                     </div> 
 
                     <div class='form-group'>
-                        <label>Email *</label>
-                        <input type='text' class='form-control' name='email' value="" />
-                    </div>
-                    <div class='form-group'>
                         <label>Telefone *</label>
                         <input type='text' class='form-control fone-mask' name='telefone' value="" />
                     </div>
-
+                    <div class='form-group'>
+                        <label>Recibo do Imposto de Renda</label>
+                        <input type='text' class='form-control' name='recibo_ir' value=""/>
+                    </div>
+                    <div class='form-group'>
+                        <label>Título de Eleitor</label>
+                        <input type='text' class='form-control' name='titulo_eleitor' value=""/>
+                    </div>
+                    <div class='form-group'>
+                        <label>PIS</label>
+                        <input type='text' class='form-control' name='pis' value=""/>
+                    </div>
+                    <div class='form-group'>
+                        <label>Pró-Labore</label>
+                        <input type='text' class='form-control' name='pro_labore' value=""/>
+                    </div>
                     <div class='form-group'>
                         <label>CPF *</label>
                         <input type='text' class='form-control cpf-mask' name='cpf' value=""/>
@@ -520,10 +652,6 @@
                     <div class='form-group'>
                         <label>Número *</label>
                         <input type='text' class='form-control numero-mask' name='numero' value=""/>
-                    </div>
-                    <div class='form-group'>
-                        <label>Complemento</label>
-                        <input type='text' class='form-control' name='complemento' value=""/>
                     </div>
 
                     <div class="form-group">
