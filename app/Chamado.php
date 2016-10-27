@@ -13,6 +13,7 @@ class Chamado extends Model {
     protected $rules = ['titulo' => 'required', 'mensagem' => 'required'];
     protected $errors;
     protected $niceNames = ['titulo' => 'Título', 'mensagem' => 'Mensagem'];
+    protected $dates = ['created_at', 'updated_at'];
 
     /**
      * The database table used by the model.
@@ -26,7 +27,7 @@ class Chamado extends Model {
      *
      * @var array
      */
-    protected $fillable = ['titulo', 'mensagem', 'id_usuario'];
+    protected $fillable = ['titulo', 'mensagem', 'id_usuario', 'status'];
 
     public function validate($data) {
         // make a new validator object
@@ -46,14 +47,13 @@ class Chamado extends Model {
     public function errors() {
         return $this->errors;
     }
-    
-    public function chamado_respostas(){
+
+    public function chamado_respostas() {
         return $this->hasMany('App\ChamadoResposta', 'id_chamado');
     }
-    
-    public function usuario()
-    {
-        return $this->belongsTo('App\Usuario','id_usuario');
+
+    public function usuario() {
+        return $this->belongsTo('App\Usuario', 'id_usuario');
     }
 
 }

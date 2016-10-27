@@ -15,8 +15,13 @@
             @endforeach
         </div>
         @endif
-        <form method="POST" action="">
+        <form method="POST" action="" enctype="multipart/form-data">
             {{ csrf_field() }}
+
+            <div class='form-group'>
+                <label>Anexar arquivo</label>
+                <input type='file' class='form-control' value="" name='anexo'/>
+            </div>
             <div class='form-group'>
                 <label>Título</label>
                 <input type='text' class='form-control' name='titulo' value=""/>

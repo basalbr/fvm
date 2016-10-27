@@ -13,7 +13,7 @@ class ChamadoResposta extends Model {
     protected $rules = ['mensagem' => 'required'];
     protected $errors;
     protected $niceNames = ['mensagem' => 'Mensagem'];
-
+protected $dates = ['created_at','updated_at'];
     /**
      * The database table used by the model.
      *
@@ -26,7 +26,7 @@ class ChamadoResposta extends Model {
      *
      * @var array
      */
-    protected $fillable = ['mensagem', 'id_usuario', 'id_chamado'];
+    protected $fillable = ['mensagem', 'id_usuario', 'id_chamado','anexo'];
 
     public function validate($data) {
         // make a new validator object

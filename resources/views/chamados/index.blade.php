@@ -68,7 +68,7 @@ $(function () {
             <tr>
                 <th>Título</th>
                 <th>Aberto em</th>
-                <th>Atualizado em</th>
+                <th>Última mensagem em</th>
                 <th></th>
             </tr>
         </thead>
@@ -77,8 +77,8 @@ $(function () {
             @foreach($chamados as $chamado)
             <tr>
                 <td>{{$chamado->titulo}}</td>
-                <td>{{date_format($chamado->created_at, 'd-m-Y')}}</td>
-                <td>{{date_format($chamado->updated_at, 'd-m-Y')}}</td>
+                <td>{{$chamado->created_at->format('d/m/Y')}}</td>
+                <td>{{$chamado->updated_at->format('d/m/Y')}}</td>
                 <td><a class="btn btn-primary" href="{{route('responder-chamado-usuario', ['id' => $chamado->id])}}">Responder</a></td>
             </tr>
             @endforeach

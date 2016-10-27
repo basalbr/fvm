@@ -20,7 +20,7 @@ body.relative{
 .card{
     background-color: #fff;
     box-shadow: 1px 2px 3px rgba(0,0,0,.4);
-    padding: 10px;
+    padding: 10px 15px;
     margin-bottom: 10px;
 }
 
@@ -34,7 +34,7 @@ body.relative{
 
 .card h3{
     margin: 5px 5px 10px 0px;
-    padding: 5px 5px 10px 5px;
+    padding: 5px 5px 15px 0px;
     font-size: 16px;
     text-transform: uppercase;
     font-weight: bold;
@@ -1064,9 +1064,8 @@ ul.lista-impostos li:hover{
     background-color: #66ffff;
     border: transparent;
     border-bottom-color: transparent;
-    font-size: 17px;
+    /*font-size: 17px;*/
     font-weight: bold;
-
 }
 
 .nav-tabs{
@@ -1130,6 +1129,14 @@ ul.lista-impostos li:hover{
     background-color: #fafafa;
     border-left: 2px solid #F3565D;
     margin-right:35px; 
+}
+
+.mensagem .anexo{
+    border-top: #337ab7 1px dashed;
+    padding: 10px 0 0 0;
+    margin: 10px 0 0 0;
+    font-size:  13px;
+    font-weight: bold;
 }
 
 .mensagem-admin{

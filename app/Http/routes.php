@@ -37,6 +37,7 @@ Route::post('/admin/socio/{id}/pro-labore/editar/{pro_labore}', ['as' => 'editar
 
 Route::get('/pro-labore/', ['as' => 'listar-pro-labore-cliente', 'uses' => 'ProlaboreController@indexCliente', 'middleware' => 'auth']);
 Route::get('/socios/', ['as' => 'listar-socios-apenas', 'uses' => 'SocioController@indexSocios', 'middleware' => 'auth']);
+Route::get('/socio/remover/{id}', ['as' => 'remover-socio', 'uses' => 'SocioController@remove', 'middleware' => 'auth']);
 Route::get('/socio/{id}/pro-labore', ['as' => 'listar-pro-labore-socio', 'uses' => 'ProlaboreController@socio', 'middleware' => 'auth']);
 Route::get('/socio/{id}/pro-labore/{id_pro_labore}', ['as' => 'visualizar-pro-labore-socio', 'uses' => 'ProlaboreController@socioEdit', 'middleware' => 'auth']);
 
@@ -110,7 +111,7 @@ Route::get('/admin/cnae/editar/{id}', ['as' => 'editar-cnae', 'uses' => 'CnaeCon
 Route::post('/admin/cnae/editar/{id}', ['as' => 'editar-cnae', 'uses' => 'CnaeController@update', 'middleware' => 'admin']);
 
 Route::get('/admin/chamados/', ['as' => 'listar-chamados', 'uses' => 'ChamadosController@index', 'middleware' => 'admin']);
-Route::get('/admin/chamados/visualizar/{id}', ['as' => 'visualizar-chamados', 'uses' => 'ChamadosController@edit', 'middleware' => 'admin']);
+Route::get('/admin/chamados/visualizar/{id}', ['as' => 'visualizar-chamados', 'uses' => 'ChamadosController@editAdmin', 'middleware' => 'admin']);
 Route::post('/admin/chamados/visualizar/{id}', ['as' => 'visualizar-chamados', 'uses' => 'ChamadosController@update', 'middleware' => 'admin']);
 
 

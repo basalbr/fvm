@@ -24,11 +24,15 @@
                 <td>{{$socio->nome}}</td>
                 <td>{{$socio->principal ? 'Sim': 'Não'}}</td>
                 <td>{{$socio->pro_labore ? 'R$ '.$socio->pro_labore_formatado(): 'Não retira pró-labore'}}</td>
-                @if($socio->pro_labore)
-                <td><a class="btn btn-warning" href="{{route('editar-socio', [$socio->pessoa->id, $socio->id])}}">Editar</a> <a class="btn btn-primary" href="{{route('listar-pro-labore-socio', [$socio->id])}}">Pró-labore</a>  <a class="btn btn-danger" href="{{$socio->id}}">Remover</a></td>
-                @else
-                <td><a class="btn btn-warning" href="{{route('editar-socio', [$socio->pessoa->id, $socio->id])}}">Editar</a> <a class="btn btn-danger" href="{{$socio->id}}">Remover</a></td>
-                @endif
+                <td>
+                    <a class="btn btn-warning" href="{{route('editar-socio', [$socio->id_pessoa, $socio->id])}}">Editar</a>
+                    @if($socio->pro_labore)
+                    <a class="btn btn-primary" href="{{route('listar-pro-labore-socio', [$socio->id])}}">Recibo de Pró-labore</a>
+                    @endif
+                    @if(!$socio->principal)
+                    <a class="btn btn-danger  remover-registro" href="{{route('remover-socio', [$socio->id])}}">Remover</a>
+                    @endif
+                </td>
             </tr>
             @endforeach
             @else

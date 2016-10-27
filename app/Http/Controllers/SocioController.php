@@ -53,5 +53,13 @@ class SocioController extends Controller {
             return redirect(route('editar-socio', [$id_empresa, $id]))->withInput()->withErrors($socio->errors());
         }
     }
+    
+    public function remove($id) {
+        $socio = Socio::where('id','=',$id)->first();
+        if($socio->pessoa->usuario->id == Auth::user()->id){
+            $socio->delete();
+        }
+        return redirect()->back();
+    }
 
 }
