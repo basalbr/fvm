@@ -40,7 +40,7 @@ $(function(){
             Empresas e Sócios
         </li>
         <li class='{{Request::is('abertura-empresa*') ? "active" : ""}}'>
-            <a href="{{route('abertura-empresa')}}"><div class="icon"><span class="fa fa-building"></span></div>Abertura de Empresa</a>
+            <a href="{{route('abertura-empresa')}}"><div class="icon"><span class="fa fa-child"></span></div>Abertura de Empresa</a>
         </li>
         <li class='{{Request::is('empresas*') ? "active" : ""}}'>
             <a href="{{route('empresas')}}"><div class="icon"><span class="fa fa-building"></span></div>Empresas</a>

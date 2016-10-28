@@ -3,6 +3,20 @@
 @parent()
 <script type="text/javascript" language="javascript">
     $(function () {
+        $('#lista-notificacao').on('click', '.mark-read', function (e) {
+            e.preventDefault();
+            $.post("{{route('ajax-notificacao')}}", {'id': $(this).data('id')}, function (data) {
+                var html = '';
+                for (i in data) {
+                    html += '<div class="notificacao-mensagem">' + data[i].mensagem + '</div>';
+                    html += '<div class="text-success"><a href="" data-id="' + data[i].id + '" class="text-success mark-read"><span class="fa fa-check"></span> Marcar como lida</a></div>'
+                }
+                $("#lista-notificacao").html(html);
+                if ($("#lista-notificacao li").length < 1) {
+$("#lista-notificacao").html('<li>Você não possui nenhuma notificação</li>');
+                }
+            });
+        });
         $('.imposto-event').on('click', function (e) {
             e.preventDefault();
             var title = $(this).data('title');
@@ -34,7 +48,6 @@
                             html += instrucao.descricao;
                             html += "</div>";
                         }, html);
-
                         $('.modal-body > p').html(html);
                         $('#imposto-modal').modal('show');
                     }
@@ -50,15 +63,14 @@
 <p>Seja bem vindo {{Auth::user()->nome}}, utilize os botões no menu esquerdo para navegar em nosso sistema.</p>
 <hr class="dash-title">
 
-<div id="apuracao-card" class="col-xs-4 clearfix">
+<div id="apuracao-card" class="col-xs-6">
     <div class='card'>
         <h3>Apurações em aberto</h3>
         <div class="card-body">
-            <p>Clique em uma apuração para visualizar mais informações.</p>
+            <p><b>Clique em uma apuração para visualizar mais informações.</b></p>
             <ul class='lista-apuracoes-urgentes'>
-            @if(count($apuracoes)>0)
-            <p>Você possui algumas apurações que precisam de informações adicionais.</p>
-            
+                @if(count($apuracoes)>0)
+
                 @foreach($apuracoes as $apuracao)
                 <li>
                     <a href="{{route('responder-processo-usuario', ['id' => $apuracao->id])}}">
@@ -68,84 +80,37 @@
                     </a>
                 </li>
                 @endforeach
-            
-            @else
-            <li>Você não possui nenhuma apuração em aberto.</li>
-            @endif
+
+                @else
+                <li>Você não possui nenhuma apuração em aberto.</li>
+                @endif
             </ul>
             <a class="btn btn-info" href="{{route('listar-processos')}}">Visualizar todas as apurações</a>
         </div>
     </div>
 </div>
 
-<div id="empresa-card" class="col-xs-4">
+<div id="notificacao-card" class="col-xs-6">
     <div class='card'>
-        <h3>Empresas cadastradas</h3> 
+        <h3>Notificações</h3> 
         <div class="card-body">
-            @if($empresas->count())
-            <p>Clique em uma empresa para visualizar informações</p>
-            <ul class='lista-apuracoes-urgentes'>
-                @foreach($empresas as $empresa)
+            <p><b>Abaixo estão os eventos mais recentes.</b></p>
+            <ul class='lista-apuracoes-urgentes' id="lista-notificacao">
+                @if($notificacoes->count())
+                @foreach($notificacoes as $notificacao)
                 <li>
-                    <a href="{{route('editar-empresa', ['id' => $empresa->id])}}">
-                        <div class='empresa'>{{$empresa->nome_fantasia}}</div>
-                        <div class='imposto'>{{$empresa->cpf_cnpj}}</div>
-                    </a>
+                    <div class="notificacao-mensagem">{!!$notificacao->mensagem!!}</div>
+                    <div class="text-success"><a href="" data-id="{{$notificacao->id}}" class="text-success mark-read"><span class="fa fa-check"></span> Marcar como lida</a></div>
                 </li>
                 @endforeach
+                @else
+                <li>Você não possui nenhuma notificação.</li>
+                @endif
             </ul>
-            <a class="btn btn-info" href="{{route('empresas')}}">Visualizar todas as empresas</a>
-            @else
-            <p>Você não possui nenhuma empresa cadastrada, para utilizar nosso sistema e aproveitar nossos serviços, você precisa cadastrar pelo menos uma empresa.<br/><a href="{{route('cadastrar-empresa')}}" >Clique aqui para cadastrar uma empresa.</a></p>
-            @endif
         </div>
     </div>
 </div>
 
-<div id="mensagem-card" class="col-xs-4">
-    <div class='card'>
-        <h3>Últimas mensagens</h3> 
-        <div class="card-body">
-            @if($mensagens->count())
-            <p>Clique em uma mensagem para abrir a conversa.</p>
-            <ul class='lista-apuracoes-urgentes'>
-                @foreach($mensagens as $mensagem)
-                <li>
-                    <a href="{{route('responder-chamado-usuario',[$mensagem->id_chamado])}}">
-                        <div class='empresa'>{{$mensagem->mensagem}}</div>
-                        <div class='imposto'>{{$mensagem->usuario->nome}}</div>
-                        <div class='vencimento'>Às {{date_format($mensagem->created_at, 'H:i - d/m/y')}}</div>
-                    </a>
-                </li>
-                @endforeach
-            </ul>
-            <a class="btn btn-info" href="{{route('listar-chamados-usuario')}}">Visualizar todas as mensagens</a>
-            @else
-            <p>Você não possui nenhuma mensagem.</p>
-            @endif
-        </div>
-    </div>
-</div>
-
-<div id="imposto-card" class="col-xs-4">
-    <div class='card'>
-        <h3>Impostos de {{$meses[date('m')]}}</h3> 
-        <div class="card-body">
-            <p>Clique em um imposto para visualizar mais informações</p>
-            <ul class='lista-apuracoes-urgentes'>
-                @foreach($impostos as $imposto)
-                <li>
-                    <a class="imposto-event" data-title="{{$imposto->nome}}" data-id="{{$imposto->id}}" href="{{route('responder-processo-usuario', ['id' => $imposto->id])}}">
-                        <div class='empresa'>{{$imposto->nome}}</div>
-                        <div class='imposto'>Vencimento: {{$imposto->vencimento.'/'.$meses[date('m')]}}</div>
-                    </a>
-                </li>
-                @endforeach
-            </ul>
-            <a class="btn btn-info" href="{{route('calendario')}}">Visualizar calendário de impostos</a>
-        </div>
-    </div>
-</div>
 @stop
 @section('modal')
 <div class="modal fade" id="imposto-modal" tabindex="-1" role="dialog">

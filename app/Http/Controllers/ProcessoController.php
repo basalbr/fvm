@@ -13,21 +13,9 @@ use Illuminate\Support\Facades\Validator;
 class ProcessoController extends Controller {
 
     public function abreProcessos() {
-        $impostos_mes = \App\ImpostoMes::where('mes', '=', date('n'))->get();
-        $competencia = date('Y-m-d', strtotime(date('Y-m') . " -1 month"));
-        foreach ($impostos_mes as $imposto_mes) {
-            $pessoas = \App\Pessoa::all();
-            foreach ($pessoas as $pessoa) {
-                $imposto = $imposto_mes->imposto;
-                $processo = new Processo;
-                $processo->create([
-                    'id_pessoa' => $pessoa->id,
-                    'competencia' => $competencia,
-                    'id_imposto' => $imposto_mes->id_imposto,
-                    'vencimento' => $imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento, 'Y-m-d'),
-                    'status' => 'novo'
-                ]);
-            }
+        $pessoas = \App\Pessoa::all();
+        foreach ($pessoas as $pessoa) {
+            $pessoa->abrir_processos();
         }
     }
 
@@ -157,10 +145,10 @@ class ProcessoController extends Controller {
     public function update($id, Request $request) {
         if ($request->is('admin/*')) {
             $processo = Processo::join('pessoa', 'processo.id_pessoa', '=', 'pessoa.id')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.id', '=', $id)->select('processo.*')->with('pessoa')->first();
-        }else{
+        } else {
             $processo = Processo::where('id', '=', $id)->first();
         }
-        
+
         $resposta = new ProcessoResposta;
         $request->merge(['id_usuario' => Auth::user()->id, 'id_processo' => $id]);
         if ($request->file('guia')) {

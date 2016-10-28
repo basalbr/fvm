@@ -24,7 +24,7 @@ Route::post('/pagseguro/notification', [
     'as' => 'pagseguro.notification',
 ]);
 
-Route::get('/testeimpostos', ['as' => 'testeimposto', 'uses' => 'ProcessoController@abreProcessos', 'middleware' => 'admin']);
+Route::get('/abrir_processos', ['as' => 'testeimposto', 'uses' => 'ProcessoController@abreProcessos']);
 Route::get('/admin/chat/', ['as' => 'listar-chat', 'uses' => 'ChatController@index', 'middleware' => 'admin']);
 Route::get('/admin/chat/visualizar/{id}', ['as' => 'visualizar-chat', 'uses' => 'ChatController@edit', 'middleware' => 'admin']);
 
@@ -199,6 +199,7 @@ Route::post('/ajax/validar-abertura-empresa/', ['as' => 'ajax-validar-abertura-e
 Route::post('/ajax/cnae/', ['as' => 'ajax-cnae', 'uses' => 'CnaeController@ajax', 'middleware' => 'auth']);
 Route::post('/ajax/calendar/', ['as' => 'ajax-calendar', 'uses' => 'ImpostoController@ajaxCalendar', 'middleware' => 'auth']);
 Route::get('/ajax/instrucoes/', ['as' => 'ajax-instrucoes', 'uses' => 'ImpostoController@ajaxInstrucoes', 'middleware' => 'auth']);
+Route::post('/ajax/notificacoes/', ['as' => 'ajax-notificacao', 'uses' => 'DashboardController@ajaxNotificacao', 'middleware' => 'auth']);
 Route::post('/ajax/enviar-contato/', ['as' => 'ajax-enviar-contato', 'uses' => 'HomeController@ajaxContato']);
 
 

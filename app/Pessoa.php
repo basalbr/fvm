@@ -27,7 +27,8 @@ class Pessoa extends Model {
         'codigo_acesso_simples_nacional' => 'numeric',
         'nome_fantasia' => 'required',
         'razao_social' => 'required|unique:pessoa,razao_social',
-        'id_tipo_tributacao' => 'required'
+        'id_tipo_tributacao' => 'required',
+        'crc' => 'required|sometimes'
     ];
     protected $errors;
     protected $niceNames = [
@@ -46,7 +47,8 @@ class Pessoa extends Model {
         'codigo_acesso_simples_nacional' => 'Código de Acesso do Simples Nacional',
         'nome_fantasia' => 'Nome Fantasia',
         'razao_social' => 'Razão Social',
-        'id_tipo_tributacao' => 'Tipo de Tributação'
+        'id_tipo_tributacao' => 'Tipo de Tributação',
+        'crc' => 'Número de registro do CRC do contador atual'
     ];
 
     /**
@@ -110,6 +112,26 @@ class Pessoa extends Model {
 
         // validation pass
         return true;
+    }
+
+    public function abrir_processos() {
+        $impostos_mes = \App\ImpostoMes::where('mes', '=', date('n'))->get();
+        $competencia = date('Y-m-d', strtotime(date('Y-m') . " -1 month"));
+        if (count($impostos_mes)) {
+            foreach ($impostos_mes as $imposto_mes) {
+                if ($this->status == 'Aprovado') {
+                    $imposto = $imposto_mes->imposto;
+                    $processo = new Processo;
+                    $processo->create([
+                        'id_pessoa' => $this->id,
+                        'competencia' => $competencia,
+                        'id_imposto' => $imposto_mes->id_imposto,
+                        'vencimento' => $imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento, 'Y-m-d'),
+                        'status' => 'novo'
+                    ]);
+                }
+            }
+        }
     }
 
     public function isSimplesNacional() {

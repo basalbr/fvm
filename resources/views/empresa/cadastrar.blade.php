@@ -372,7 +372,13 @@
                         <td colspan="3" class="nenhum-cnae">Por favor adicione pelo menos um CNAE.</td>
                     </tr>
                 </tbody>
-            </table>                        
+            </table>      
+            <h3>Contabilidade Atual (Migração para WEBContabilidade)</h3>
+            <p>Precisamos que você informe o número de registro do CRC do seu atual contador para que possamos dar início ao processo de transferência de sua empresa para nossa equipe.</p>
+            <div class='form-group'>
+                <label>Número de registro do CRC do contador atual</label>
+                <input type='text' class='form-control' name='crc' value="{{Input::old('crc')}}"/>
+            </div>
             <div class='form-group'>
                 <a href="" id="mostrar-simulador" class='btn btn-primary'>Cadastrar Empresa</a>
             </div>

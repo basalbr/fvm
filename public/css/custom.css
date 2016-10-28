@@ -24,14 +24,23 @@ body.relative{
     margin-bottom: 10px;
 }
 
-#empresa-card .card-body ul, #mensagem-card .card-body ul, #apuracao-card .card-body ul, #imposto-card .card-body ul{
+/*#empresa-card .card-body ul, #mensagem-card .card-body ul, #apuracao-card .card-body ul, #imposto-card .card-body ul{
     height: 250px;
     overflow: auto;
 }
 
-#empresa-card .card, #mensagem-card .card, #apuracao-card .card, #imposto-card .card{
+#notificacao-card .card-body ul{
+    height: 290px;
+    overflow: auto;
+}
+#empresa-card .card, #mensagem-card .card, #apuracao-card .card, #imposto-card .card, #notificacao-card .card{
     overflow: hidden;
     height: 405px;
+}*/
+
+.notificacao-mensagem{
+        margin-bottom: 2px;
+        padding-bottom: 2px;
 }
 
 .form-inline .form-control{
@@ -40,6 +49,10 @@ body.relative{
 
 .form-inline .form-group{
     margin-bottom: 4px;
+}
+
+.text-success {
+    color: #3c763d!important;
 }
 
 .card h3{
@@ -1255,7 +1268,7 @@ ul.lista-impostos li:hover{
 
 }
 .lista-apuracoes-urgentes li a{
-    color: #11a8bb !important;
+    color: #11a8bb;
 }
 
 .lista-apuracoes-urgentes li a:hover{
