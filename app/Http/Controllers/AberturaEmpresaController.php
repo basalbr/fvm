@@ -33,7 +33,6 @@ class AberturaEmpresaController extends Controller {
     }
 
     public function store(Request $request) {
-//        dd($request->all());
         $empresa = new \App\AberturaEmpresa;
         $request->merge(['id_usuario' => Auth::user()->id]);
         if (count($request->get('cnaes'))) {
@@ -84,6 +83,9 @@ class AberturaEmpresaController extends Controller {
             $pagamento->status = 'Pendente';
             $pagamento->vencimento = date('Y-m-d H:i:s', strtotime("+7 day"));
             $pagamento->save();
+            
+            $empresa->enviar_notificacao_criacao();
+            
             return redirect(route('abertura-empresa'));
         } else {
             return redirect(route('cadastrar-abertura-empresa'))->withInput()->withErrors($empresa->errors());
@@ -133,8 +135,9 @@ class AberturaEmpresaController extends Controller {
             }
             $abertura_empresa = \App\AberturaEmpresa::find($id);
             $abertura_empresa->status = 'Concluído';
+            $abertura_empresa->enviar_notificacao_conclusao($request->get('nome_fantasia'));
             $abertura_empresa->save();
-
+                    
             $impostos_mes = \App\ImpostoMes::where('mes', '=', date('n'))->get();
             $competencia = date('Y-m-d', strtotime(date('Y-m') . " -1 month"));
             foreach ($impostos_mes as $imposto_mes) {
@@ -194,6 +197,7 @@ class AberturaEmpresaController extends Controller {
 
     public function update($id, Request $request) {
         $mensagem = new \App\AberturaEmpresaComentario;
+        $empresa = \App\AberturaEmpresa::where('id', '=', $id)->where('id_usuario')->first();
         if ($mensagem->validate($request->all())) {
             if ($request->file('anexo')) {
                 $anexo = date('dmyhis') . '.' . $request->file('anexo')->guessClientExtension();
@@ -205,6 +209,7 @@ class AberturaEmpresaController extends Controller {
             $mensagem->id_abertura_empresa = $id;
             $mensagem->id_usuario = Auth::user()->id;
             $mensagem->save();
+            $empresa->enviar_notificacao_nova_mensagem_admin();
             return redirect(route('editar-abertura-empresa', [$id]));
         }
         return redirect(route('editar-abertura-empresa', [$id]))->withInput()->withErrors($mensagem->errors());
@@ -227,6 +232,7 @@ class AberturaEmpresaController extends Controller {
             $mensagem->id_abertura_empresa = $id;
             $mensagem->id_usuario = Auth::user()->id;
             $mensagem->save();
+            $empresa->enviar_notificacao_nova_mensagem_usuario();
             return redirect(route('editar-abertura-empresa-admin', [$id]));
         }
         return redirect(route('editar-abertura-empresa-admin', [$id]))->withInput()->withErrors($mensagem->errors());

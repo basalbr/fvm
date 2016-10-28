@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 @section('header_title', 'Mensalidades')
 @section('main')
-<h1>Pagamentos</h1>
-<p>Abaixo estão as ordens de pagamento em aberto no nosso sistema. É necessário estar com a mensalidade em dia para que você possa receber nossos serviços.</p>
+<h1>Histórico de Pagamentos</h1>
+<p>Abaixo estão as ordens de pagamento realizados no nosso sistema.</p>
 <hr class="dash-title">
 <div class="card">
-    <h3>Lista de Pagamentos Pendentes</h3>
+    <h3>Lista de Pagamentos Realizados</h3>
     <table class='table'>
         <thead>
             <tr>

@@ -35,6 +35,7 @@ class ChamadosController extends Controller {
         if (Input::get('status')) {
             $chamados->where('status', '=',Input::get('status'));
         }
+        $chamados->orderBy('status','asc');
         if (Input::get('ordenar')) {
             if (Input::get('ordenar') == 'atualizado_desc') {
                 $chamados->orderBy('updated_at', 'desc');
@@ -75,6 +76,7 @@ class ChamadosController extends Controller {
                 $chamado_resposta->anexo = $anexo;
             }
             $chamado_resposta->save();
+            $chamado->enviar_notificacao_novo_chamado();
             return redirect(route('listar-chamados-usuario'));
         } else {
             return redirect(route('cadastrar-chamado'))->withInput()->withErrors($chamado->errors());
@@ -102,7 +104,8 @@ class ChamadosController extends Controller {
                 $request->merge(['anexo'=>$anexo]);
             }
             
-            $resposta->create($request->all());
+            $resposta = $resposta->create($request->all());
+            $resposta->enviar_notificacao_nova_mensagem_chamado();
             $chamado = Chamado::where('id', '=', $id)->first();
             $chamado->touch();
             if($request->get('status')){

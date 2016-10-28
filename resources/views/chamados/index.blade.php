@@ -42,8 +42,8 @@ $(function () {
             <label>Status</label>
             <select name="status" class="form-control">
                 <option value="" {{Input::get('status') ? 'selected' : ''}}>Todos</option>
-                <option value="aberto" {{Input::get('status') == 'aberto' ? 'selected' : ''}}>Aberto</option>
-                <option value="fechado" {{Input::get('status') == 'fechado' ? 'selected' : ''}}>Fechado</option>
+                <option value="Aberto" {{Input::get('status') == 'Aberto' ? 'selected' : ''}}>Aberto</option>
+                <option value="Concluído" {{Input::get('status') == 'Concluído' ? 'selected' : ''}}>Concluído</option>
             </select>
         </div>
         <div class="form-group" style="width: 250px">
@@ -66,6 +66,7 @@ $(function () {
     <table class='table'>
         <thead>
             <tr>
+                <th>Status</th>
                 <th>Título</th>
                 <th>Aberto em</th>
                 <th>Última mensagem em</th>
@@ -76,9 +77,10 @@ $(function () {
             @if($chamados->count())
             @foreach($chamados as $chamado)
             <tr>
+                <td>{{$chamado->status}}</td>
                 <td>{{$chamado->titulo}}</td>
-                <td>{{$chamado->created_at->format('d/m/Y')}}</td>
-                <td>{{$chamado->updated_at->format('d/m/Y')}}</td>
+                <td>{{$chamado->created_at->format('d/m/Y - H:i:s')}}</td>
+                <td>{{$chamado->updated_at->format('d/m/Y - H:i:s')}}</td>
                 <td><a class="btn btn-primary" href="{{route('responder-chamado-usuario', ['id' => $chamado->id])}}">Responder</a></td>
             </tr>
             @endforeach

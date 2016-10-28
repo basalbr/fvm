@@ -15,7 +15,7 @@
                 <th>Limite de Documentos Contábeis</th>
                 <th>Limite de Pró-labores</th>
                 <th>Último Pagamento</th>
-                <th>Próximo Pagamento</th>
+                <th>Vencimento do Próximo Pagamento</th>
             </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@
                 <td>Até {{$mensalidade->documentos_fiscais}}</td>
                 <td>Até {{$mensalidade->documentos_contabeis}}</td>
                 <td>Até {{$mensalidade->pro_labores}}</td>
-                <td>{{date_format($mensalidade->pagamentos()->where('status','=','pago')->orderBy('created_at', 'desc')->first()->updated_at, 'd/m/Y')}}</td>
+                <td>{{date_format($mensalidade->pagamentos()->where('status','=','Paga')->orderBy('created_at', 'desc')->first()->updated_at, 'd/m/Y')}}</td>
                 <td>{{$mensalidade->proximo_pagamento()}}</td>
             </tr>
             @endforeach

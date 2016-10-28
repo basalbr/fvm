@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
 use laravel\pagseguro\Platform\Laravel5\PagSeguro;
+use App\Notificacao;
+use Illuminate\Support\Facades\Auth;
 
 class AberturaEmpresa extends Model {
 
@@ -88,17 +90,17 @@ class AberturaEmpresa extends Model {
     ];
 
     public function validate($data) {
-        // make a new validator object
+// make a new validator object
         $v = Validator::make($data, $this->rules);
         $v->setAttributeNames($this->niceNames);
-        // check for failure
+// check for failure
         if ($v->fails()) {
-            // set errors and return false
+// set errors and return false
             $this->errors = $v->errors()->all();
             return false;
         }
 
-        // validation pass
+// validation pass
         return true;
     }
 
@@ -109,6 +111,70 @@ class AberturaEmpresa extends Model {
                     return false;
                 }
             }
+            return true;
+        }
+    }
+
+    public function enviar_notificacao_criacao() {
+        $usuario = Auth::user();
+        $notificacao = new Notificacao;
+        $notificacao->mensagem = 'Você abriu uma solicitação de abertura de empresa.';
+        $notificacao->id_usuario = Auth::user()->id;
+        $notificacao->save();
+        try {
+            \Illuminate\Support\Facades\Mail::send('emails.nova-abertura-empresa', ['nome' => $usuario->nome, 'id_empresa' => $this->id], function ($m) use($usuario) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to($usuario->email)->subject('Solicitação de Abertura de Empresa');
+            });
+            \Illuminate\Support\Facades\Mail::send('emails.nova-abertura-empresa-admin', ['nome' => $usuario->nome, 'id_empresa' => $this->id], function ($m) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to('admin@webcontabilidade.com')->subject('Nova Solicitação de Abertura de Empresa');
+            });
+        } catch (\Exception $ex) {
+            return true;
+        }
+    }
+
+    public function enviar_notificacao_nova_mensagem_usuario() {
+        $usuario = Auth::user();
+        $notificacao = new Notificacao;
+        $notificacao->mensagem = 'Você possui uma nova mensagem em seu processo de abertura de empresa. <a href="' . route('editar-abertura-empresa', ['id' => $this->id]) . '">Visualizar.</a>';
+        $notificacao->id_usuario = Auth::user()->id;
+        $notificacao->save();
+        try {
+            \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-abertura-empresa', ['nome' => $usuario->nome, 'id_empresa' => $this->id], function ($m) use($usuario) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to($usuario->email)->subject('Nova Mensagem em Abertura de Empresa');
+            });
+        } catch (\Exception $ex) {
+            return true;
+        }
+    }
+
+    public function enviar_notificacao_nova_mensagem_admin() {
+        $usuario = Auth::user();
+        try {
+            \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-abertura-empresa-admin', ['nome' => $usuario->nome, 'id_empresa' => $this->id], function ($m) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to('admin@webcontabilidade.com')->subject('Nova Mensagem em Abertura de Empresa');
+            });
+        } catch (\Exception $ex) {
+            return true;
+        }
+    }
+
+    public function enviar_notificacao_conclusao($nome) {
+        $usuario = Auth::user();
+        $notificacao = new Notificacao;
+        $notificacao->mensagem = 'O processo de abertura da empresa ' . $nome . ' foi concluído.';
+        $notificacao->id_usuario = Auth::user()->id;
+        $notificacao->save();
+        try {
+            \Illuminate\Support\Facades\Mail::send('emails.conclusao-abertura-empresa', ['nome' => $usuario->nome, 'empresa' => $nome], function ($m) use($usuario) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to($usuario->email)->subject('Processo de Abertura de Empresa Concluído');
+            });
+        } catch (\Exception $ex) {
             return true;
         }
     }

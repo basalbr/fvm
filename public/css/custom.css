@@ -24,6 +24,16 @@ body.relative{
     margin-bottom: 10px;
 }
 
+#empresa-card .card-body ul, #mensagem-card .card-body ul, #apuracao-card .card-body ul, #imposto-card .card-body ul{
+    height: 250px;
+    overflow: auto;
+}
+
+#empresa-card .card, #mensagem-card .card, #apuracao-card .card, #imposto-card .card{
+    overflow: hidden;
+    height: 405px;
+}
+
 .form-inline .form-control{
     width: 100%;
 }
@@ -1373,6 +1383,6 @@ ul.lista-impostos li:hover{
 }
 
 th,td{
-        white-space: nowrap;
-        vertical-align: middle;
+    white-space: nowrap;
+    vertical-align: middle;
 }
