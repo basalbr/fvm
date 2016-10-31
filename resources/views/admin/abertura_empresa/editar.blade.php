@@ -276,8 +276,8 @@
                                     @if($empresa->cnaes->count())
                                     @foreach($empresa->cnaes as $cnae)
                                     <tr>
-                                        <td>{{$cnaes->cnae->codigo}}</td>
-                                        <td>{{$cnaes->cnae->descricao}}</td>
+                                        <td>{{$cnae->cnae->codigo}}</td>
+                                        <td>{{$cnae->cnae->descricao}}</td>
                                     </tr>
                                     @endforeach
                                     @else
