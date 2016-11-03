@@ -51,7 +51,9 @@ $(function(){
                 <td>
                     <a class='btn btn-primary' href="{{route('editar-abertura-empresa', ['id' => $empresa->id])}}">Visualizar Processo</a>
                     {!!$empresa->botao_pagamento()!!}
+                    @if($empresa->status != 'Concluído' && $empresa->status != 'Cancelado')
                     <a class='btn btn-danger remover-registro' href="{{route('deletar-abertura-empresa',[$empresa->id])}}">Cancelar Processo</a>
+                    @endif
                 </td>
             </tr>
             @endforeach

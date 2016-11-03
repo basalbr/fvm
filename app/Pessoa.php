@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class Pessoa extends Model {
 
@@ -120,15 +121,33 @@ class Pessoa extends Model {
         if (count($impostos_mes)) {
             foreach ($impostos_mes as $imposto_mes) {
                 if ($this->status == 'Aprovado') {
+
                     $imposto = $imposto_mes->imposto;
                     $processo = new Processo;
-                    $processo->create([
+                    $processo = $processo->create([
                         'id_pessoa' => $this->id,
                         'competencia' => $competencia,
                         'id_imposto' => $imposto_mes->id_imposto,
                         'vencimento' => $imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento, 'Y-m-d'),
                         'status' => 'novo'
                     ]);
+                    $usuario = Auth::user();
+                    $notificacao = new Notificacao;
+                    $notificacao->mensagem = '<a href="'.$processo->id.'">Você possui uma nova apuração. Clique aqui para visualizar.</a>';
+                    $notificacao->id_usuario = Auth::user()->id;
+                    $notificacao->save();
+                    try {
+                        \Illuminate\Support\Facades\Mail::send('emails.novo-processo', ['nome' => $usuario->nome, 'id_processo' => $processo->id], function ($m) use($usuario) {
+                            $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                            $m->to($usuario->email)->subject('Você Possui Uma Nova Apuração');
+                        });
+                        \Illuminate\Support\Facades\Mail::send('emails.novo-processo-admin', ['nome' => $this->nome_fantasia, 'id_processo' => $processo->id], function ($m) {
+                            $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                            $m->to('admin@webcontabilidade.com')->subject('Uma nova apuração foi aberta');
+                        });
+                    } catch (\Exception $ex) {
+                        return true;
+                    }
                 }
             }
         }

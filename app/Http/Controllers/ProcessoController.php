@@ -133,7 +133,7 @@ class ProcessoController extends Controller {
     }
 
     public function edit($id) {
-        $processo = Processo::join('pessoa', 'processo.id_pessoa', '=', 'pessoa.id')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.id', '=', $id)->select('processo.*')->with('pessoa')->first();
+        $processo = Processo::where('processo.id', '=', $id)->first();
         return view('admin.processos.visualizar', ['processo' => $processo]);
     }
 
@@ -144,9 +144,10 @@ class ProcessoController extends Controller {
 
     public function update($id, Request $request) {
         if ($request->is('admin/*')) {
-            $processo = Processo::join('pessoa', 'processo.id_pessoa', '=', 'pessoa.id')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.id', '=', $id)->select('processo.*')->with('pessoa')->first();
-        } else {
             $processo = Processo::where('id', '=', $id)->first();
+        } else {
+            $processo = Processo::join('pessoa', 'processo.id_pessoa', '=', 'pessoa.id')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.id', '=', $id)->select('processo.*')->with('pessoa')->first();
+            
         }
 
         $resposta = new ProcessoResposta;
@@ -172,12 +173,12 @@ class ProcessoController extends Controller {
                 $processo->save();
             }
             if ($request->is('admin/*')) {
-                return redirect(route('visualizar-processos', $id));
+                return redirect(route('visualizar-processo-admin', $id));
             }
             return redirect(route('responder-processo-usuario', $id));
         } else {
             if ($request->is('admin/*')) {
-                return redirect(route('visualizar-processos', $id))->withInput()->withErrors($resposta->errors());
+                return redirect(route('visualizar-processo-admin', $id))->withInput()->withErrors($resposta->errors());
             }
             return redirect(route('responder-processo-usuario', $id))->withInput()->withErrors($resposta->errors());
         }
