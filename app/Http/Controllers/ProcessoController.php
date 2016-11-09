@@ -20,7 +20,52 @@ class ProcessoController extends Controller {
     }
 
     public function index() {
-        $processos = Processo::orderBy('status', 'updated_at')->get();
+        $processos = Processo::query();
+        $processos->join('pessoa', 'pessoa.id', '=', 'processo.id_pessoa');
+        if (Input::get('competencia_de')) {
+            $data = explode('/', Input::get('competencia_de'));
+            $data = $data[2] . '-' . $data[1] . '-' . '01';
+            $processos->where('processo.competencia', '>=', $data);
+        }
+        if (Input::get('competencia_ate')) {
+            $data = explode('/', Input::get('competencia_ate'));
+            $data = $data[2] . '-' . $data[1] . '-' . '01';
+            $processos->where('processo.competencia', '<=', $data);
+        }
+        if (Input::get('vencimento_de')) {
+            $data = explode('/', Input::get('vencimento_de'));
+            $data = $data[2] . '-' . $data[1] . '-' . $data[0];
+            $processos->where('processo.vencimento', '>=', $data);
+        }
+        if (Input::get('vencimento_ate')) {
+            $data = explode('/', Input::get('vencimento_ate'));
+            $data = $data[2] . '-' . $data[1] . '-' . $data[0];
+            $processos->where('processo.vencimento', '<=', $data);
+        }
+
+        if (Input::get('empresa')) {
+            $processos->where('processo.id_pessoa', '=', Input::get('empresa'));
+        }
+        if (Input::get('imposto')) {
+            $processos->where('processo.id_imposto', '=', Input::get('imposto'));
+        }
+        if (Input::get('status')) {
+            $processos->where('processo.status', '=', Input::get('status'));
+        }
+        if (Input::get('ordenar')) {
+            if (Input::get('ordenar') == 'vencimento_desc') {
+                $processos->orderBy('processo.vencimento', 'desc');
+            }
+            if (Input::get('ordenar') == 'competencia_desc') {
+                $processos->orderBy('processo.competencia', 'desc');
+            }
+        } else {
+            $processos->orderByRaw("FIELD(processo.status , 'novo', 'aberto', 'concluido','cancelado') ASC");
+            $processos->orderBy('processo.competencia', 'desc');
+            $processos->orderBy('pessoa.nome_fantasia', 'asc');
+        }
+
+        $processos = $processos->select('processo.*')->paginate(10);
         return view('admin.processos.index', ['processos' => $processos]);
     }
 
@@ -147,7 +192,6 @@ class ProcessoController extends Controller {
             $processo = Processo::where('id', '=', $id)->first();
         } else {
             $processo = Processo::join('pessoa', 'processo.id_pessoa', '=', 'pessoa.id')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.id', '=', $id)->select('processo.*')->with('pessoa')->first();
-            
         }
 
         $resposta = new ProcessoResposta;
