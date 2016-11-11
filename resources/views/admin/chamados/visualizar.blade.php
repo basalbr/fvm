@@ -40,7 +40,7 @@
         @if($chamado->chamado_respostas->count())
         @foreach($chamado->chamado_respostas()->orderBy('updated_at', 'desc')->get() as $resposta)
         <div class='form-group'>
-            <div class="mensagem {{$resposta->usuario->id == Auth::user()->id ? 'mensagem-usuario':'mensagem-admin'}}">
+            <div class="mensagem {{$resposta->usuario->admin ? 'mensagem-admin':'mensagem-usuario'}}">
                 <p class='title'>{{$resposta->usuario->nome}} em {{$resposta->updated_at->format('d/m/Y')}} às {{$resposta->updated_at->format('H:i')}}</p>
                 {{$resposta->mensagem}}
                 @if($resposta->anexo)

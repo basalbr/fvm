@@ -25,7 +25,6 @@
 @stop
 @section('main')
 <h1>Empresas</h1>
-<p>Abaixo estão as empresas cadastradas por você, caso queira editar ou visualizar alguma informação, clique em editar.<br/>Se você deseja gerenciar os sócios de uma empresa, clique em sócios.</p>
 <hr class="dash-title">
 <div class="card">
     <h3>Lista de empresas</h3>

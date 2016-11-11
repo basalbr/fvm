@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class SimplesNacionalController extends Controller {
 
     public function index() {
-        $tabelas = TabelaSimplesNacional::orderBy('descricao', 'asc')->get();
+        $tabelas = TabelaSimplesNacional::orderBy('descricao', 'asc')->paginate(10);
         return view('admin.simples_nacional.index', ['tabelas' => $tabelas]);
     }
 

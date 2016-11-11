@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class FaqController extends Controller {
 
     public function index() {
-        $faqs = Faq::orderBy('local', 'asc')->orderBy('pergunta', 'asc')->get();
+        $faqs = Faq::orderBy('local', 'asc')->orderBy('pergunta', 'asc')->paginate(10);
         return view('admin.faq.index', ['faqs' => $faqs]);
     }
 

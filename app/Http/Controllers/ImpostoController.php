@@ -49,7 +49,7 @@ class ImpostoController extends Controller {
     }
 
     public function index() {
-        $impostos = Imposto::orderBy('nome', 'asc')->get();
+        $impostos = Imposto::orderBy('nome', 'asc')->paginate(10);
         return view('admin.imposto.index', ['impostos' => $impostos]);
     }
 

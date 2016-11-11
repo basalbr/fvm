@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class TipoTributacaoController extends Controller {
 
     public function index() {
-        $tipo_tributacao = TipoTributacao::orderBy('descricao', 'asc')->get();
+        $tipo_tributacao = TipoTributacao::orderBy('descricao', 'asc')->paginate(10);
         return view('admin.tipo_tributacao.index', ['tipo_tributacao' => $tipo_tributacao]);
     }
 

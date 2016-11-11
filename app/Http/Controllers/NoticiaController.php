@@ -10,7 +10,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 class NoticiaController extends Controller {
 
     public function index() {
-        $noticias = Noticia::orderBy('created_at', 'desc')->get();
+        $noticias = Noticia::orderBy('created_at', 'desc')->paginate(10);
         return view('admin.noticias.index', ['noticias' => $noticias]);
     }
 

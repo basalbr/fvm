@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Input;
 class ProlaboreController extends Controller {
 
     public function index() {
-        $socios = Socio::where('pro_labore', '>', 0)->orderBy('id_pessoa')->get();
+        $socios = Socio::where('pro_labore', '>', 0)->orderBy('id_pessoa')->paginate(10);
         return view('admin.pro_labore.index', ['socios' => $socios]);
     }
 

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class NaturezaJuridicaController extends Controller {
 
     public function index() {
-        $naturezas_juridicas = NaturezaJuridica::orderBy('descricao', 'asc')->get();
+        $naturezas_juridicas = NaturezaJuridica::orderBy('descricao', 'asc')->paginate(10);
         return view('admin.natureza_juridica.index', ['naturezas_juridicas' => $naturezas_juridicas]);
     }
 

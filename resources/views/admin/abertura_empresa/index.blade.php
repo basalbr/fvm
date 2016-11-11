@@ -25,14 +25,13 @@ $(function(){
 @stop
 @section('main')
 <h1>Processos de abertura de empresa</h1>
-<p>Abaixo estão as solicitações de abertura de empresa feita por você.</p>
-<p><b>É necessário efetuar o pagamento de R$ 49,90 referente ao processo para que possamos abrir a empresa para você.</b></p>
 <hr class="dash-title">
 <div class="card">
     <h3>Lista de processos de abertura de empresa</h3>
     <table class='table'>
         <thead>
             <tr>
+                <th>Usuário</th>
                 <th>Nome Preferencial</th>
                 <th>Nome do Sócio Principal</th>
                 <th>Status do Processo</th>
@@ -44,6 +43,7 @@ $(function(){
             @if($empresas->count())
             @foreach($empresas as $empresa)
             <tr>
+                <td>{{$empresa->usuario->nome}}</td>
                 <td>{{$empresa->nome_empresarial1}}</td>
                 <td>{{$empresa->socios()->where('principal','=',1)->first()->nome}}</td>
                 <td>{{$empresa->status}}</td>
@@ -61,6 +61,5 @@ $(function(){
             @endif
         </tbody>
     </table>
-    <a href='{{route('cadastrar-abertura-empresa')}}' class='btn btn-primary'>Nova Solicitação</a><br />
 </div>
 @stop
