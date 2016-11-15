@@ -13,6 +13,7 @@ class EmpresaController extends Controller {
         $empresas = \App\Pessoa::where('id_usuario', '=', Auth::user()->id)->orderBy('nome_fantasia')->get();
         return view('empresa.index', ['empresas' => $empresas]);
     }
+
     public function indexAdmin() {
         $empresas = \App\Pessoa::orderBy('nome_fantasia')->get();
         return view('admin.empresa.index', ['empresas' => $empresas]);
@@ -77,11 +78,11 @@ class EmpresaController extends Controller {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                 $m->to('admin@webcontabilidade.com')->subject('Novo usuário cadastrado');
             });
-            
+
             $impostos_mes = \App\ImpostoMes::where('mes', '=', date('n'))->get();
             $competencia = date('Y-m-d', strtotime(date('Y-m') . " -1 month"));
             foreach ($impostos_mes as $imposto_mes) {
-                if($imposto_mes->imposto->vencimento > ((int)date('d'))){
+                if ($imposto_mes->imposto->vencimento > ((int) date('d'))) {
                     $imposto = $imposto_mes->imposto;
                     $processo = new Processo;
                     $processo->create([
@@ -93,9 +94,9 @@ class EmpresaController extends Controller {
                     ]);
                 }
             }
-            
-            $plano = \App\Plano::where('total_documentos','>=',$request->get('total_documentos'))->where('total_documentos_contabeis','>=',$request->get('total_contabeis'))->where('pro_labores','>=',$request->get('pro_labores'))->orderBy('valor','asc')->first();
-            
+
+            $plano = \App\Plano::where('total_documentos', '>=', $request->get('total_documentos'))->where('total_documentos_contabeis', '>=', $request->get('total_contabeis'))->where('pro_labores', '>=', $request->get('pro_labores'))->orderBy('valor', 'asc')->first();
+
             $mensalidade = new \App\Mensalidade;
             $mensalidade->id_usuario = Auth::user()->id;
             $mensalidade->id_pessoa = $empresa->id;
@@ -105,14 +106,8 @@ class EmpresaController extends Controller {
             $mensalidade->documentos_contabeis = $plano->total_documentos_contabeis;
             $mensalidade->pro_labores = $plano->pro_labores;
             $mensalidade->funcionarios = $plano->funcionarios;
+            $mensalidade->status = 'pendente';
             $mensalidade->save();
-            
-            $pagamento = new \App\Pagamento;
-            $pagamento->id_mensalidade = $mensalidade->id;
-            $pagamento->status = 'Paga';
-            $pagamento->valor = 0.0;
-            $pagamento->vencimento = date('Y-m-d H:i:s');
-            $pagamento->save();
             return redirect(route('empresas'));
         } else {
             return redirect(route('cadastrar-empresa'))->withInput()->withErrors($empresa->errors());
@@ -120,12 +115,12 @@ class EmpresaController extends Controller {
     }
 
     public function edit($id) {
-        $empresa = \App\Pessoa::where('id', '=', $id)->where('id_usuario', '=', Auth::user()->id)->first();
+        $empresa = \App\Pessoa::where('id', '=', $id)->where('id_usuario', '=', Auth::user()->id)->where('status','=','Aprovado')->first();
         $tipoTributacoes = \App\TipoTributacao::orderBy('descricao', 'asc')->get();
         $naturezasJuridicas = \App\NaturezaJuridica::orderBy('descricao', 'asc')->get();
         return view('empresa.editar', [ 'tipoTributacoes' => $tipoTributacoes, 'naturezasJuridicas' => $naturezasJuridicas, 'empresa' => $empresa]);
     }
-    
+
     public function editAdmin($id) {
         $empresa = \App\Pessoa::where('id', '=', $id)->first();
         $tipoTributacoes = \App\TipoTributacao::orderBy('descricao', 'asc')->get();
@@ -168,6 +163,25 @@ class EmpresaController extends Controller {
         } else {
             return redirect(route('editar-empresa', [$id]))->withInput()->withErrors($empresa->errors());
         }
+    }
+
+    public function updateAdmin($id, Request $request) {
+
+        $empresa = \App\Pessoa::where('id', '=', $id)->first();
+        $statusAnterior = $empresa->status;
+        $statusAtual = $request->get('status');
+        if ($statusAtual == 'Aprovado' && ($statusAnterior != $statusAtual)) {
+            $pagamento = new \App\Pagamento;
+            $pagamento->id_mensalidade = $empresa->mensalidade()->orderBy('created_at','desc')->first()->id;
+            $pagamento->status = 'Paga';
+            $pagamento->valor = 0.0;
+            $pagamento->vencimento = date('Y-m-d H:i:s');
+            $pagamento->save();
+        }
+        $empresa->status = $statusAtual;
+        $empresa = $empresa->save();
+        $empresa->enviar_notificacao_status();
+        return redirect(route('empresas-admin'));
     }
 
     public function register() {

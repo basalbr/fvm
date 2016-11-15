@@ -134,8 +134,22 @@
             @endforeach
         </div>
         @endif
+        <form method='POST' action=''>
+            <h3>Status</h3>
+            <div class='form-group'>
+                <label>Status</label>
+                <select class="form-control" name="id_natureza_juridica">
+                    <option {{$empresa->status == 'Em Análise' ? 'selected':''}} value="Em Análise">Em Análise</option>
+                    <option {{$empresa->status == 'Aprovado' ? 'selected':''}} value="Aprovado">Aprovado</option>
+                    <option {{$empresa->status == 'Cancelado' ? 'selected':''}} value="Cancelado">Cancelado</option>
+                </select>
+            </div>
+            <div class='form-group'>
+                <input type='submit' value="Mudar Status" class='btn btn-primary' />
+            </div>
+        </form>
         <form method="POST" action="" id="principal-form">
-
+            
             {{ csrf_field() }}
             <h3>Informações</h3>
             <p>Preencha os campos abaixo e clique em "salvar atelrações" para atualizar os dados de sua empresa em nosso sistema.</p>

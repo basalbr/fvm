@@ -152,6 +152,22 @@ class Pessoa extends Model {
             }
         }
     }
+    
+     public function enviar_notificacao_status() {
+        $usuario = Auth::user();
+        $notificacao = new Notificacao; 
+        $notificacao->mensagem = '<a href="'.route('editar-empresa',[$this->id]).'">A empresa '.$this->nome_fantasia.' mudou seu status para '.$this->status.'. Clique aqui para visualizar a empresa.</a>';
+        $notificacao->id_usuario = Auth::user()->id;
+        $notificacao->save();
+        try {
+            \Illuminate\Support\Facades\Mail::send('emails.status-empresa', ['nome' => $usuario->nome, 'id_empresa' => $this->id,'nome_empresa'=>$this->nome_fantasia, 'status'=>$this->status], function ($m) use($usuario) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to($usuario->email)->subject('Mudança de Status em Empresa');
+            });
+        } catch (\Exception $ex) {
+            return true;
+        }
+    }
 
     public function isSimplesNacional() {
         if ($this->cnaes->count() > 0) {

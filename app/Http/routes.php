@@ -25,6 +25,7 @@ Route::post('/pagseguro/notification', [
 ]);
 
 Route::get('/abrir_processos', ['as' => 'testeimposto', 'uses' => 'ProcessoController@abreProcessos']);
+Route::get('/abrir_pagamentos', ['as' => 'testepagamento', 'uses' => 'MensalidadeController@abrePagamentos']);
 Route::get('/admin/chat/', ['as' => 'listar-chat', 'uses' => 'ChatController@index', 'middleware' => 'admin']);
 Route::get('/admin/chat/visualizar/{id}', ['as' => 'visualizar-chat', 'uses' => 'ChatController@edit', 'middleware' => 'admin']);
 
@@ -154,6 +155,7 @@ Route::post('/empresas/editar/{id}', ['uses' => 'EmpresaController@update', 'mid
 
 Route::get('/admin/empresas', ['as' => 'empresas-admin', 'uses' => 'EmpresaController@indexAdmin', 'middleware' => 'admin']);
 Route::get('/admin/empresas/editar/{id}', ['as' => 'editar-empresa-admin', 'uses' => 'EmpresaController@editAdmin', 'middleware' => 'admin']);
+Route::post('/admin/empresas/editar/{id}', [ 'uses' => 'EmpresaController@updateAdmin', 'middleware' => 'admin']);
 
 Route::get('/abertura-empresa', ['as' => 'abertura-empresa', 'uses' => 'AberturaEmpresaController@index', 'middleware' => 'auth']);
 Route::get('/abertura-empresa/cadastrar', ['as' => 'cadastrar-abertura-empresa', 'uses' => 'AberturaEmpresaController@create', 'middleware' => 'auth']);
@@ -201,12 +203,4 @@ Route::post('/ajax/calendar/', ['as' => 'ajax-calendar', 'uses' => 'ImpostoContr
 Route::get('/ajax/instrucoes/', ['as' => 'ajax-instrucoes', 'uses' => 'ImpostoController@ajaxInstrucoes', 'middleware' => 'auth']);
 Route::post('/ajax/notificacoes/', ['as' => 'ajax-notificacao', 'uses' => 'DashboardController@ajaxNotificacao', 'middleware' => 'auth']);
 Route::post('/ajax/enviar-contato/', ['as' => 'ajax-enviar-contato', 'uses' => 'HomeController@ajaxContato']);
-
-
-Route::get('/ajax/enviar-contat2o', ['as' => 'ajax2-enviar-contato', 'uses' => function () {
-        $user = App\Usuario::findOrFail(2);
-        Mail::send('emails.novo-usuario', ['nome' => $user->nome], function ($m) use ($user) {
-            $m->to($user->email, $user->nome)->subject('Bem Vindo à WEBContabilidade');
-        });
-    }]);
         
