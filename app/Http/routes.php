@@ -201,6 +201,8 @@ Route::post('/ajax/calendar/', ['as' => 'ajax-calendar', 'uses' => 'ImpostoContr
 Route::get('/ajax/instrucoes/', ['as' => 'ajax-instrucoes', 'uses' => 'ImpostoController@ajaxInstrucoes', 'middleware' => 'auth']);
 Route::post('/ajax/notificacoes/', ['as' => 'ajax-notificacao', 'uses' => 'DashboardController@ajaxNotificacao', 'middleware' => 'auth']);
 Route::post('/ajax/enviar-contato/', ['as' => 'ajax-enviar-contato', 'uses' => 'HomeController@ajaxContato']);
+Route::get('/ajax/chat-count/', ['as' => 'ajax-chat-count', 'uses' => 'ChatController@ajaxCount']);
+Route::get('/ajax/chat-notification/', ['as' => 'ajax-chat-notification', 'uses' => 'ChatController@ajaxNotification']);
 
 
 Route::get('/ajax/enviar-contat2o', ['as' => 'ajax2-enviar-contato', 'uses' => function () {

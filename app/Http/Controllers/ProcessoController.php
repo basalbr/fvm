@@ -178,7 +178,7 @@ class ProcessoController extends Controller {
     }
 
     public function edit($id) {
-        $processo = Processo::where('processo.id', '=', $id)->first();
+        $processo = Processo::where('id', '=', $id)->first();
         return view('admin.processos.visualizar', ['processo' => $processo]);
     }
 

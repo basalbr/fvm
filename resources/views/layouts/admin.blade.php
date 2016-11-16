@@ -1,4 +1,51 @@
 @extends('layouts.master')
+@section('js')
+@parent
+<script type="text/javascript">
+    var chat;
+    function notify(title, message, url) {
+        if (Notification.permission !== "granted")
+            Notification.requestPermission();
+        else {
+            var notification = new Notification(title, {
+                icon: 'http://webcontabilidade.com/images/notificacao.png',
+                body: message,
+            });
+
+            notification.onclick = function () {
+                window.open(url);
+            };
+
+        }
+
+    }
+    function inicializaChatNotifications() {
+        $.get("{{route('ajax-chat-count')}}", function (data) {
+            chat = data;
+            setInterval(function () {
+                $.get("{{route('ajax-chat-notification')}}", function (data) {
+                    if (data.total != chat) {
+                        chat = data.total;
+                        notify(data.title, data.message, data.url);
+                    }
+                });
+            }, 5000);
+        });
+
+    }
+
+    function askPermission() {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+    }
+
+    $(function () {
+        inicializaChatNotifications();
+        askPermission();
+    });
+</script>
+@stop
 @section('content')
 <div id="sidebar-left">
     <ul>
@@ -44,11 +91,11 @@
         <li class='{{Request::is('admin/simples-nacional*') ? "active" : ""}}'>
             <a href="{{route('listar-simples-nacional')}}"><div class="icon"><span class="fa fa-table"></span></div>Simples Nacional</a>
         </li>
-         <li class='{{Request::is('admin/tipo-tributacao*') ? "active" : ""}}'>
+        <li class='{{Request::is('admin/tipo-tributacao*') ? "active" : ""}}'>
             <a href="{{route('listar-tipo-tributacao')}}"><div class="icon"><span class="fa fa-sitemap"></span></div>Tip. Tributação</a>
         </li>
-         <li class='{{Request::is('admin/noticias*') ? "active" : ""}}'>
-             <a href="{{route('listar-noticias')}}"><div class="icon"><span class="fa fa-newspaper-o"></span></div>Notícias</a>
+        <li class='{{Request::is('admin/noticias*') ? "active" : ""}}'>
+            <a href="{{route('listar-noticias')}}"><div class="icon"><span class="fa fa-newspaper-o"></span></div>Notícias</a>
         </li>
     </ul>
 </div>
