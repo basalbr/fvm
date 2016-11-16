@@ -25,7 +25,7 @@ $(function(){
 @stop
 @section('main')
 <h1>Empresas</h1>
-<p>Abaixo estão as empresas cadastradas por você, caso queira editar ou visualizar alguma informação, clique em editar.<br/>Se você deseja gerenciar os sócios de uma empresa, clique em sócios.</p>
+<p>Abaixo estão as empresas cadastradas por você, caso queira editar ou visualizar alguma informação, clique em editar.<br/>Se você deseja gerenciar os sócios de uma empresa, clique em sócios.<br />Empresas em processo de análise não podem ser editadas.</p>
 <hr class="dash-title">
 <div class="card">
     <h3>Lista de empresas</h3>
@@ -36,6 +36,7 @@ $(function(){
                 <th>Razão Social</th>
                 <th>CNPJ</th>
                 <th>Nº de Sócios</th>
+                <th>Status</th>
                 <th></th>
             </tr>
         </thead>
@@ -47,10 +48,13 @@ $(function(){
                 <td>{{$empresa->razao_social}}</td>
                 <td>{{$empresa->cpf_cnpj}}</td>
                 <td>{{$empresa->socios()->count()}}</td>
+                <td>{{$empresa->status}}</td>
                 <td>
-                    <a class='btn btn-warning' href="{{route('editar-empresa', ['id' => $empresa->id])}}">Editar</a>
+                    <!--<a class='btn btn-warning' href="{{route('editar-empresa', ['id' => $empresa->id])}}">Editar</a>-->
+                    @if($empresa->status != 'Em Análise')
                     <a class='btn btn-info' href="{{route('cadastrar-socio', [$empresa->id])}}">Cadastrar Sócio</a>
                     <a class='btn btn-primary' href="{{route('listar-socios', [$empresa->id])}}">Listar Sócios</a>
+                    @endif
                 </td>
             </tr>
             @endforeach

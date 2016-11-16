@@ -48,10 +48,39 @@ class Mensalidade extends Model {
     }
 
     public function proximo_pagamento() {
-        $data_vencimento = date_format($this->created_at, 'd');
-        $ultimo_pagamento = date_format($this->pagamentos()->orderBy('created_at', 'desc')->first()->created_at,'Y-m');
-        $date = strtotime("+5 days +1 month", strtotime($ultimo_pagamento.'-'.$data_vencimento));
-        return date("d/m/Y", $date);
+        try {
+            $data_vencimento = date_format($this->created_at, 'd');
+            $ultimo_pagamento = date_format($this->pagamentos()->orderBy('created_at', 'desc')->first()->created_at, 'Y-m');
+            $date = strtotime("+5 days +1 month", strtotime($ultimo_pagamento . '-' . $data_vencimento));
+            return date("d/m/Y", $date);
+        } catch (Exception $ex) {
+            return false;
+        }
+    }
+
+    public function abrir_ordem_pagamento() {
+        try {
+            $data_vencimento = date_format($this->created_at, 'd');
+            $ultimo_pagamento = date_format($this->pagamentos()->orderBy('created_at', 'desc')->first()->created_at, 'Y-m');
+            $date = strtotime("+1 month", strtotime($ultimo_pagamento . '-' . $data_vencimento));
+            $vencimento = date('Y-m-d',strtotime("+5 days", $date));
+            
+            if (date('Ymd') == date('Ymd', $date)) {
+                
+                if ($this->empresa->status == 'Aprovado') {
+                    echo date('Ymd', $date);
+                    $pagamento = new \App\Pagamento;
+                    $pagamento->id_mensalidade = $this->id;
+                    $pagamento->status = 'Pendente';
+                    $pagamento->valor = $this->valor;
+                    $pagamento->vencimento = $vencimento;
+                    $pagamento->save();
+                }
+            }
+            return true;
+        } catch (Exception $ex) {
+            return false;
+        }
     }
 
     public function pagamentos() {
