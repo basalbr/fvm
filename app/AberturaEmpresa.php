@@ -87,6 +87,7 @@ class AberturaEmpresa extends Model {
         'area_total',
         'area_ocupada',
         'cpf_cnpj_proprietario',
+        'status',
     ];
 
     public function validate($data) {
@@ -216,10 +217,10 @@ class AberturaEmpresa extends Model {
                 ($this->status == 'Atenção' ||
                 $this->status == 'Em Processamento' ||
                 $this->status == 'Novo') &&
-                ($this->status_pagamento == 'Devolvida' ||
-                $this->status_pagamento == 'Cancelada' ||
-                $this->status_pagamento == 'Pendente' ||
-                $this->status_pagamento == 'Aguardando pagamento')
+                ($this->pagamento->status == 'Devolvida' ||
+                $this->pagamento->status == 'Cancelada' ||
+                $this->pagamento->status == 'Pendente' ||
+                $this->pagamento->status == 'Aguardando pagamento')
         ) {
             $data = [
                 'items' => [

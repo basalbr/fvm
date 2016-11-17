@@ -85,6 +85,7 @@ h3 {
 *::-webkit-scrollbar
 {
     width: 10px;
+    height: 5px;
     background-color: #F5F5F5;
 }
 

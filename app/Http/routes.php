@@ -19,7 +19,7 @@ Route::get('/admin', ['as' => 'admin', 'uses' => 'AdminController@index', 'middl
 
 Route::get('/pagseguro/teste', ['as' => 'pagseguro.teste', 'uses' => 'PagseguroController@teste']);
 Route::get('/pagseguro/redirect', ['as' => 'pagseguro.redirect', 'uses' => 'PagseguroController@redirect']);
-Route::post('/pagseguro/notification', [
+Route::post('/pagseguro', [
     'uses' => '\laravel\pagseguro\Platform\Laravel5\NotificationController@notification',
     'as' => 'pagseguro.notification',
 ]);

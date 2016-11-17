@@ -45,7 +45,6 @@ class AberturaEmpresaController extends Controller {
         if (!count($request->get('socio'))) {
             return redirect(route('cadastrar-abertura-empresa'))->withInput()->withErrors(['É necessário cadastrar pelo menos um sócio']);
         }
-        //atencao, arrumar telefone!!!!!!!!!!!!!!!!!!!!
         $request->merge([
             'id_tipo_tributacao' => 1,
             'status_pagamento' => 'Aguardando pagamento',
@@ -79,7 +78,7 @@ class AberturaEmpresaController extends Controller {
             $pagamento = new \App\Pagamento;
             $pagamento->tipo = 'abertura_empresa';
             $pagamento->id_abertura_empresa = $empresa->id;
-            $pagamento->valor = 49.99;
+            $pagamento->valor = 59;
             $pagamento->status = 'Pendente';
             $pagamento->vencimento = date('Y-m-d H:i:s', strtotime("+7 day"));
             $pagamento->save();
