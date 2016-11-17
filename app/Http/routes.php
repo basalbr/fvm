@@ -215,3 +215,4 @@ Route::get('/ajax/enviar-contat2o', ['as' => 'ajax2-enviar-contato', 'uses' => f
         });
     }]);
         
+        
