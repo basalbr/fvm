@@ -11,10 +11,9 @@
   |
  */
 
-Route::get('/', ['as' => 'home', 'uses' => function () {
-        return view('index');
-    }]);
 
+
+Route::get('/', ['as' => 'home', 'uses' => 'HomeController@site']);
 Route::get('/admin', ['as' => 'admin', 'uses' => 'AdminController@index', 'middleware' => 'admin']);
 
 Route::get('/pagseguro/teste', ['as' => 'pagseguro.teste', 'uses' => 'PagseguroController@teste']);
