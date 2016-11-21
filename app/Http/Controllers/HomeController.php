@@ -37,7 +37,7 @@ class HomeController extends Controller {
         $horario4 = \DateTime::createFromFormat('H:i a', '6:00 pm');
         
         $horario_atual = \DateTime::createFromFormat('H:i a', date('h:i A'));
-        if (date('w') <= 5 && date('w') >= 5 && (($horario1 <= $horario_atual && $horario2 >= $horario_atual) || ($horario3 <= $horario_atual && $horario4 >= $horario_atual))) {
+        if (date('w') <= 5 && date('w') >= 1 && (($horario1 <= $horario_atual && $horario2 >= $horario_atual) || ($horario3 <= $horario_atual && $horario4 >= $horario_atual))) {
             $atendimento = true;
         }
 

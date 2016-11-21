@@ -99,6 +99,8 @@ $(function () {
     $('.cnae-mask').mask('0000-0/00');
     $('.irpf-mask').mask('000000000000');
     $('.pis-mask').mask('000.00000.00-0');
+      $(".time-mask").mask("99:99", {placeholder: "--:--", clearIfNotMatch: true});
+    $(".multiplier-mask").mask('##0%', {reverse: true, placeholder: "0%"});
 
     jQuery.support.cors = true;
     /*$('.cep-mask').on('keyup', function () {
