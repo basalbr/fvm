@@ -111,13 +111,14 @@
         });
         $('#chat-app form').on('submit', function (e) {
             e.preventDefault();
+            
+            $.post('{{route("envia-mensagem-chat")}}', {id_chat: chat_id, mensagem: $('#chat-app form textarea').val()}, function (data) {
+
+            });
             $('#chat-app form textarea').empty().val(null);
             if (!$('#chat-app form textarea').val()) {
 
             }
-            $.post('{{route("envia-mensagem-chat")}}', {id_chat: chat_id, mensagem: $('#chat-app form textarea').val()}, function (data) {
-
-            });
         });
         $('#chat-button').on('click', function () {
             $('#chat-box').show();
