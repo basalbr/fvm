@@ -354,9 +354,11 @@
     </div>
     <div class="clearfix"></div>
 </section>
+@if($atendimento)
 <div id="chat-button">
     <button><span class="fa fa-comment"></span>Atendimento Online</button>
 </div>
+@endif
 <div id="chat-box" style="display: none">
     <h4 class="text-uppercase text-primary">Atendimento Online</h4>
     <div id="chat-info">

@@ -36,7 +36,6 @@ class EmpresaController extends Controller {
                 }
             }
         }
-
         //atencao, arrumar telefone!!!!!!!!!!!!!!!!!!!!
         $request->merge([
             'id_tipo_tributacao' => 1,
@@ -45,12 +44,9 @@ class EmpresaController extends Controller {
             'id_uf' => 24
         ]);
         if ($empresa->validate($request->except('_token'))) {
-
-
             $empresa = $empresa->create($request->except('_token', 'cnaes', 'socio'));
             if (count($request->get('socio'))) {
                 $socio = new \App\Socio;
-
                 $socioData = $request->get('socio');
                 $socioData['id_pessoa'] = $empresa->id;
                 if ($request->get('socio')['pro_labore']) {
@@ -78,7 +74,6 @@ class EmpresaController extends Controller {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                 $m->to('admin@webcontabilidade.com')->subject('Novo usuário cadastrado');
             });
-
             $impostos_mes = \App\ImpostoMes::where('mes', '=', date('n'))->get();
             $competencia = date('Y-m-d', strtotime(date('Y-m') . " -1 month"));
             foreach ($impostos_mes as $imposto_mes) {
@@ -94,9 +89,7 @@ class EmpresaController extends Controller {
                     ]);
                 }
             }
-
             $plano = \App\Plano::where('total_documentos', '>=', $request->get('total_documentos'))->where('total_documentos_contabeis', '>=', $request->get('total_contabeis'))->where('pro_labores', '>=', $request->get('pro_labores'))->orderBy('valor', 'asc')->first();
-
             $mensalidade = new \App\Mensalidade;
             $mensalidade->id_usuario = Auth::user()->id;
             $mensalidade->id_pessoa = $empresa->id;
@@ -115,7 +108,7 @@ class EmpresaController extends Controller {
     }
 
     public function edit($id) {
-        $empresa = \App\Pessoa::where('id', '=', $id)->where('id_usuario', '=', Auth::user()->id)->where('status','=','Aprovado')->first();
+        $empresa = \App\Pessoa::where('id', '=', $id)->where('id_usuario', '=', Auth::user()->id)->where('status', '=', 'Aprovado')->first();
         $tipoTributacoes = \App\TipoTributacao::orderBy('descricao', 'asc')->get();
         $naturezasJuridicas = \App\NaturezaJuridica::orderBy('descricao', 'asc')->get();
         return view('empresa.editar', [ 'tipoTributacoes' => $tipoTributacoes, 'naturezasJuridicas' => $naturezasJuridicas, 'empresa' => $empresa]);
@@ -129,7 +122,6 @@ class EmpresaController extends Controller {
     }
 
     public function update($id, Request $request) {
-
         $empresa = \App\Pessoa::where('id', '=', $id)->where('id_usuario', '=', Auth::user()->id)->first();
         $request->merge(['id' => $empresa->id]);
         if (count($request->get('cnaes'))) {
@@ -139,9 +131,7 @@ class EmpresaController extends Controller {
                 }
             }
         }
-
         if ($empresa->validate($request->except('_token'), true)) {
-
             $empresa->update($request->except('_token', 'cnaes', 'socio'));
             if (count($request->get('cnaes'))) {
                 foreach ($empresa->cnaes()->get() as $cnae) {
@@ -166,13 +156,12 @@ class EmpresaController extends Controller {
     }
 
     public function updateAdmin($id, Request $request) {
-
         $empresa = \App\Pessoa::where('id', '=', $id)->first();
         $statusAnterior = $empresa->status;
         $statusAtual = $request->get('status');
         if ($statusAtual == 'Aprovado' && ($statusAnterior != $statusAtual)) {
             $pagamento = new \App\Pagamento;
-            $pagamento->id_mensalidade = $empresa->mensalidade()->orderBy('created_at','desc')->first()->id;
+            $pagamento->id_mensalidade = $empresa->mensalidade()->orderBy('created_at', 'desc')->first()->id;
             $pagamento->status = 'Paga';
             $pagamento->valor = 0.0;
             $pagamento->vencimento = date('Y-m-d H:i:s');

@@ -11,15 +11,16 @@
   |
  */
 
-Route::get('/', ['as' => 'home', 'uses' => function () {
-        return view('index');
-    }]);
 
+
+Route::get('/', ['as' => 'home', 'uses' => 'HomeController@site']);
 Route::get('/admin', ['as' => 'admin', 'uses' => 'AdminController@index', 'middleware' => 'admin']);
+
+Route::get('/funcionarios/cadastrar', ['as'=>'cadastrar-funcionario', 'uses'=>'FuncionarioController@create','middleware'=>'auth']);
 
 Route::get('/pagseguro/teste', ['as' => 'pagseguro.teste', 'uses' => 'PagseguroController@teste']);
 Route::get('/pagseguro/redirect', ['as' => 'pagseguro.redirect', 'uses' => 'PagseguroController@redirect']);
-Route::post('/pagseguro/notification', [
+Route::post('/pagseguro', [
     'uses' => '\laravel\pagseguro\Platform\Laravel5\NotificationController@notification',
     'as' => 'pagseguro.notification',
 ]);
@@ -168,7 +169,7 @@ Route::post('/abertura-empresa/cadastrar/{id}', ['uses' => 'AberturaEmpresaContr
 Route::get('/admin/abertura-empresa', ['as' => 'abertura-empresa-admin', 'uses' => 'AberturaEmpresaController@indexAdmin', 'middleware' => 'admin']);
 Route::get('/admin/abertura-empresa/editar/{id}', ['as' => 'editar-abertura-empresa-admin', 'uses' => 'AberturaEmpresaController@editAdmin', 'middleware' => 'admin']);
 Route::post('/admin/abertura-empresa/editar/{id}', ['uses' => 'AberturaEmpresaController@updateAdmin', 'middleware' => 'admin']);
-Route::get('/abertura-empresa/excluir/{id}', ['as'=>'deletar-abertura-empresa', 'uses' => 'AberturaEmpresaController@remove', 'middleware' => 'auth']);
+Route::get('/abertura-empresa/excluir/{id}', ['as' => 'deletar-abertura-empresa', 'uses' => 'AberturaEmpresaController@remove', 'middleware' => 'auth']);
 
 // Registration routes...
 Route::get('/registrar', ['uses' => 'Auth\AuthController@getRegister', 'as' => 'registrar']);
@@ -203,4 +204,17 @@ Route::post('/ajax/calendar/', ['as' => 'ajax-calendar', 'uses' => 'ImpostoContr
 Route::get('/ajax/instrucoes/', ['as' => 'ajax-instrucoes', 'uses' => 'ImpostoController@ajaxInstrucoes', 'middleware' => 'auth']);
 Route::post('/ajax/notificacoes/', ['as' => 'ajax-notificacao', 'uses' => 'DashboardController@ajaxNotificacao', 'middleware' => 'auth']);
 Route::post('/ajax/enviar-contato/', ['as' => 'ajax-enviar-contato', 'uses' => 'HomeController@ajaxContato']);
+
+Route::get('/ajax/chat-count/', ['as' => 'ajax-chat-count', 'uses' => 'ChatController@ajaxCount']);
+Route::get('/ajax/chat-notification/', ['as' => 'ajax-chat-notification', 'uses' => 'ChatController@ajaxNotification']);
+
+
+Route::get('/ajax/enviar-contat2o', ['as' => 'ajax2-enviar-contato', 'uses' => function () {
+        $user = App\Usuario::findOrFail(2);
+        Mail::send('emails.novo-usuario', ['nome' => $user->nome], function ($m) use ($user) {
+            $m->to($user->email, $user->nome)->subject('Bem Vindo à WEBContabilidade');
+        });
+    }]);
+
+
         

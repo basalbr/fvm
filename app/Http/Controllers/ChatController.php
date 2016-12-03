@@ -27,11 +27,11 @@ class ChatController extends Controller {
     public function storeAjax(Request $request) {
         $chat = new Chat;
         if (Auth::user()) {
-            $request->merge(['id_usuario' => Auth::user()->id, 'nome'=>Auth::user()->nome,'email'=>Auth::user()->nome]);
+            $request->merge(['id_usuario' => Auth::user()->id, 'nome' => Auth::user()->nome, 'email' => Auth::user()->nome]);
         }
         if ($chat->validate($request->all())) {
             $chat = $chat->create($request->all());
-            return response()->json(['id'=>$chat->id]);
+            return response()->json(['id' => $chat->id]);
         } else {
             return response()->json(['status' => false]);
         }
@@ -66,21 +66,33 @@ class ChatController extends Controller {
             $nova_mensagem->create($request->all());
         }
     }
-    
-        public function getMensagensAjax(Request $request){
-            
-            $mensagens = ChatMensagem::where('id_chat','=',$request->get('chat_id'))->where('id','>',$request->get('chat_message_last_id'))->orderBy('id','asc')->get();
-            $json = [];
-            foreach($mensagens as $k => $mensagem){
-                if($mensagem->id_atendente){
-                    $json[] = ['id'=>$mensagem->id, 'mensagem'=>$mensagem->mensagem, 'atendente'=>$mensagem->atendente->nome, 'hora'=>  date_format($mensagem->created_at, 'H:i')];
-                }else{
-                    $json[] = ['id'=>$mensagem->id,'mensagem'=>$mensagem->mensagem,'nome'=>$mensagem->chat->nome, 'hora'=>  date_format($mensagem->created_at, 'H:i')];
-                }
+
+    public function getMensagensAjax(Request $request) {
+
+        $mensagens = ChatMensagem::where('id_chat', '=', $request->get('chat_id'))->where('id', '>', $request->get('chat_message_last_id'))->orderBy('id', 'asc')->get();
+        $json = [];
+        foreach ($mensagens as $k => $mensagem) {
+            if ($mensagem->id_atendente) {
+                $json[] = ['id' => $mensagem->id, 'mensagem' => $mensagem->mensagem, 'atendente' => $mensagem->atendente->nome, 'hora' => date_format($mensagem->created_at, 'H:i')];
+            } else {
+                $json[] = ['id' => $mensagem->id, 'mensagem' => $mensagem->mensagem, 'nome' => $mensagem->chat->nome, 'hora' => date_format($mensagem->created_at, 'H:i')];
             }
-            return response()->json($json);
-            
         }
-        
+        return response()->json($json);
+    }
+
+    public function ajaxCount() {
+        return (int) Chat::count();
+    }
+
+    public function ajaxNotification() {
+        $total = Chat::count();
+        $ultimo_chat = Chat::orderBy('created_at', 'desc')->first();
+        if ($total > 0) {
+            $url = route('visualizar-chat', [$ultimo_chat->id]);
+            return response()->json(['total' => $total, 'title' => $ultimo_chat->nome, 'message' => $ultimo_chat->mensagem, 'url' => $url]);
+        }
+        return response()->json(['total' => $total, 'title' => '', 'message' => '', 'url' => '']);
+    }
 
 }

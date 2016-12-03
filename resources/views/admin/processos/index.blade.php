@@ -104,7 +104,7 @@ $(function () {
                 <td>{{$processo->competencia_formatado()}}</td>
                 <td>{{$processo->vencimento_formatado()}}</td>
                 <td>{{$processo->status}}</td>
-                <td><a class='btn btn-primary' href="{{route('responder-processo-usuario', ['id' => $processo->id])}}">Visualizar</a></td>
+                <td><a class='btn btn-primary' href="{{route('visualizar-processo-admin', ['id' => $processo->id])}}">Visualizar</a></td>
             </tr>
             @endforeach
             @else

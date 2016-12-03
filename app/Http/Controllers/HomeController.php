@@ -28,6 +28,22 @@ class HomeController extends Controller {
         return view('dados-pessoais.index', ['id' => $id, 'nome' => $nome, 'apelido' => $apelido, 'cpf' => $cpf, 'tipo' => $tipo, 'data_nascimento' => $data_nascimento, 'has_pessoa' => $has_pessoa]);
     }
 
+    public function site() {
+        $atendimento = false;
+        
+        $horario1 = \DateTime::createFromFormat('H:i a', '8:00 am');
+        $horario2 = \DateTime::createFromFormat('H:i a', '12:00 pm');
+        $horario3 = \DateTime::createFromFormat('H:i a', '1:30 pm');
+        $horario4 = \DateTime::createFromFormat('H:i a', '6:00 pm');
+        
+        $horario_atual = \DateTime::createFromFormat('H:i a', date('h:i A'));
+        if (date('w') <= 5 && date('w') >= 1 && (($horario1 <= $horario_atual && $horario2 >= $horario_atual) || ($horario3 <= $horario_atual && $horario4 >= $horario_atual))) {
+            $atendimento = true;
+        }
+
+        return view('index', ['atendimento'=>$atendimento]);
+    }
+
     public function acessar() {
         return view('acessar.index');
     }
