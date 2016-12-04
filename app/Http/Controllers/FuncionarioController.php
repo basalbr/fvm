@@ -4,20 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Noticia;
+use App\Funcionario;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class FuncionarioController extends Controller {
 
     public function index() {
-        $noticias = Noticia::orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.noticias.index', ['noticias' => $noticias]);
+        $empresas = \App\Pessoa::where('id_usuario', '=', Auth::user()->id)->orderBy('nome_fantasia')->get();
+        return view('funcionarios.index', ['empresas' => $empresas]);
     }
-
-    public function indexSite() {
-        $noticias = Noticia::orderBy('created_at', 'desc')->where('created_at', '<', 'NOW()')->get();
-        return view('noticias.index', ['noticias' => $noticias]);
+public function index2($id) {
+        $funcionarios = Funcionario::join('pessoa','pessoa.id','=','funcionario.id_pessoa')->where('funcionario.id_pessoa','=',$id)->where('pessoa.id_usuario', '=', Auth::user()->id)->orderBy('funcionario.nome_completo')->select('funcionario.*')->get();
+        return view('funcionarios.index2', ['funcionarios' => $funcionarios]);
     }
 
     public function ler($id) {

@@ -45,6 +45,9 @@ $(function(){
         <li class='{{Request::is('empresas*') ? "active" : ""}}'>
             <a href="{{route('empresas')}}"><div class="icon"><span class="fa fa-building"></span></div>Empresas</a>
         </li>
+        <li class='{{Request::is('funcionarios*') ? "active" : ""}}'>
+            <a href="{{route('funcionarios')}}"><div class="icon"><span class="fa fa-users"></span></div>funcionários</a>
+        </li>
         <li class='{{Request::is('socios*') ? "active" : ""}}'>
             <a href="{{route('listar-socios-apenas')}}"><div class="icon"><span class="fa fa-users"></span></div>sócios</a>
         </li>

@@ -191,6 +191,9 @@ class Pessoa extends Model {
     public function socios() {
         return $this->hasMany('App\Socio', 'id_pessoa');
     }
+    public function funcionarios() {
+        return $this->hasMany('App\Funcionario', 'id_pessoa');
+    }
 
     public function processos() {
         return $this->hasMany('App\Processo', 'id_pessoa');

@@ -1434,6 +1434,7 @@ th,td{
     width: 20px;
     height: 20px;
     border: 2px solid #535858;
+    top: -2px;
 }
 
 .radio-styled:not(ie8) input ~ span:before {

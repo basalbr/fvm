@@ -136,6 +136,8 @@
                     <input class="form-control" type="text" placeholder="Local de nascimento do funcionário" name="nome_mae" value="{{ Input::old('naturalidade') }}">
 
                 </div>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Grau de instrução</label>
                     <select class="form-control" name="sexo" value="{{ Input::old('sexo') }}" required="">
@@ -176,6 +178,13 @@
             </div>
 
             <div class="col-md-6">
+
+
+            </div>
+            <div class="clearfix"></div>
+            <br />
+            <h3>documentos</h3>
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">CPF</label>
                     <input class="form-control cpf-mask" type="text" placeholder="Digite o CPF do funcionário" name="cpf" value="{{ Input::old('cpf') }}" required="">
@@ -196,266 +205,6 @@
                     <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
 
                 </div>
-                <div class="form-group">
-                    <label class="control-label">Número do Título Eleitoral</label>
-                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
-
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Zona e Seção Eleitoral</label>
-                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
-
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Número da Carteira de Reservista</label>
-                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Categoria da Carteira de Reservista</label>
-                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Número da Carteira de Motorista</label>
-                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Categoria da Carteira de Motorista</label>
-                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Vencimento da Carteira de Motorista</label>
-                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
-                </div>
-                <div class="form-group">
-                    <label class="control-label">E-mail</label>
-                    <input class="form-control" type="text" placeholder="Digite o e-mail" name="email" value="{{ Input::old('email') }}">
-
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Telefone</label>
-                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
-
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            <br />
-            <h3 class="text-uppercase">Estrangeiro</h3>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="control-label">Data de Chegada</label>
-                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
-                </div>
-                
-                  <div class="form-group">
-                    <label class="control-label">Condição de Trabalhador Estrangeiro no Brasil</label>
-                     <select class="form-control" name="estado" value="{{ Input::old('estado') }}">
-                        <option value="">Selecione uma opção</option>
-                        @foreach($estados as $estado)
-                        <option value="{{$estado->sigla}}">{{$estado->nome}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                 <div class="form-group">
-                    <label class="control-label">Número do Processo MTE</label>
-                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
-                </div>
-                 <div class="form-group">
-                    <label class="control-label">Data de Validade da Carteira de Trabalho</label>
-                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
-                </div>
-                 <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Casado(a) com Brasileiro(a).
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-                 <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Filho(s) com Brasileiro(a).
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-                 <div class="form-group">
-                    <label class="control-label">Número do RNE</label>
-                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
-                </div>
-                 <div class="form-group">
-                    <label class="control-label">Data de Expedição do RNE</label>
-                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
-                </div>
-                 <div class="form-group">
-                    <label class="control-label">Órgão Emissor do RNE</label>
-                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
-                </div>
-                 <div class="form-group">
-                    <label class="control-label">Data de Validade do RNE</label>
-                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            <br />
-            <h3 class="text-uppercase">Tipos de Deficiência</h3>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Motora.
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Visual.
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Auditiva.
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Mental.
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Outras.
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-                  <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Reabilitado.
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Observações</label>
-                    <input class="form-control cep-mask" type="text" placeholder="99999-999" name="cep" value="{{ Input::old('cep') }}">
-
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            <br />
-            <h3 class="text-uppercase">Endereço</h3>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="control-label">CEP</label>
-                    <input class="form-control cep-mask" type="text" placeholder="99999-999" name="cep" value="{{ Input::old('cep') }}">
-
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Estado</label>
-                    <select class="form-control" name="estado" value="{{ Input::old('estado') }}">
-                        <option value="">Selecione uma opção</option>
-                        @foreach($estados as $estado)
-                        <option value="{{$estado->sigla}}">{{$estado->nome}}</option>
-                        @endforeach
-                    </select>
-
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Cidade</label>
-                    <input class="form-control" type="text" placeholder="Digite a cidade onde o funcionário reside" name="cidade" value="{{ Input::old('cidade') }}">
-
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="control-label">Bairro</label>
-                    <input class="form-control" type="text" placeholder="Digite o bairro do funcionário" name="bairro" value="{{ Input::old('bairro') }}">
-
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Endereço</label>
-                    <input class="form-control" type="text" placeholder="Digite o endereço completo do funcionário" name="endereco" value="{{ Input::old('endereco') }}">
-
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Complemento</label>
-                    <input class="form-control" type="text" placeholder="Digite o complemento do endereço" name="complemento" value="{{ Input::old('complemento') }}">
-
-                </div>
-                <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Residente/Domiciliado no Exterior.
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Residência Própria.
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Imóvel Adquirido com Recursos do FGTS.
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            <br/>
-            <h3 class="text-uppercase">Geral</h3>
-
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="control-label">Matrícula</label>
-                    <input class="form-control" type="text" placeholder="Digite o PIS do funcionário" name="pis" value="{{ Input::old('pis') }}" required="">
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Cargo</label>
-                    <input class="form-control" type="text" placeholder="Digite o CTPS do funcionário" name="ctps" value="{{ Input::old('ctps') }}" required="">
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Função</label>
-                    <input class="form-control" type="text" placeholder="Digite o CTPS do funcionário" name="ctps" value="{{ Input::old('ctps') }}" required="">
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Departamento</label>
-                    <input class="form-control" type="text" placeholder="Digite o CTPS do funcionário" name="ctps" value="{{ Input::old('ctps') }}" required="">
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Centro de Custo</label>
-                    <input class="form-control" type="text" placeholder="Digite o CTPS do funcionário" name="ctps" value="{{ Input::old('ctps') }}" required="">
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Sindicato</label>
-                    <input class="form-control" type="text" placeholder="Digite o CTPS do funcionário" name="ctps" value="{{ Input::old('ctps') }}" required="">
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            <br/>
-            <h3 class="text-uppercase">Sindicato</h3>
-
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Sindicalizado.
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Pagou contribuição.
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label">Competência</label>
-                    <input class="form-control" type="text" placeholder="Digite o CTPS do funcionário" name="ctps" value="{{ Input::old('ctps') }}" required="">
-                </div>
-
-            </div>
-            <div class="clearfix"></div>
-            <br/>
-            <h3 class="text-uppercase">Informações Trabalhistas</h3>
-            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">PIS</label>
                     <input class="form-control" type="text" placeholder="Digite o PIS do funcionário" name="pis" value="{{ Input::old('pis') }}" required="">
@@ -485,6 +234,241 @@
                     </select>
 
                 </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Número do Título Eleitoral</label>
+                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Zona e Seção Eleitoral</label>
+                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Número da Carteira de Motorista</label>
+                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Categoria da Carteira de Motorista</label>
+                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Vencimento da Carteira de Motorista</label>
+                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Número da Carteira de Reservista</label>
+                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Categoria da Carteira de Reservista</label>
+                    <input class="form-control" type="text" placeholder="Número do RG" name="rg" value="{{ Input::old('rg') }}">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <br />
+            <h3 class="text-uppercase">Estrangeiro</h3>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Data de Chegada</label>
+                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Condição de Trabalhador Estrangeiro no Brasil</label>
+                    <select class="form-control" name="estado" value="{{ Input::old('estado') }}">
+                        <option value="">Selecione uma opção</option>
+                        @foreach($estados as $estado)
+                        <option value="{{$estado->sigla}}">{{$estado->nome}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Número do Processo MTE</label>
+                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Data de Validade da Carteira de Trabalho</label>
+                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox checkbox-styled radio-success">
+                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Casado(a) com Brasileiro(a).
+                    </label>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox checkbox-styled radio-success">
+                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Filho(s) com Brasileiro(a).
+                    </label>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Número do RNE</label>
+                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Data de Expedição do RNE</label>
+                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Órgão Emissor do RNE</label>
+                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Data de Validade do RNE</label>
+                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <br />
+            <h3 class="text-uppercase">Deficiências</h3>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="checkbox checkbox-styled radio-success">
+                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Motora.
+                    </label>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="checkbox checkbox-styled radio-success">
+                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Visual.
+                    </label>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="checkbox checkbox-styled radio-success">
+                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Auditiva.
+                    </label>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="checkbox checkbox-styled radio-success">
+                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Mental.
+                    </label>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="checkbox checkbox-styled radio-success">
+                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Reabilitado.
+                    </label>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="checkbox checkbox-styled radio-success">
+                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Outras.
+                    </label>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <br />
+            <h3 class="text-uppercase">Endereço / Contato</h3>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">E-mail</label>
+                    <input class="form-control" type="text" placeholder="Digite o e-mail" name="email" value="{{ Input::old('email') }}">
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Telefone</label>
+                    <input class="form-control fone-mask" type="text" placeholder="Número de telefone" name="telefone" value="{{ Input::old('telefone') }}">
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">CEP</label>
+                    <input class="form-control cep-mask" type="text" placeholder="99999-999" name="cep" value="{{ Input::old('cep') }}">
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Estado</label>
+                    <select class="form-control" name="estado" value="{{ Input::old('estado') }}">
+                        <option value="">Selecione uma opção</option>
+                        @foreach($estados as $estado)
+                        <option value="{{$estado->sigla}}">{{$estado->nome}}</option>
+                        @endforeach
+                    </select>
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Cidade</label>
+                    <input class="form-control" type="text" placeholder="Digite a cidade onde o funcionário reside" name="cidade" value="{{ Input::old('cidade') }}">
+
+                </div>
+                <div class="form-group">
+                    <label class="checkbox checkbox-styled radio-success">
+                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Residente/Domiciliado no Exterior.
+                    </label>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox checkbox-styled radio-success">
+                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Residência Própria.
+                    </label>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox checkbox-styled radio-success">
+                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Imóvel Adquirido com Recursos do FGTS.
+                    </label>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Bairro</label>
+                    <input class="form-control" type="text" placeholder="Digite o bairro do funcionário" name="bairro" value="{{ Input::old('bairro') }}">
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Endereço</label>
+                    <input class="form-control" type="text" placeholder="Digite o endereço completo do funcionário" name="endereco" value="{{ Input::old('endereco') }}">
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Número</label>
+                    <input class="form-control" type="text" placeholder="Digite o complemento do endereço" name="complemento" value="{{ Input::old('complemento') }}">
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Complemento</label>
+                    <input class="form-control" type="text" placeholder="Digite o complemento do endereço" name="complemento" value="{{ Input::old('complemento') }}">
+
+                </div>
+
+            </div>
+            <div class="clearfix"></div>
+            <br/>
+            <h3 class="text-uppercase">Contrato de Trabalho</h3>
+
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <label class="control-label">Cargo</label>
+                    <input class="form-control" type="text" placeholder="Digite o CTPS do funcionário" name="ctps" value="{{ Input::old('ctps') }}" required="">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Função</label>
+                    <input class="form-control" type="text" placeholder="Digite o CTPS do funcionário" name="ctps" value="{{ Input::old('ctps') }}" required="">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Departamento</label>
+                    <input class="form-control" type="text" placeholder="Digite o CTPS do funcionário" name="ctps" value="{{ Input::old('ctps') }}" required="">
+                </div>
                 <div class="form-group">
                     <label class="control-label">Categoria</label>
                     <select class="form-control" name="ctps_uf" value="{{ Input::old('ctps_uf') }}">
@@ -504,15 +488,6 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Situação do Seguro Desemprego</label>
-                    <select class="form-control" name="ctps_uf" value="{{ Input::old('ctps_uf') }}">
-                        <option value="">Selecione uma opção</option>
-                        @foreach($estados as $estado)
-                        <option value="{{$estado->sigla}}">{{$estado->nome}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
                     <label class="control-label">Salário (R$)</label>
                     <input class="form-control money-mask" type="text" placeholder="Digite o Salário, somente números" name="salario" value="{{ Input::old('salario') }}" required="">
 
@@ -523,7 +498,6 @@
                     <label class="control-label">Data de admissão</label>
                     <input class="form-control date-mask" type="text" placeholder="--/--/--" name="data_admissao" value="{{ Input::get('data_admissao') }}" required="">
                 </div>
-
                 <div class="form-group">
                     <label class="checkbox checkbox-styled radio-success">
                         <input type="checkbox" value="true" id="banco_horas" name="banco_horas"><span></span> O funcionário possui banco de horas.
@@ -536,19 +510,6 @@
                     </label>
                     <div class="clearfix"></div>
                 </div>
-                <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="descontar_inss" name="descontar_inss"><span></span> Desejo descontar o INSS do funcionário.
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="form-group">
-                    <label class="checkbox checkbox-styled radio-success">
-                        <input type="checkbox" value="true" id="adicional_noturno" name="adicional_noturno"><span></span> O funcionário possui adicional noturno.
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-
                 <div class="form-group">
                     <label class="checkbox checkbox-styled radio-success">
                         <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> O contrato é de experiência.
@@ -570,11 +531,21 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="control-label">INSS</label>
-                    <input class="form-control money-mask" type="text" placeholder="Digite o valor de INSS" name="inss" value="{{ Input::old('inss') }}">
+                    <label class="control-label">Situação do Seguro Desemprego</label>
+                    <select class="form-control" name="ctps_uf" value="{{ Input::old('ctps_uf') }}">
+                        <option value="">Selecione uma opção</option>
+                        @foreach($estados as $estado)
+                        <option value="{{$estado->sigla}}">{{$estado->nome}}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Vale Transporte</label>
+                    <label class="control-label">Quantidade de Dias que recebe Vale Transporte</label>
+                    <input class="form-control money-mask" type="text" placeholder="Digite o valor de Vale Transporte" name="vale_tranporte" value="{{ Input::old('vale_tranporte') }}">
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Valor de Vale Transporte</label>
                     <input class="form-control money-mask" type="text" placeholder="Digite o valor de Vale Transporte" name="vale_tranporte" value="{{ Input::old('vale_tranporte') }}">
 
                 </div>
@@ -589,15 +560,41 @@
 
                 </div>
 
-                <div class="form-group">
-                    <label class="control-label">Quantidade de Dependentes</label>
-                    <input class="form-control" type="text" placeholder="Digite a quantidade de dependentes que o funcionário possui" name="dependentes" value="{{ Input::old('dependentes') }}">
 
+
+            </div>
+            <div class="clearfix"></div>
+            <br/>
+            <h3 class="text-uppercase">Sindicato</h3>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">Nome do Sindicato</label>
+                    <input class="form-control" type="text" placeholder="Digite o CTPS do funcionário" name="ctps" value="{{ Input::old('ctps') }}" required="">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox checkbox-styled radio-success">
+                        <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Pagou contribuição.
+                    </label>
+                    <div class="clearfix"></div>
+                    <div class="form-group">
+                        <label class="checkbox checkbox-styled radio-success">
+                            <input type="checkbox" value="true" id="experiencia" name="experiencia"><span></span> Sindicalizado.
+                        </label>
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Competência</label>
+                    <input class="form-control" type="text" placeholder="Digite o CTPS do funcionário" name="ctps" value="{{ Input::old('ctps') }}" required="">
                 </div>
 
             </div>
             <div class="clearfix"></div>
             <br/>
+
             <h3 class="text-uppercase">Contrato de experiência</h3>
             <div class="col-md-12">
                 <div class="form-group">
@@ -614,8 +611,10 @@
                     <input class="form-control money-mask" type="text" placeholder="Digite o valor de Assistência Médica" name="assistencia_medica" value="{{ Input::old('assistencia_medica') }}">
 
                 </div>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group">
-                    <label class="control-label">Dias de prorrogação</label>
+                    <label class="control-label">Data início de prorrogação</label>
                     <input class="form-control money-mask" type="text" placeholder="Digite o valor de desconto da Assistência Médica" name="desconto_assistencia_medica" value="{{ Input::old('desconto_assistencia_medica') }}">
 
                 </div>
@@ -629,17 +628,19 @@
             <div class="clearfix"></div>
             <br />        
             <h3>Horário de Trabalho</h3>
-            <div class="form-group">
-                <label class="control-label">D.S.R (Descanso semanal remunerado)</label>
-                <select class="form-control" required="" id='dsr' name='dsr'>
-                    @foreach($dow as $n => $dia)
-                    <option value="{{$n}}" {{$n == 0 ? 'selected="selected"' : ''}}>{{$dia}}</option>
-                    @endforeach
-                </select>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">D.S.R (Descanso semanal remunerado)</label>
+                    <select class="form-control" required="" id='dsr' name='dsr'>
+                        @foreach($dow as $n => $dia)
+                        <option value="{{$n}}" {{$n == 0 ? 'selected="selected"' : ''}}>{{$dia}}</option>
+                        @endforeach
+                    </select>
 
+                </div>
             </div>
-            <br />
-            <p class="text-primary">Digite na tabela abaixo o horário de trabalho do funcionário de acordo com o dia da semana.</p>
+            <p><b>Digite na tabela abaixo o horário de trabalho do funcionário de acordo com o dia da semana.</b></p>
+            <div class="col-md-12">
             <table class='table table-hover table-bordered table-striped'>
                 <thead>
                     <tr>
@@ -680,12 +681,14 @@
                     @endforeach
                 </tbody>
             </table>
+                </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary"><span class='fa fa-save'></span> Cadastrar funcionário</button>
                 <a href="{{URL::previous()}}" class="btn btn-default"><span class='fa fa-history'></span> Voltar</a>
             </div>
             <div class='clearfix'></div>
         </form>
+        
         <div class='clearfix'></div>
     </div>
 </div>

@@ -16,7 +16,12 @@
 Route::get('/', ['as' => 'home', 'uses' => 'HomeController@site']);
 Route::get('/admin', ['as' => 'admin', 'uses' => 'AdminController@index', 'middleware' => 'admin']);
 
-Route::get('/funcionarios/cadastrar', ['as'=>'cadastrar-funcionario', 'uses'=>'FuncionarioController@create','middleware'=>'auth']);
+Route::get('/funcionarios/', ['as'=>'funcionarios', 'uses'=>'FuncionarioController@index','middleware'=>'auth']);
+Route::get('/empresa/{id}/funcionarios/', ['as'=>'listar-funcionarios', 'uses'=>'FuncionarioController@index2','middleware'=>'auth']);
+Route::get('/empresa/{id}/funcionarios/cadastrar', ['as'=>'cadastrar-funcionario', 'uses'=>'FuncionarioController@create','middleware'=>'auth']);
+Route::post('/empresa/{id}/funcionarios/cadastrar', ['as'=>'cadastrar-funcionario', 'uses'=>'FuncionarioController@store','middleware'=>'auth']);
+Route::get('/empresa/{id}/funcionarios/editar/{funcionario}', ['as'=>'editar-funcionario', 'uses'=>'FuncionarioController@edit','middleware'=>'auth']);
+Route::post('/empresa/{id}/funcionarios/editar/{funcionario}', ['as'=>'editar-funcionario', 'uses'=>'FuncionarioController@update','middleware'=>'auth']);
 
 Route::get('/pagseguro/teste', ['as' => 'pagseguro.teste', 'uses' => 'PagseguroController@teste']);
 Route::get('/pagseguro/redirect', ['as' => 'pagseguro.redirect', 'uses' => 'PagseguroController@redirect']);
