@@ -23,6 +23,12 @@ Route::post('/empresa/{id}/funcionarios/cadastrar', ['as'=>'cadastrar-funcionari
 Route::get('/empresa/{id}/funcionarios/editar/{funcionario}', ['as'=>'editar-funcionario', 'uses'=>'FuncionarioController@edit','middleware'=>'auth']);
 Route::post('/empresa/{id}/funcionarios/editar/{funcionario}', ['as'=>'editar-funcionario', 'uses'=>'FuncionarioController@update','middleware'=>'auth']);
 
+Route::get('/admin/funcionarios/', ['as'=>'funcionarios-admin', 'uses'=>'FuncionarioController@index','middleware'=>'auth']);
+Route::get('/admin/empresa/{id}/funcionarios/', ['as'=>'listar-funcionarios-admin', 'uses'=>'FuncionarioController@index2','middleware'=>'auth']);
+Route::get('/admin/funcionarios/editar/{funcionario}', ['as'=>'editar-funcionario-admin', 'uses'=>'FuncionarioController@edit','middleware'=>'auth']);
+Route::post('/admin/funcionarios/editar/{funcionario}', ['as'=>'editar-funcionario-admin', 'uses'=>'FuncionarioController@update','middleware'=>'auth']);
+
+
 Route::get('/pagseguro/teste', ['as' => 'pagseguro.teste', 'uses' => 'PagseguroController@teste']);
 Route::get('/pagseguro/redirect', ['as' => 'pagseguro.redirect', 'uses' => 'PagseguroController@redirect']);
 Route::post('/pagseguro', [
@@ -201,6 +207,7 @@ Route::controllers([
 
 Route::get('/ajax/simular-plano/', ['as' => 'ajax-simular-plano', 'uses' => 'PlanoController@simular']);
 Route::post('/ajax/consulta/', ['as' => 'ajax-simples', 'uses' => 'DashboardController@consultaAjax', 'middleware' => 'auth']);
+Route::post('/ajax/validar-dependente/', ['as' => 'ajax-validar-dependente', 'uses' => 'FuncionarioController@validateDependente', 'middleware' => 'auth']);
 Route::post('/ajax/validar-socio/', ['as' => 'ajax-validar-socio', 'uses' => 'AberturaEmpresaController@validateSocio', 'middleware' => 'auth']);
 Route::post('/ajax/validar-socio-empresa/', ['as' => 'ajax-validar-socio-empresa', 'uses' => 'AberturaEmpresaController@validateSocioEmpresa', 'middleware' => 'auth']);
 Route::post('/ajax/validar-abertura-empresa/', ['as' => 'ajax-validar-abertura-empresa', 'uses' => 'AberturaEmpresaController@validateAberturaEmpresa', 'middleware' => 'auth']);

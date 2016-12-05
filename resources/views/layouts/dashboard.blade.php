@@ -49,7 +49,7 @@ $(function(){
             <a href="{{route('funcionarios')}}"><div class="icon"><span class="fa fa-users"></span></div>funcionários</a>
         </li>
         <li class='{{Request::is('socios*') ? "active" : ""}}'>
-            <a href="{{route('listar-socios-apenas')}}"><div class="icon"><span class="fa fa-users"></span></div>sócios</a>
+            <a href="{{route('listar-socios-apenas')}}"><div class="icon"><span class="fa fa-suitcase"></span></div>sócios</a>
         </li>
         <li class='{{Request::is('pro-labore*') ? "active" : ""}}'>
             <a href="{{route('listar-pro-labore-cliente')}}"><div class="icon"><span class="fa fa-dollar"></span></div>pró-labore</a>
