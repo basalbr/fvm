@@ -135,6 +135,7 @@
         </div>
         @endif
         <form method='POST' action=''>
+             {{ csrf_field() }}
             <h3>Status</h3>
             <div class='form-group'>
                 <label>Status</label>
@@ -149,7 +150,7 @@
             </div>
         </form>
         <form method="POST" action="" id="principal-form">
-            
+
             {{ csrf_field() }}
             <h3>Informações</h3>
             <p>Preencha os campos abaixo e clique em "salvar atelrações" para atualizar os dados de sua empresa em nosso sistema.</p>
@@ -220,7 +221,11 @@
                 <label>Número</label>
                 <input type='text' class='form-control numero-mask' name='numero' value="{{$empresa->numero}}"/>
             </div>
-
+            <h3>Contabilidade Atual</h3>
+            <div class='form-group'>
+                <label>Número de registro do CRC do contador atual</label>
+                <input type='text' class='form-control' name='crc' value="{{$empresa->crc}}"/>
+            </div>
             <h3>CNAEs</h3>
             <p>Adicione os CNAEs relacionados à sua empresa. Caso não saiba os códigos, clique em Pesquisar CNAE.</p>
             <div class='form-group'>
@@ -254,7 +259,7 @@
                 </tbody>
             </table>
             <div class='form-group'>
-                <input type='submit' value="Salvar alterações" class='btn btn-primary' />
+                <!--<input type='submit' value="Salvar alterações" class='btn btn-primary' />-->
             </div>
             <div class='clearfix'></div>
         </form>

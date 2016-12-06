@@ -49,8 +49,11 @@
                 <td>{{$empresa->cpf_cnpj}}</td>
                 <td>{{$empresa->socios()->count()}}</td>
                 <td>
+                    @if($empresa->status != 'Aprovado')
+                    <a class='btn btn-success' href="{{route('ativar-empresa-admin', ['id' => $empresa->id])}}">Ativar Empresa</a>
+                    @endif
                     <a class='btn btn-warning' href="{{route('editar-empresa-admin', ['id' => $empresa->id])}}">Visualizar</a>
-                    <a class='btn btn-danger' href="{{$empresa->id}}">Remover</a>
+                    <a class='btn btn-danger' href="{{route('remover-empresa-admin', ['id' => $empresa->id])}}">Remover</a>
                 </td>
             </tr>
             @endforeach

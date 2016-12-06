@@ -19,6 +19,27 @@ class EmpresaController extends Controller {
         return view('admin.empresa.index', ['empresas' => $empresas]);
     }
 
+    public function ativar($id) {
+        $empresa = \App\Pessoa::where('id', '=', $id)->first();
+        $empresa->status = 'Aprovado';
+        $empresa->save();
+        $empresa->iniciar_periodo_gratis();
+        $empresa->enviar_notificacao_status();
+        $empresa->abrir_processos();
+        return redirect()->route('empresas-admin');
+    }
+
+    public function abrir_processos($id) {
+        $empresa = \App\Pessoa::where('id', '=', $id)->first();
+        $empresa->abrir_processos();
+    }
+
+    public function delete($id) {
+        $empresa = \App\Pessoa::where('id', '=', $id)->first();
+        $empresa->delete();
+        return redirect()->route('empresas-admin');
+    }
+
     public function create() {
         $tipoTributacoes = \App\TipoTributacao::orderBy('descricao', 'asc')->get();
         $naturezasJuridicas = \App\NaturezaJuridica::orderBy('descricao', 'asc')->get();
@@ -65,42 +86,10 @@ class EmpresaController extends Controller {
                     $pessoaCnae->save();
                 }
             }
-            $usuario = Auth::user();
-            \Illuminate\Support\Facades\Mail::send('emails.nova-empresa', ['nome' => $usuario->nome, 'empresa' => $empresa], function ($m) use ($usuario) {
-                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
-                $m->to($usuario->email)->subject('Nova empresa cadastrada');
-            });
-            \Illuminate\Support\Facades\Mail::send('emails.nova-empresa-admin', ['nome' => $usuario->nome, 'empresa' => $empresa], function ($m) use ($usuario) {
-                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
-                $m->to('admin@webcontabilidade.com')->subject('Novo usuário cadastrado');
-            });
-            $impostos_mes = \App\ImpostoMes::where('mes', '=', date('n'))->get();
-            $competencia = date('Y-m-d', strtotime(date('Y-m') . " -1 month"));
-            foreach ($impostos_mes as $imposto_mes) {
-                if ($imposto_mes->imposto->vencimento > ((int) date('d'))) {
-                    $imposto = $imposto_mes->imposto;
-                    $processo = new Processo;
-                    $processo->create([
-                        'id_pessoa' => $empresa->id,
-                        'competencia' => $competencia,
-                        'id_imposto' => $imposto_mes->id_imposto,
-                        'vencimento' => $imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento, 'Y-m-d'),
-                        'status' => 'novo'
-                    ]);
-                }
-            }
-            $plano = \App\Plano::where('total_documentos', '>=', $request->get('total_documentos'))->where('total_documentos_contabeis', '>=', $request->get('total_contabeis'))->where('pro_labores', '>=', $request->get('pro_labores'))->orderBy('valor', 'asc')->first();
-            $mensalidade = new \App\Mensalidade;
-            $mensalidade->id_usuario = Auth::user()->id;
-            $mensalidade->id_pessoa = $empresa->id;
-            $mensalidade->duracao = $plano->duracao;
-            $mensalidade->valor = $plano->valor;
-            $mensalidade->documentos_fiscais = $plano->total_documentos;
-            $mensalidade->documentos_contabeis = $plano->total_documentos_contabeis;
-            $mensalidade->pro_labores = $plano->pro_labores;
-            $mensalidade->funcionarios = $plano->funcionarios;
-            $mensalidade->status = 'pendente';
-            $mensalidade->save();
+            $empresa->enviar_notificacao_nova_empresa();
+            $empresa->abrir_processos();
+            $empresa->criar_mensalidade($request);
+
             return redirect(route('empresas'));
         } else {
             return redirect(route('cadastrar-empresa'))->withInput()->withErrors($empresa->errors());
@@ -144,11 +133,7 @@ class EmpresaController extends Controller {
                     $pessoaCnae->save();
                 }
             }
-            $usuario = Auth::user();
-            \Illuminate\Support\Facades\Mail::send('emails.editar-empresa', ['nome' => $usuario->nome, 'empresa' => $empresa], function ($m) use ($usuario) {
-                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
-                $m->to($usuario->email)->subject('Nova empresa cadastrada');
-            });
+
             return redirect(route('empresas'));
         } else {
             return redirect(route('editar-empresa', [$id]))->withInput()->withErrors($empresa->errors());
@@ -159,16 +144,12 @@ class EmpresaController extends Controller {
         $empresa = \App\Pessoa::where('id', '=', $id)->first();
         $statusAnterior = $empresa->status;
         $statusAtual = $request->get('status');
-        if ($statusAtual == 'Aprovado' && ($statusAnterior != $statusAtual)) {
-            $pagamento = new \App\Pagamento;
-            $pagamento->id_mensalidade = $empresa->mensalidade()->orderBy('created_at', 'desc')->first()->id;
-            $pagamento->status = 'Paga';
-            $pagamento->valor = 0.0;
-            $pagamento->vencimento = date('Y-m-d H:i:s');
-            $pagamento->save();
-        }
         $empresa->status = $statusAtual;
-        $empresa = $empresa->save();
+        $empresa->save();
+        if ($statusAtual == 'Aprovado' && ($statusAnterior != $statusAtual)) {
+            $empresa->iniciar_periodo_gratis();
+            $empresa->abrir_processos();
+        }
         $empresa->enviar_notificacao_status();
         return redirect(route('empresas-admin'));
     }

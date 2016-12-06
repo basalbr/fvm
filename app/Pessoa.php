@@ -87,7 +87,8 @@ class Pessoa extends Model {
         'razao_social',
         'numero',
         'codigo_acesso_simples_nacional',
-        'id_tipo_tributacao'
+        'id_tipo_tributacao',
+        'crc'
     ];
 
     public function validate($data, $update = false) {
@@ -115,8 +116,46 @@ class Pessoa extends Model {
         return true;
     }
 
+    public function criar_mensalidade($request) {
+        $plano = \App\Plano::where('total_documentos', '>=', $request->get('total_documentos'))->where('total_documentos_contabeis', '>=', $request->get('total_contabeis'))->where('pro_labores', '>=', $request->get('pro_labores'))->orderBy('valor', 'asc')->first();
+        $valor = $plano->valor;
+        if ($request->get('funcionarios')) {
+            if ($request->get('funcionarios') >= 10) {
+                $valor = $plano->valor + ($request->get('funcionarios') * 20);
+            } else {
+                $valor = $plano->valor + ($request->get('funcionarios') * 25);
+            }
+        }
+        $mensalidade = new \App\Mensalidade;
+        $mensalidade->id_usuario = Auth::user()->id;
+        $mensalidade->id_pessoa = $this->id;
+        $mensalidade->duracao = $plano->duracao;
+        $mensalidade->valor = $valor;
+        $mensalidade->documentos_fiscais = $plano->total_documentos;
+        $mensalidade->documentos_contabeis = $plano->total_documentos_contabeis;
+        $mensalidade->pro_labores = $plano->pro_labores;
+        $mensalidade->funcionarios = $request->get('funcionarios') ? $request->get('funcionarios') : 0;
+        $mensalidade->status = 'Pendente';
+        $mensalidade->save();
+    }
+
+    public function iniciar_periodo_gratis() {
+        $mensalidade = Mensalidade::where('id_pessoa', '=', $this->id)->first();
+        
+        $pagamento = new \App\Pagamento;
+        $pagamento->tipo = 'mensalidade';
+        $pagamento->id_mensalidade = $mensalidade->id;
+        $pagamento->valor = $mensalidade->valor;
+        $pagamento->status = 'Paga';
+        $pagamento->vencimento = date('Y-m-d H:i:s', strtotime("+7 day"));
+        $pagamento->save();
+        $mensalidade->created_at = date('Y-m-d H:i:s');
+        $mensalidade->status = 'Aprovado';
+        $mensalidade->save();
+    }
+
     public function abrir_processos() {
-        $impostos_mes = \App\ImpostoMes::where('mes', '=', date('n'))->get();
+        $impostos_mes = \App\ImpostoMes::where('mes', '=', (date('n')-1))->get();
         $competencia = date('Y-m-d', strtotime(date('Y-m') . " -1 month"));
         if (count($impostos_mes)) {
             foreach ($impostos_mes as $imposto_mes) {
@@ -133,7 +172,7 @@ class Pessoa extends Model {
                     ]);
                     $usuario = Auth::user();
                     $notificacao = new Notificacao;
-                    $notificacao->mensagem = '<a href="'.$processo->id.'">Você possui uma nova apuração. Clique aqui para visualizar.</a>';
+                    $notificacao->mensagem = '<a href="' . $processo->id . '">Você possui uma nova apuração. Clique aqui para visualizar.</a>';
                     $notificacao->id_usuario = Auth::user()->id;
                     $notificacao->save();
                     try {
@@ -152,17 +191,32 @@ class Pessoa extends Model {
             }
         }
     }
-    
-     public function enviar_notificacao_status() {
+
+    public function enviar_notificacao_status() {
         $usuario = Auth::user();
-        $notificacao = new Notificacao; 
-        $notificacao->mensagem = '<a href="'.route('editar-empresa',[$this->id]).'">A empresa '.$this->nome_fantasia.' mudou seu status para '.$this->status.'. Clique aqui para visualizar a empresa.</a>';
+        $notificacao = new Notificacao;
+        $notificacao->mensagem = '<a href="' . route('editar-empresa', [$this->id]) . '">A empresa ' . $this->nome_fantasia . ' mudou seu status para ' . $this->status . '. Clique aqui para visualizar a empresa.</a>';
         $notificacao->id_usuario = Auth::user()->id;
         $notificacao->save();
         try {
-            \Illuminate\Support\Facades\Mail::send('emails.status-empresa', ['nome' => $usuario->nome, 'id_empresa' => $this->id,'nome_empresa'=>$this->nome_fantasia, 'status'=>$this->status], function ($m) use($usuario) {
+            \Illuminate\Support\Facades\Mail::send('emails.status-empresa', ['nome' => $usuario->nome, 'id_empresa' => $this->id, 'nome_empresa' => $this->nome_fantasia, 'status' => $this->status], function ($m) use($usuario) {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                 $m->to($usuario->email)->subject('Mudança de Status em Empresa');
+            });
+        } catch (\Exception $ex) {
+            return true;
+        }
+    }
+    public function enviar_notificacao_nova_empresa() {
+        $usuario = Auth::user();
+        try {
+          \Illuminate\Support\Facades\Mail::send('emails.nova-empresa', ['nome' => $usuario->nome, 'empresa' => $this], function ($m) use ($usuario) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to($usuario->email)->subject('Nova empresa cadastrada');
+            });
+            \Illuminate\Support\Facades\Mail::send('emails.nova-empresa-admin', ['nome' => $usuario->nome, 'empresa' => $this], function ($m) use ($usuario) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to('admin@webcontabilidade.com')->subject('Novo usuário cadastrado');
             });
         } catch (\Exception $ex) {
             return true;
@@ -191,6 +245,7 @@ class Pessoa extends Model {
     public function socios() {
         return $this->hasMany('App\Socio', 'id_pessoa');
     }
+
     public function funcionarios() {
         return $this->hasMany('App\Funcionario', 'id_pessoa');
     }
