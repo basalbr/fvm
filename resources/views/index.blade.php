@@ -97,12 +97,12 @@
             if (total_contabeis > max_contabeis) {
                 $('#total_contabeis').val(max_contabeis);
             }
-            if(funcionarios >= 10){
+            if (funcionarios >= 10) {
                 acrescimo_funcionarios = funcionarios * 20;
-            }else{
+            } else {
                 acrescimo_funcionarios = funcionarios * 25;
             }
-            
+
 
             for (i in planos) {
 
@@ -110,7 +110,7 @@
                     minValor = parseFloat(planos[i].valor);
                 }
             }
-            minValor = parseFloat(minValor+acrescimo_funcionarios).toFixed(2);
+            minValor = parseFloat(minValor + acrescimo_funcionarios).toFixed(2);
             $('#mensalidade').text('R$' + minValor);
             contabilidade = $('#contabilidade').val().replace(".", "");
             contabilidade = parseFloat(contabilidade.replace(",", "."));
@@ -185,15 +185,15 @@
 </script>
 @stop
 @section('content')
-<img id="parallax" src="{{url('public/images/banner.jpg')}}"/>
+<img id="parallax" src="{{url(public_path().'images/banner.jpg')}}"/>
 <section id="inicio" style="height: 600px; overflow: hidden; position: relative; text-align: center; margin-top: 45px;">
     <h2>Sua contabilidade agora ficou digital.<br />Acesse nossos serviços onde você estiver.</h2>
     <div class="clearfix"></div>
-    <a class="btn text-uppercase btn-info" href="#planos"><span class="fa fa-calculator"></span> Simule sua mensalidade</a>
+    <a class="btn text-uppercase btn-info page-scroll" href="#planos"><span class="fa fa-calculator"></span> Simule sua mensalidade</a>
     <a class="btn btn-success text-uppercase" href='{{route('acessar')}}'><span class="fa fa-sign-in"></span> Acesse agora mesmo</a>
 
 </section>
-<section id="como-funciona" class="bg-white bg-shadow" style=""> 
+<section id="como-funciona" class="bg-white"> 
     <div class="container">
         <hr>
         <h1 class="title">A sua contabilidade na internet</h1>
@@ -201,17 +201,21 @@
         <div class="col-md-4 text-info">
             <h2 class="text-center">Público Alvo</h2>
             <div class="icon"><span class="fa fa-child"></span></div>
-            <p>Para você que tem uma empresa em Santa Catarina, optante pelo Simples Nacional e não possui funcionários, fornecemos um método econômico e dinâmico para que você realize sua contabilidade.</p>
+            <p>Para você que tem uma empresa em Santa Catarina, optante pelo Simples Nacional, fornecemos um método econômico e dinâmico para que você realize sua contabilidade.</p>
+            <p>Oferecemos também serviço de <b>abertura de empresa</b> em toda Santa Catarina. Basta se <a class='{{route('acessar')}}'></a>cadastrar gratuitamente e criar uma solicitação de abertura de empresa.</p>
         </div>
         <div class="col-md-4 text-info">
             <h2 class="text-center">Como funciona</h2>
             <div class="icon"><span class="fa fa-question-circle"></span></div>
-            <p>Você realiza o cadastro em nosso sistema, cadastra sua empresa e a partir disso nos envia os documentos necessários para realizarmos as apurações.<br />Nós lhe entregamos as guias para pagamento e lembramos a data de vencimento.<br />Isso tudo de maneira on-line.</p>
+            <p>Você realiza o cadastro em nosso sistema, cadastra sua empresa e a partir disso nos envia os documentos necessários para realizarmos as apurações.</p><p>Nós lhe entregamos as guias para pagamento e lembramos a data de vencimento.<br />Isso tudo de maneira on-line.</p>
+
         </div>
         <div class="col-md-4 text-info">
             <h2 class="text-center">Quanto Custa?</h2>
             <div class="icon"><span class="fa fa-money"></span></div>
-            <p>Nossa mensalidade custa a partir de <b>R$19,90</b> por mês e ainda o <b>primeiro mês é totalmente gratuito</b>.<br /><a href="#planos">Você pode simular sua mensalidade clicando aqui.</a></p>
+            <p>Nossa mensalidade custa a partir de <b>R$19,90</b> por mês e ainda o <b>primeiro mês é totalmente gratuito</b>.</p>
+            <p>O <b>cadastro</b> é totalmente gratuito, as cobranças serão feitas somente quando estivermos realizando os serviços de apuração ou abertura de empresa.</p>
+            <p><a class='page-scroll' href="#planos">Você pode simular sua mensalidade clicando aqui.</a></p>
         </div>
         <div class="col-xs-12 text-center">
             <br />
@@ -264,7 +268,7 @@
         <div class="clearfix"></div>
     </div>
 </section>
-<section id="faq" class="bg-white">
+<section id="faq" class="bg-dark">
     <div class="container">
         <hr>
         <h1 class="title">Perguntas Frequentes</h1>

@@ -30,7 +30,6 @@ class HomeController extends Controller {
 
     public function site() {
         $atendimento = false;
-        
         $horario1 = \DateTime::createFromFormat('H:i a', '8:00 am');
         $horario2 = \DateTime::createFromFormat('H:i a', '12:00 pm');
         $horario3 = \DateTime::createFromFormat('H:i a', '1:30 pm');

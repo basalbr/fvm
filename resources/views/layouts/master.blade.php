@@ -6,29 +6,39 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         @section('css')
         <link href='https://fonts.googleapis.com/css?family=Raleway:400,700,700italic,400italic' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" type="text/css" href="{{url('public/css/font-awesome.min.css')}}" />
-        <link rel="stylesheet" type="text/css" href="{{url('public/css/bootstrap.min.css')}}" />
-        <link rel="stylesheet" name="text/css" href="{{url('public/css/fullcalendar.min.css')}}" />
-        <link rel="stylesheet" type="text/css" href="{{url('public/css/bootstrap-datepicker3.min.css')}}" />
-        <link rel="stylesheet" type="text/css" href="{{url('public/css/animate.css')}}" />
-        <link rel="stylesheet" type="text/css" href="{{url('public/css/custom.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url(public_path().'css/font-awesome.min.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url(public_path().'css/bootstrap.min.css')}}" />
+        <link rel="stylesheet" name="text/css" href="{{url(public_path().'css/fullcalendar.min.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url(public_path().'css/bootstrap-datepicker3.min.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url(public_path().'css/animate.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url(public_path().'css/custom.css')}}" />
         @show
         @section('js')
 
-        <script type="text/javascript" src="{{url('public/js/jquery-2.1.4.min.js')}}"></script>
-        <script type="text/javascript" src="{{url('public/js/moment.min.js')}}"></script>
-        <script type="text/javascript" src="{{url('public/js/bootstrap.min.js')}}"></script>
-        <script type="text/javascript" src="{{url('public/js/mask.js')}}"></script>
+        <script type="text/javascript" src="{{url(public_path().'js/jquery-2.1.4.min.js')}}"></script>
+        <script type="text/javascript" src="{{url(public_path().'js/moment.min.js')}}"></script>
+        <script type="text/javascript" src="{{url(public_path().'js/bootstrap.min.js')}}"></script>
+        <script type="text/javascript" src="{{url(public_path().'js/mask.js')}}"></script>
         <script name="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.js"></script>
-        <script type="text/javascript" src="{{url('public/js/pt-br.js')}}"></script>
+        <script type="text/javascript" src="{{url(public_path().'js/pt-br.js')}}"></script>
+        <script name="text/javascript" src="{{url(public_path().'js/viewportchecker.js')}}"></script>
+        <script name="text/javascript" src="{{url(public_path().'js/SmoothScroll.js')}}"></script>
+        <script name="text/javascript" src="{{url(public_path().'js/jquery.easing.min.js')}}"></script>
         <script type="text/javascript"  language="javascript">
 $(function () {
-
+ $('#inicio, #como-funciona, #planos, #faq, #servicos, #noticias, #contato').addClass("hiddenSection").viewportChecker({
+        classToAdd: 'animated visibleSection fadeIn',
+        classToRemove: 'hiddenSection',
+        classToAddForFullView: '',
+        offset: '0%',
+        invertBottomOffset: false,
+    });
     $('a.page-scroll').bind('click', function (event) {
-        var $anchor = $(this);
+        var anchor = $(this);
         $('html, body').stop().animate({
-            scrollTop: $($anchor.attr('href')).offset().top - 50
+            scrollTop: $(anchor.attr('href')).offset().top - 70
         }, 1000, 'easeInOutExpo');
+        console.log($(anchor.attr('href')).offset().top)
         event.preventDefault();
     });
 
@@ -123,7 +133,7 @@ $(function () {
             <div class="navbar navbar-default navbar-fixed-top">
                 <div class="{{Request::is('/') || Request::is('noticias*') ? 'container' : 'container-fluid'}}">
                     <div class="navbar-header">
-                        <a href="{{route('home')}}" class="navbar-brand"><img src="{{url('public/images/logotipo-pequeno.png')}}" /></a>
+                        <a href="{{route('home')}}" class="navbar-brand"><img src="{{url(public_path().'images/logotipo-pequeno.png')}}" /></a>
                         <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
@@ -134,22 +144,22 @@ $(function () {
                         <ul class="nav navbar-nav navbar-right" role="tablist">
                             @if(Request::is('/'))
                             <li class="dropdown">
-                                <a href="#inicio" id="nav-inicio">Início</a>
+                                <a class='page-scroll' href="#inicio" id="nav-inicio">Início</a>
                             </li>
                             <li>
-                                <a href="#como-funciona">Como funciona</a>
+                                <a class='page-scroll' href="#como-funciona">Como funciona</a>
                             </li>
                             <li>
-                                <a href="#planos">Simulação</a>
+                                <a class='page-scroll' href="#planos">Simulação</a>
                             </li>
                             <li>
-                                <a href="#faq">Perguntas Frequentes</a>
+                                <a class='page-scroll' href="#faq">Perguntas Frequentes</a>
                             </li>
                             <li>
-                                <a href="#noticias">Notícias</a>
+                                <a class='page-scroll' href="#noticias">Notícias</a>
                             </li>
                             <li>
-                                <a href="#contato">Contato</a>
+                                <a class='page-scroll' href="#contato">Contato</a>
                             </li>
                             @endif
                             @if(Request::is('noticias*'))

@@ -8,12 +8,12 @@
             $.post("{{route('ajax-notificacao')}}", {'id': $(this).data('id')}, function (data) {
                 var html = '';
                 for (i in data) {
-                    html += '<div class="notificacao-mensagem">' + data[i].mensagem + '</div>';
-                    html += '<div class="text-success"><a href="" data-id="' + data[i].id + '" class="text-success mark-read"><span class="fa fa-check"></span> Marcar como lida</a></div>'
+                    html += '<li><div class="notificacao-mensagem">' + data[i].mensagem + '</div></li>';
+                    html += '<li><div class="text-success"><a href="" data-id="' + data[i].id + '" class="text-success mark-read"><span class="fa fa-check"></span> Marcar como lida</a></div></li>'
                 }
                 $("#lista-notificacao").html(html);
                 if ($("#lista-notificacao li").length < 1) {
-$("#lista-notificacao").html('<li>Você não possui nenhuma notificação</li>');
+                    $("#lista-notificacao").html('<li>Você não possui nenhuma notificação</li>');
                 }
             });
         });

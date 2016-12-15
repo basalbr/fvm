@@ -5,12 +5,12 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         @section('css')
-        <link rel="stylesheet" type="text/css" href="{{url('css/font-awesome.min.css')}}" />
-        <link rel="stylesheet" type="text/css" href="{{url('css/bootstrap.min.css')}}" />
-        <link rel="stylesheet" name="text/css" href="{{url('css/fullcalendar.min.css')}}" />
-        <link rel="stylesheet" type="text/css" href="{{url('css/bootstrap-datepicker3.min.css')}}" />
-        <link rel="stylesheet" type="text/css" href="{{url('css/animate.css')}}" />
-        <link rel="stylesheet" type="text/css" href="{{url('css/custom.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url(public_path().'css/font-awesome.min.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url(public_path().'css/bootstrap.min.css')}}" />
+        <link rel="stylesheet" name="text/css" href="{{url(public_path().'css/fullcalendar.min.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url(public_path().'css/bootstrap-datepicker3.min.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url(public_path().'css/animate.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url(public_path().'css/custom.css')}}" />
         @show
     </head>
     <body>

@@ -8,12 +8,12 @@ $(function(){
       $('#empresa-modal').modal('show'); 
    });
    $('#validar-empresa').on('click', function(e){
-       if(!$('input[name="santa_catarina"]:checked').val() || !$('input[name="funcionarios"]:checked').val() || !$('input[name="simples_nacional"]:checked').val()){
+       if(!$('input[name="santa_catarina"]:checked').val() || !$('input[name="simples_nacional"]:checked').val()){
           e.preventDefault();
           $('#empresa-modal').modal('hide'); 
           $('#erro-modal').modal('show');
       } 
-      if($('input[name="santa_catarina"]:checked').val() == 'nao' || $('input[name="funcionarios"]:checked').val() == 'sim' || $('input[name="simples_nacional"]:checked').val() == 'nao'){
+      if($('input[name="santa_catarina"]:checked').val() == 'nao' || $('input[name="simples_nacional"]:checked').val() == 'nao'){
           e.preventDefault();
           $('#empresa-modal').modal('hide'); 
           $('#erro-modal').modal('show');
@@ -33,11 +33,11 @@ $(function(){
         <thead>
             <tr>
                 <th>Nome Fantasia</th>
-                <th>Razão Social</th>
-                <th>CNPJ</th>
-                <th>Nº de Sócios</th>
-                <th>Status</th>
-                <th></th>
+                <th class="hidden-xs hidden-sm">Razão Social</th>
+                <th class="visible-lg">CNPJ</th>
+                <th class="visible-lg">Nº de Sócios</th>
+                <th class="hidden-xs hidden-sm">Status</th>
+                <th>Opções</th>
             </tr>
         </thead>
         <tbody>
@@ -45,12 +45,11 @@ $(function(){
             @foreach($empresas as $empresa)
             <tr>
                 <td>{{$empresa->nome_fantasia}}</td>
-                <td>{{$empresa->razao_social}}</td>
-                <td>{{$empresa->cpf_cnpj}}</td>
-                <td>{{$empresa->socios()->count()}}</td>
-                <td>{{$empresa->status}}</td>
+                <td class="hidden-xs hidden-sm">{{$empresa->razao_social}}</td>
+                <td class="visible-lg">{{$empresa->cpf_cnpj}}</td>
+                <td class="visible-lg">{{$empresa->socios()->count()}}</td>
+                <td class="hidden-xs hidden-sm">{{$empresa->status}}</td>
                 <td>
-                    <!--<a class='btn btn-warning' href="{{route('editar-empresa', ['id' => $empresa->id])}}">Editar</a>-->
                     @if($empresa->status != 'Em Análise')
                     <a class='btn btn-info' href="{{route('cadastrar-socio', [$empresa->id])}}">Cadastrar Sócio</a>
                     <a class='btn btn-primary' href="{{route('listar-socios', [$empresa->id])}}">Listar Sócios</a>
@@ -82,12 +81,6 @@ $(function(){
                 <p>Olá, por favor responda as perguntas abaixo e clique em continuar</p>
                 <form>
                     <div class="form-group">
-                        <label>Você possui funcionários?</label>
-                        <div class="clearfix"></div>
-                        <label class='form-control'><input type="radio" name="funcionarios" value="sim"/> Sim</label>
-                        <label class='form-control'><input type="radio" name="funcionarios" value="nao"/> Não</label>
-                    </div> 
-                    <div class="form-group">
                         <label>Sua empresa é optante do Simples Nacional?</label>
                         <div class="clearfix"></div>
                         <label class='form-control'><input type="radio" name="simples_nacional" value="sim"/> Sim</label>
@@ -118,7 +111,7 @@ $(function(){
                 <div class="clearfix"></div>
             </div>
             <div class="modal-body">
-                <p>Desculpe, mas por enquanto só atendemos empresas optantes do Simples Nacional, registradas em Santa Catarina e que não possuem funcionários.</p>
+                <p>Desculpe, mas por enquanto só atendemos empresas optantes do Simples Nacional e registradas em Santa Catarina.</p>
                 <div class="clearfix"></div>
             </div>
             <div class="modal-footer">

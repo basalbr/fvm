@@ -10,8 +10,9 @@
     var maxValor;
     var minValor;
     $(function () {
-        $.get("{{route('ajax-simular-plano')}}", function (data) {
+       $.get("{{route('ajax-simular-plano')}}", function (data) {
             planos = data.planos;
+//            max_funcionarios = parseInt(data.total_funcionarios);
             max_documentos = parseInt(data.max_documentos);
             max_contabeis = parseInt(data.max_contabeis);
             max_pro_labores = parseInt(data.max_pro_labores);
@@ -22,8 +23,9 @@
             $('#mensalidade').text('R$' + parseFloat(data.min_valor).toFixed(2));
             $('#economia').text('R$' + economia.toFixed(2));
         });
-        $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores').on('keyup', function () {
-
+        $('#total_documentos, #funcionarios, #contabilidade, #total_contabeis, #pro_labores').on('keyup', function () {
+            var funcionarios = $('#funcionarios').val() ? parseInt($('#funcionarios').val()) : 0;
+            var acrescimo_funcionarios = 0;
             var pro_labores = $('#pro_labores').val();
             var total_documentos = $('#total_documentos').val();
             var total_contabeis = $('#total_contabeis').val();
@@ -37,22 +39,21 @@
             if (total_contabeis > max_contabeis) {
                 $('#total_contabeis').val(max_contabeis);
             }
-            if (!pro_labores) {
-                $('#pro_labores').val(0);
+            if(funcionarios >= 10){
+                acrescimo_funcionarios = funcionarios * 20;
+            }else{
+                acrescimo_funcionarios = funcionarios * 25;
             }
-            if (!total_documentos) {
-                $('#total_documentos').val(0);
-            }
-            if (!total_contabeis) {
-                $('#total_contabeis').val(0);
-            }
+            
+
             for (i in planos) {
 
                 if (total_contabeis <= parseInt(planos[i].total_documentos_contabeis) && total_documentos <= parseInt(planos[i].total_documentos) && pro_labores <= parseInt(planos[i].pro_labores) && parseFloat(planos[i].valor) < minValor) {
                     minValor = parseFloat(planos[i].valor);
                 }
             }
-            $('#mensalidade').text('R$' + parseFloat(minValor).toFixed(2));
+            minValor = parseFloat(minValor+acrescimo_funcionarios).toFixed(2);
+            $('#mensalidade').text('R$' + minValor);
             contabilidade = $('#contabilidade').val().replace(".", "");
             contabilidade = parseFloat(contabilidade.replace(",", "."));
             totalDesconto = (contabilidade * 12) - (minValor * 12) > 0 ? (contabilidade * 12) - (minValor * 12) : 0;
@@ -188,7 +189,7 @@
 </script>
 @stop
 @section('main')
-<h1>Cadastrar Empresa</h1>
+<h1>Migrar Empresa</h1>
 <hr class="dash-title">
 <div class='col-xs-12'>
     <div class='card'>
@@ -399,12 +400,16 @@
             </div>
             <div class="modal-body">
                 <p>Complete os campos abaixo e confira os valores de nossas mensalidades.
-                    <br />Ao cadastrar sua empresa você receberá <b>30 dias grátis</b> em nosso sistema, somente após esse período de 30 dias é que começaremos a cobrar mensalidade.</p>
+                    <br />Após migrarmos sua empresa, você receberá <b>30 dias grátis</b> em nosso sistema. Somente após esse período de 30 dias é que começaremos a cobrar a mensalidade.</p>
                 <div class='col-xs-6'>
                     <div class='form-group'>
                         <label>Quantos sócios retiram pró-labore? <span data-trigger="hover" class="text-info" title="Pró-labore é o salário dos sócios que constam no contrato social da empresa, e recolhem o INSS mensalmente para a previdência social." data-toggle="tooltip" data-placement="top">(o que é isso?)</span></label>
                         <input type='text' class='form-control numero-mask2' id='pro_labores' name="pro_labores" data-mask-placeholder='0' value="0"/>
                     </div>
+                    <div class='form-group'>
+                    <label>Quantos funcionários possui? <span data-trigger="hover" class="text-info" title="Quantidade de funcionários registrados na empresa. Exigido certificado digital A1." data-toggle="tooltip" data-placement="top">(o que é isso?)</span></label>
+                    <input type='text' class='form-control numero-mask2' id='funcionarios' data-mask-placeholder='0' />
+                </div>
                     <div class='form-group'>
                         <label> Quantos documentos fiscais são emitidos e recebidos por mês? <span data-trigger="hover" class="text-info" title="Documentos fiscais, são as notas fiscais de venda ou prestação de serviço emitidas, e as notas fiscais de aquisição de mercadorias ou serviços." data-toggle="tooltip" data-placement="top" >(o que é isso?)</span></label>
                         <input type='text' class='form-control numero-mask2' id='total_documentos' name="total_documentos" data-mask-placeholder='0' value="0"/>

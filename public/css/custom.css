@@ -170,7 +170,7 @@ button:active, button:focus{
     color: #fff;
 
 }
-#contato hr{
+.bg-dark hr{
     background-image: linear-gradient(to left,rgba(255,255,255,0),rgba(255,255,255,.2),rgba(255,255,255,0))!important;   
 }
 
