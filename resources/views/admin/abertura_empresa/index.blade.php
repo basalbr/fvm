@@ -50,7 +50,7 @@ $(function(){
                 <td>{{$empresa->pagamento->status}}</td>
                 <td>
                     <a class='btn btn-primary' href="{{route('editar-abertura-empresa-admin', ['id' => $empresa->id])}}">Visualizar Processo</a>
-                    <a class='btn btn-danger' href="">Cancelar Processo</a>
+                    <a class='btn btn-danger' href="{{route('deletar-abertura-empresa-admin', ['id' => $empresa->id])}}">Remover Processo</a>
                 </td>
             </tr>
             @endforeach

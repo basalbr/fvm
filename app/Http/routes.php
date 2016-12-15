@@ -184,6 +184,7 @@ Route::get('/admin/abertura-empresa', ['as' => 'abertura-empresa-admin', 'uses' 
 Route::get('/admin/abertura-empresa/editar/{id}', ['as' => 'editar-abertura-empresa-admin', 'uses' => 'AberturaEmpresaController@editAdmin', 'middleware' => 'admin']);
 Route::post('/admin/abertura-empresa/editar/{id}', ['uses' => 'AberturaEmpresaController@updateAdmin', 'middleware' => 'admin']);
 Route::get('/abertura-empresa/excluir/{id}', ['as' => 'deletar-abertura-empresa', 'uses' => 'AberturaEmpresaController@remove', 'middleware' => 'auth']);
+Route::get('/admin/abertura-empresa/excluir/{id}', ['as' => 'deletar-abertura-empresa-admin', 'uses' => 'AberturaEmpresaController@removeAdmin', 'middleware' => 'admin']);
 
 // Registration routes...
 Route::get('/registrar', ['uses' => 'Auth\AuthController@getRegister', 'as' => 'registrar']);

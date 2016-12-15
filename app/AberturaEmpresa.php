@@ -90,6 +90,23 @@ class AberturaEmpresa extends Model {
         'status',
     ];
 
+    public function delete() {
+        if($this->pagamento instanceof Pagamento){
+            $this->pagamento->delete();
+        }
+        if($this->socios->count()){
+            foreach($this->socios as $socio){
+                $socio->delete();
+            }
+        }
+        if($this->mensagens->count()){
+            foreach($this->mensagens as $mensagem){
+                $mensagem->delete();
+            }
+        }
+        parent::delete();
+    }
+    
     public function validate($data) {
 // make a new validator object
         $v = Validator::make($data, $this->rules);

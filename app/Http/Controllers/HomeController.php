@@ -66,8 +66,8 @@ class HomeController extends Controller {
         $assunto = $request->get('assunto');
         $email = $request->get('email');
         $mensagem = $request->get('mensagem');
-        \Illuminate\Support\Facades\Mail::send('emails.novo-contato-site', ['nome' => $nome, 'assunto' => $assunto, 'email' => $email, 'mensagem' => $mensagem], function ($m) use ($assunto) {
-            $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+        \Illuminate\Support\Facades\Mail::send('emails.novo-contato-site', ['nome' => $nome, 'assunto' => $assunto, 'email' => $email, 'mensagem' => $mensagem], function ($m) use ($assunto, $email,$nome) {
+            $m->from($email, $nome);
             $m->to(['admin@webcontabilidade.com', 'silmara@i9ge.com.br', 'sil0511@gmail.com'])->subject($assunto);
         });
     }

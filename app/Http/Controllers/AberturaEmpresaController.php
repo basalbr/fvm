@@ -31,6 +31,12 @@ class AberturaEmpresaController extends Controller {
         $empresa->save();
         return redirect(route('abertura-empresa'));
     }
+    
+    public function removeAdmin($id) {
+        $empresa = \App\AberturaEmpresa::where('id', '=', $id)->first();
+        $empresa->delete();
+        return redirect(route('abertura-empresa-admin'));
+    }
 
     public function store(Request $request) {
         $empresa = new \App\AberturaEmpresa;
