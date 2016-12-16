@@ -479,7 +479,7 @@ hr.dash-title {
     cursor: pointer;
     padding: 8px;
     margin: 10px;
-    color: #2a3342;
+    color: #0d7e8c;
     font-size: 13px;
     font-weight: 600;
     background: transparent;
@@ -524,7 +524,7 @@ hr.dash-title {
     color: #fff;
 }
 .fc-event.fc-day-grid-event.fc-event-dark {
-    background-color: #2a3342;
+    background-color: #0d7e8c;
     color: #fff;
 }
 .fc-event.fc-day-grid-event.fc-event-light {
@@ -548,7 +548,7 @@ hr.dash-title {
 .fc-event:hover,
 .fc-event:focus {
     background: #f4f7f9;
-    color: #2a3342;
+    color: #0d7e8c;
 }
 .fc-view-container .fc-event {
     padding: 10px;
@@ -627,7 +627,7 @@ hr.dash-title {
 }
 .fc-today-button.fc-state-default.fc-corner-right {
     margin-left: 30px;
-    color: #2a3342;
+    color: #0d7e8c;
 }
 .fc-today-button.fc-state-default.fc-corner-right:not(.fc-state-disabled) {
     background-color: #f1f3fa;
@@ -646,13 +646,13 @@ hr.dash-title {
     text-shadow: none;
 }
 .fc-today-button {
-    color: #2a3342;
+    color: #0d7e8c;
 }
 .fc-state-hover,
 .fc-state-down,
 .fc-state-active {
     color: #ffffff !important;
-    background-color: #2a3342 !important;
+    background-color: #0d7e8c !important;
 }
 .fc-state-hover {
     color: #ffffff !important;
@@ -660,7 +660,7 @@ hr.dash-title {
 }
 .fc-state-down,
 .fc-state-active {
-    background-color: #2a3342 !important;
+    background-color: #0d7e8c !important;
     background-image: none;
 }
 .fc-state-disabled {
@@ -717,14 +717,14 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
 .fc-day-header {
     background-color: #fff;
     border-color: transparent !important;
-    color: #2a3342;
+    color: #0d7e8c;
     font-size: 13px;
     height: 35px;
     line-height: 35px;
     text-transform: uppercase;
 }
 .fc-basic-view td.fc-day-number {
-    color: #2a3342;
+    color: #0d7e8c;
     font-size: 20px;
     font-weight: 700;
     padding-top: 5px;
@@ -735,7 +735,7 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
     font-weight: 600;
 }
 .fc-title-clone {
-    color: #2a3342;
+    color: #0d7e8c;
     font-size: 20px;
     font-weight: 700;
     padding-left: 5px;
@@ -755,7 +755,7 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
 .minimal-mp .ui-datepicker td span,
 .minimal-mp .ui-datepicker td a {
     background: #e5eaee;
-    color: #2a3342;
+    color: #0d7e8c;
     line-height: 38px;
     padding: 0;
     text-transform: uppercase;
@@ -820,7 +820,7 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    color: #2a3342;
+    color: #0d7e8c;
     background-color: #e5eaee;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.12) rgba(0, 0, 0, 0.15);
     height: auto;
@@ -854,7 +854,7 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
 }
 
 .fc button:hover, .fc button:focus, .fc button:active, .fc button.active, .open > .dropdown-toggle.fc button {
-    color: #2a3342;
+    color: #0d7e8c;
     background-color: #dde4e9;
 }
 
@@ -885,7 +885,7 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
 
 .fc-today-button.fc-state-default.fc-corner-right {
     margin-left: 30px;
-    color: #2a3342;
+    color: #0d7e8c;
 }
 
 .instrucao-descricao{
@@ -910,14 +910,14 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
 }
 .btn-primary:hover,.btn-primary:active{
     color: #fff;
-    background-color: #2a3342;
+    background-color: #0d7e8c;
 
 }
 
 .paginacao-instrucao{
     background-color: #fff;
     border-color: transparent !important;
-    color: #2a3342;
+    color: #0d7e8c;
     font-size: 13px;
     height: 35px;
     line-height: 35px;
@@ -1525,4 +1525,39 @@ th,td{
     -webkit-transition: all 0.2s ease-in-out;
     -o-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
+}
+
+
+.modal-header .close {
+    opacity: 1;
+    color: #fff;
+}
+
+.modal-header {
+    border-bottom: 1px solid #2F3A49 !important;
+    background: #2F3A49 !important;
+    color: #fff;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold!important;
+}
+
+.btn-lg{
+    box-shadow: 1px 2px 3px rgba(0,0,0,.4);
+    border-radius: 0;
+    color: #fff;
+    height: 50px;
+    z-index: 999;
+    font-size: 14px;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    line-height: 35px;
+    position: relative;
+}
+
+.btn-lg span{
+    font-size: 20px;
+    vertical-align: text-top;
+    padding: 0;
 }

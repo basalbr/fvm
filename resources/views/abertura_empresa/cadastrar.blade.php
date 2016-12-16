@@ -256,7 +256,6 @@ $(function () {
 @section('main')
 <h1>Solicitar abertura de empresa</h1>
 <hr class="dash-title">
-<div class='col-xs-12'>
     <div class='card'>
         @if($errors->has())
         <div class="alert alert-warning animate shake">
@@ -420,7 +419,6 @@ $(function () {
         </form>
         <div class='clearfix'></div>
     </div>
-</div>
 @stop
 @section('modal')
 <div class="modal fade" id="socio-modal" tabindex="-1" role="dialog">
@@ -469,6 +467,7 @@ $(function () {
                         <label>Regime de casamento *</label>
                         <select class="form-control" name='regime_casamento'>
                             <option value="">Selecione uma opção</option>
+                            <option value="">Nenhuma das opções</option>
                             <option value="parcial">Separação Parcial dos Bens</option>
                             <option value="total">Separação Total dos Bens</option>
                             <option value="universal">Separação Universal dos Bens</option>

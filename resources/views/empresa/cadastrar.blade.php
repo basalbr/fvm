@@ -10,7 +10,7 @@
     var maxValor;
     var minValor;
     $(function () {
-       $.get("{{route('ajax-simular-plano')}}", function (data) {
+        $.get("{{route('ajax-simular-plano')}}", function (data) {
             planos = data.planos;
 //            max_funcionarios = parseInt(data.total_funcionarios);
             max_documentos = parseInt(data.max_documentos);
@@ -39,12 +39,12 @@
             if (total_contabeis > max_contabeis) {
                 $('#total_contabeis').val(max_contabeis);
             }
-            if(funcionarios >= 10){
+            if (funcionarios >= 10) {
                 acrescimo_funcionarios = funcionarios * 20;
-            }else{
+            } else {
                 acrescimo_funcionarios = funcionarios * 25;
             }
-            
+
 
             for (i in planos) {
 
@@ -52,7 +52,7 @@
                     minValor = parseFloat(planos[i].valor);
                 }
             }
-            minValor = parseFloat(minValor+acrescimo_funcionarios).toFixed(2);
+            minValor = parseFloat(minValor + acrescimo_funcionarios).toFixed(2);
             $('#mensalidade').text('R$' + minValor);
             contabilidade = $('#contabilidade').val().replace(".", "");
             contabilidade = parseFloat(contabilidade.replace(",", "."));
@@ -191,23 +191,24 @@
 @section('main')
 <h1>Migrar Empresa</h1>
 <hr class="dash-title">
-<div class='col-xs-12'>
-    <div class='card'>
-        @if($errors->has())
-        <div class="alert alert-warning shake">
-            <b>Atenção</b><br />
-            @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-            @endforeach
+<div class='card'>
+    @if($errors->has())
+    <div class="alert alert-warning shake">
+        <b>Atenção</b><br />
+        @foreach ($errors->all() as $error)
+        {{ $error }}<br />
+        @endforeach
+    </div>
+    @endif
+    <form method="POST" action="" id="principal-form">
+        <h3>Informações</h3>
+        <div class='col-xs-12'>
+            <p>Preencha os campos abaixo e clique em "solicitar migração" para iniciarmos o processo de migração de sua empresa para a WEBContabilidade.
+                <br /><b>Campos com * são obrigatórios.</b></p>
         </div>
-        @endif
-        <form method="POST" action="" id="principal-form">
-            <h3>Informações</h3>
-            <p>Preencha os campos abaixo e clique em "cadastrar" para registrar sua empresa em nosso sistema.</p>
-            <p>Campos com * são obrigatórios.</p>
-            {{ csrf_field() }}
-            <input type="hidden" value="J" name='tipo' />
-
+        {{ csrf_field() }}
+        <input type="hidden" value="J" name='tipo' />
+        <div class='col-md-6'>
             <div class='form-group'>
                 <label>Nome Fantasia *</label>
                 <input type='text' class='form-control' name='nome_fantasia' value="{{Input::old('nome_fantasia')}}"/>
@@ -230,7 +231,8 @@
                 <label>CNPJ *</label>
                 <input type='text' class='form-control cnpj-mask' name='cpf_cnpj' value="{{Input::old('cpf_cnpj')}}"/>
             </div>
-
+        </div>
+        <div class='col-md-6'>
             <div class='form-group'>
                 <label>Inscrição Estadual</label>
                 <input type='text' class='form-control' name='inscricao_estadual'  value="{{Input::old('inscricao_estadual')}}"/>
@@ -243,8 +245,12 @@
                 <label>IPTU</label>
                 <input type='text' class='form-control' name='iptu'  value="{{Input::old('iptu')}}"/>
             </div>
-            <h3>Endereço</h3>
-            <p>Complete os campos abaixo com o endereço da sua empresa.</p>
+        </div>
+        <div class='clearfix'></div>
+        <br />
+        <h3>Endereço</h3>
+        <div class='col-xs-12'><p>Complete os campos abaixo com o endereço da sua empresa.</p></div>
+        <div class='col-md-6'>
             <div class='form-group'>
                 <label>CEP *</label>
                 <input type='text' class='form-control cep-mask' name='cep' value="{{Input::old('cep')}}" />
@@ -259,6 +265,8 @@
                 <label>Cidade *</label>
                 <input type='text' class='form-control' name='cidade'  value="{{Input::old('cidade')}}"/>
             </div>
+        </div>
+        <div class='col-md-6'>
             <div class='form-group'>
                 <label>Endereço *</label>
                 <input type='text' class='form-control' name='endereco'  value="{{Input::old('endereco')}}"/>
@@ -271,10 +279,13 @@
                 <label>Número *</label>
                 <input type='text' class='form-control numero-mask' name='numero' value="{{Input::old('numero')}}"/>
             </div>
-
-            <h3>Sócio Responsável</h3>
-            <p>Complete os campos abaixo com as informações do <b>sócio responsável pela empresa perante a Receita Federal</b><br />
-                <b>Atenção:</b> Essas informações são importantes para automatizarmos processos contábeis junto com os sistemas do governo.</p>
+        </div>
+        <div class='clearfix'></div>
+        <br />
+        <h3>Sócio Responsável</h3>
+        <div class='col-xs-12'><p>Complete os campos abaixo com as informações do <b>sócio responsável pela empresa perante a Receita Federal</b><br />
+                <b>Atenção:</b> Essas informações são importantes para automatizarmos processos contábeis junto com os sistemas do governo.</p></div>
+        <div class='col-md-6'>
             <div class='form-group'>
                 <label>Nome do responsável *</label>
                 <input type='text' class='form-control' name='socio[nome]' value="{{Input::old('socio')['nome']}}" />
@@ -305,14 +316,13 @@
                 <label>Nº Título de Eleitor do responsável *</label>
                 <input type='text' class='form-control' name='socio[titulo_eleitor]' value="{{Input::old('socio')['titulo_eleitor']}}"/>
             </div>
-            <div class='form-group'>
-                <label>Nº do Último Recibo do Imposto de Renda do responsável (Deixe em branco caso não tenha declarado)</label>
-                <input type='text' class='form-control irpf-mask' name='socio[recibo_ir]' value="{{Input::old('socio')['recibo_ir']}}"/>
-            </div>
+
             <div class='form-group'>
                 <label>PIS do responsável</label>
                 <input type='text' class='form-control pis-mask' name='socio[pis]' value="{{Input::old('socio')['pis']}}"/>
             </div>
+        </div>
+        <div class='col-md-6'>
             <div class='form-group'>
                 <label>CEP do responsável*</label>
                 <input type='text' class='form-control cep-mask' name='socio[cep]' value="{{Input::old('socio')['cep']}}"/>
@@ -340,13 +350,22 @@
                 <input type='text' class='form-control' name='socio[bairro]' value="{{Input::old('socio')['bairro']}}"/>
             </div>
             <div class='form-group'>
+                <label>Nº do Último Recibo do Imposto de Renda do responsável (Deixe em branco caso não tenha declarado)</label>
+                <input type='text' class='form-control irpf-mask' name='socio[recibo_ir]' value="{{Input::old('socio')['recibo_ir']}}"/>
+            </div>
+            <div class='form-group'>
                 <label>Valor de Pró-Labore do responsável (Deixe em branco caso não receba pró-labore)</label>
                 <input type='text' class='form-control dinheiro-mask' name='socio[pro_labore]' value="{{Input::old('socio')['pro_labore']}}"/>
             </div>
             <input type='hidden' name='socio[principal]' value="1"/>
-
-            <h3>CNAEs</h3>
+        </div>
+        <div class='clearfix'></div>
+        <br />
+        <h3>CNAEs</h3>
+        <div class='col-xs-12'>
             <p>Adicione os CNAEs relacionados à sua empresa. Caso não saiba os códigos, clique em Pesquisar CNAE.</p>
+        </div>
+        <div class='col-xs-12'>
             <div class='form-group'>
                 <label>CNAE *</label>
                 <div class='input-group col-md-6'>
@@ -359,8 +378,8 @@
                 <button type="button" class="btn btn-info" id='abrir-modal-cnae'><span class="fa fa-search"></span> Pesquisar CNAE</button>
                 <div class="cnae-search-box"><div class="result"></div></div>
             </div>
+
             <table class='table table-striped'>
-                <legend>Lista de CNAEs adicionados</legend>
                 <thead>
                     <tr>
                         <th>Descrição</th>
@@ -373,19 +392,29 @@
                         <td colspan="3" class="nenhum-cnae">Por favor adicione pelo menos um CNAE.</td>
                     </tr>
                 </tbody>
-            </table>      
-            <h3>Contabilidade Atual (Migração para WEBContabilidade)</h3>
-            <p>Precisamos que você informe o número de registro do CRC do seu atual contador para que possamos dar início ao processo de transferência de sua empresa para nossa equipe.</p>
+            </table>     
+        </div>
+        <div class='clearfix'></div>
+        <br />
+        <h3>Contabilidade Atual (Migração para WEBContabilidade)</h3>
+        <div class='col-xs-12'>
+            <p>Precisamos que você informe o número de registro do CRC do seu atual contador para que possamos dar início ao processo de transferência de sua empresa.</p>
+        </div>
+        <div class='col-xs-12'>
             <div class='form-group'>
                 <label>Número de registro do CRC do contador atual</label>
                 <input type='text' class='form-control' name='crc' value="{{Input::old('crc')}}"/>
             </div>
-            <div class='form-group'>
-                <a href="" id="mostrar-simulador" class='btn btn-primary'>Cadastrar Empresa</a>
-            </div>
-        </form>
+        </div>
         <div class='clearfix'></div>
-    </div>
+        <br />
+        <div class='col-xs-12'>
+            <div class='form-group'>
+                <a href="" id="mostrar-simulador" class='btn btn-primary'>Solicitar Migração</a>
+            </div>
+        </div>
+    </form>
+    <div class='clearfix'></div>
 </div>
 @stop
 
@@ -407,9 +436,9 @@
                         <input type='text' class='form-control numero-mask2' id='pro_labores' name="pro_labores" data-mask-placeholder='0' value="0"/>
                     </div>
                     <div class='form-group'>
-                    <label>Quantos funcionários possui? <span data-trigger="hover" class="text-info" title="Quantidade de funcionários registrados na empresa. Exigido certificado digital A1." data-toggle="tooltip" data-placement="top">(o que é isso?)</span></label>
-                    <input type='text' class='form-control numero-mask2' id='funcionarios' data-mask-placeholder='0' />
-                </div>
+                        <label>Quantos funcionários possui? <span data-trigger="hover" class="text-info" title="Quantidade de funcionários registrados na empresa. Exigido certificado digital A1." data-toggle="tooltip" data-placement="top">(o que é isso?)</span></label>
+                        <input type='text' class='form-control numero-mask2' id='funcionarios' data-mask-placeholder='0' />
+                    </div>
                     <div class='form-group'>
                         <label> Quantos documentos fiscais são emitidos e recebidos por mês? <span data-trigger="hover" class="text-info" title="Documentos fiscais, são as notas fiscais de venda ou prestação de serviço emitidas, e as notas fiscais de aquisição de mercadorias ou serviços." data-toggle="tooltip" data-placement="top" >(o que é isso?)</span></label>
                         <input type='text' class='form-control numero-mask2' id='total_documentos' name="total_documentos" data-mask-placeholder='0' value="0"/>

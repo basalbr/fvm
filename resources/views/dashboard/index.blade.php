@@ -131,5 +131,27 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div class="modal fade" id="empresa-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="width: 807px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Bem vindo à WEBContabilidade</h4>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-body">
+                <br />
+                <p>Olá <b>{{auth()->user()->nome}}</b>, seja bem vindo à WEBContabilidade.</p>
+                <p>Pudemos notar que você ainda não fez nenhuma <b>solicitação de abertura de empresa</b> ou para <b>migrar sua empresa</b>.</p>
+                <p>Escolha uma opção abaixo para prosseguir:</p>
+                <br />
+                <div class="clearfix"></div>
+                <a href='{{route('cadastrar-abertura-empresa')}}' class='btn btn-success btn-lg'><span class='fa fa-folder-open-o'></span> desejo abrir uma empresa</a>
+                <a href='{{route('cadastrar-empresa')}}' class='btn btn-primary btn-lg'><span class='fa fa-paper-plane'></span> desejo migrar minha empresa</a>
+                <a href='{{route('cadastrar-chamado')}}' class='btn btn-info btn-lg'><span class='fa fa-question'></span> desejo tirar dúvidas</a>
 
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 @stop
