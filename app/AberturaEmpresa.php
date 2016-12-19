@@ -154,7 +154,7 @@ class AberturaEmpresa extends Model {
     }
 
     public function enviar_notificacao_nova_mensagem_usuario() {
-        $usuario = Auth::user();
+        $usuario = \App\Usuario::where('id','=',$this->id_usuario)->first();
         $notificacao = new Notificacao;
         $notificacao->mensagem = 'Você possui uma nova mensagem em seu processo de abertura de empresa. <a href="' . route('editar-abertura-empresa', ['id' => $this->id]) . '">Visualizar.</a>';
         $notificacao->id_usuario = Auth::user()->id;
