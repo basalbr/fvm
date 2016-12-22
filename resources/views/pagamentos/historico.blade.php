@@ -1,19 +1,19 @@
 @extends('layouts.dashboard')
 @section('header_title', 'Mensalidades')
 @section('main')
-<h1>Histórico de Pagamentos</h1>
-<p>Abaixo estão as ordens de pagamento realizados no nosso sistema.</p>
-<hr class="dash-title">
+
 <div class="card">
+    <h1>Histórico de Pagamentos</h1>
+        <p>Abaixo estão as ordens de pagamento realizados no nosso sistema.</p>
+
     <h3>Lista de Pagamentos Realizados</h3>
-    <table class='table'>
+    <table class='table table-hover table-striped'>
         <thead>
             <tr>
                 <th>Empresa</th>
                 <th>Valor</th>
                 <th>Vencimento</th>
                 <th>Status</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -21,10 +21,9 @@
             @foreach($pagamentos as $pagamento)
             <tr>
                 <td>{{$pagamento->mensalidade->empresa->nome_fantasia}}</td>
-                <td>R${{number_format($pagamento->mensalidade->valor,2,',','.')}}</td>
+                <td>R$ {{number_format($pagamento->mensalidade->valor,2,',','.')}}</td>
                 <td>{{DateTime::createFromFormat('Y-m-d H:i:s', $pagamento->vencimento)->format('d/m/Y')}}</td>
-                <td>{{$pagamento->status}}</td>
-                <td>{!!$pagamento->botao_pagamento()!!}</td>
+                <td><b>{{$pagamento->status}}</b></td>
             </tr>
             @endforeach
             @else

@@ -1,12 +1,12 @@
 @extends('layouts.dashboard')
 @section('main')
 @section('header_title', 'Editar Sócio')
-<h1>Meus Dados</h1>
-<p>Após modificar os campos abaixo, clique em "salvar alterações" para atualizar suas informações.</p>
-<hr class='dash-title' />
 
-<div class='col-xs-12'>
+
+
     <div class='card'>
+            <h1>Meus Dados</h1>
+
         @if($errors->has())
         <div class="alert alert-warning shake">
             <b>Atenção</b><br />
@@ -16,6 +16,7 @@
         </div>
         @endif
         <h3>Informações</h3>
+        <p>Após modificar os campos abaixo, clique em "salvar alterações" para atualizar suas informações.</p>
         <form method="POST" action="">
             {{ csrf_field() }}
             <div class='form-group'>
@@ -39,10 +40,9 @@
                 <input type='password' class='form-control' name='senha_confirmation' />
             </div>
             <div class='form-group'>
-                <input type='submit' value="Salvar alterações" class='btn btn-primary' />
+                <button type="submit" class="btn btn-success"><span class='fa fa-save'></span> Salvar Alterações</button>
             </div>
             <div class="clearfix"></div>
         </form>
     </div>
-</div>
 @stop

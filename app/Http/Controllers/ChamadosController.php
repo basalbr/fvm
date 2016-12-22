@@ -86,7 +86,7 @@ class ChamadosController extends Controller {
         }else{
             $chamados->orderBy('updated_at','desc');
         }
-        $chamados = $chamados->paginate(10);
+        $chamados = $chamados->paginate(5);
         return view('chamados.index', ['chamados' => $chamados]);
     }
 

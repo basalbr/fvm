@@ -73,6 +73,7 @@ class Socio extends Model {
         'id_uf',
         'pro_labore',
         'orgao_expedidor',
+        'telefone',
     ];
 
     public function validate($data, $update = false) {

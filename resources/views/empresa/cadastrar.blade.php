@@ -181,7 +181,7 @@
 
         $('#cadastrar-empresa').on('click', function (e) {
             e.preventDefault();
-            $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores').clone().appendTo('#principal-form');
+            $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores, #funcionarios').clone().appendTo('#principal-form');
             $('#principal-form').submit();
         });
 
@@ -189,9 +189,9 @@
 </script>
 @stop
 @section('main')
-<h1>Migrar Empresa</h1>
-<hr class="dash-title">
+
 <div class='card'>
+    <h1>Migrar Empresa</h1>
     @if($errors->has())
     <div class="alert alert-warning shake">
         <b>Atenção</b><br />
@@ -410,7 +410,8 @@
         <br />
         <div class='col-xs-12'>
             <div class='form-group'>
-                <a href="" id="mostrar-simulador" class='btn btn-primary'>Solicitar Migração</a>
+                <a href="" id="mostrar-simulador" class='btn btn-success'><span class='fa fa-exchange'></span> Solicitar Migração</a>
+                <a href="{{URL::previous()}}" class="btn btn-primary"><span class='fa fa-history'></span> Voltar</a>
             </div>
         </div>
     </form>
@@ -428,8 +429,10 @@
                 <h4 class="modal-title">Mensalidade</h4>
             </div>
             <div class="modal-body">
+                <div class='col-xs-12'>
                 <p>Complete os campos abaixo e confira os valores de nossas mensalidades.
                     <br />Após migrarmos sua empresa, você receberá <b>30 dias grátis</b> em nosso sistema. Somente após esse período de 30 dias é que começaremos a cobrar a mensalidade.</p>
+                </div>
                 <div class='col-xs-6'>
                     <div class='form-group'>
                         <label>Quantos sócios retiram pró-labore? <span data-trigger="hover" class="text-info" title="Pró-labore é o salário dos sócios que constam no contrato social da empresa, e recolhem o INSS mensalmente para a previdência social." data-toggle="tooltip" data-placement="top">(o que é isso?)</span></label>
@@ -475,7 +478,9 @@
                 <h4 class="modal-title">Pesquisar CNAE</h4>
             </div>
             <div class="modal-body">
+                <div class='col-xs-12'>
                 <p>Digite parte da descrição e pressione pesquisar. Algumas opções irão aparecer, selecione a desejada clicando em "adicionar".</p>
+                </div>
                 <form id="cnae-form">
                     <div class='form-group'>
                         <label>CNAE</label>

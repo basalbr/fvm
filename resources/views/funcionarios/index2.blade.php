@@ -1,10 +1,10 @@
 @extends('layouts.dashboard')
 @section('header_title', 'Funcionários')
 @section('main')
-<h1>Funcionários</h1>
-<hr class="dash-title">
+
 <div class="card">
-    <h3>Lista de empresas</h3>
+    <h1>Funcionários</h1>
+    <h3>Lista de funcionários de {{\App\Pessoa::find($empresa)->nome_fantasia}}</h3>
     <table class='table'>
         <thead>
             <tr>
@@ -20,7 +20,7 @@
                 <td>{{$funcionario->nome_completo}}</td>
                 <td>{{$funcionario->cpf}}</td>
                 <td>
-                    <a class='btn btn-info' href="{{route('editar-funcionario', [$empresa, $funcionario->id])}}">Editar Funcionário</a>
+                    <a class='btn btn-warning' href="{{route('editar-funcionario', [$empresa, $funcionario->id])}}"><span class='fa fa-edit'></span> Editar Funcionário</a>
                 </td>
             </tr>
             @endforeach
@@ -31,6 +31,7 @@
             @endif
         </tbody>
     </table>
-    <a class='btn btn-info' href="{{route('cadastrar-funcionario', [$empresa])}}">Cadastrar Funcionário</a>
+    <a class='btn btn-success' href="{{route('cadastrar-funcionario', [$empresa])}}"><span class='fa fa-user-plus'></span> Cadastrar Funcionário</a>
+    <a href="{{URL::previous()}}" class="btn btn-primary"><span class='fa fa-history'></span> Voltar</a>
 </div>
 @stop

@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('header_title')
 @section('js')
-@parent()
+@parent
 <script type='text/javascript'>
     var chat_message_last_id;
     var chat_id;

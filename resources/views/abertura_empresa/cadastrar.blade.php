@@ -177,7 +177,7 @@ $(function () {
                     scrollTop: $("#empresa-erros").offset().top
                 }, 1000);
                 $('#principal-form .alert').show();
-            }else{
+            } else {
                 $('#principal-form').submit();
             }
         });
@@ -254,30 +254,36 @@ $(function () {
 </script>
 @stop
 @section('main')
-<h1>Solicitar abertura de empresa</h1>
-<hr class="dash-title">
-    <div class='card'>
-        @if($errors->has())
-        <div class="alert alert-warning animate shake">
+
+<div class='card'>
+    <h1>Solicitar abertura de empresa</h1>
+
+    <div class='clearfix'></div>
+    @if($errors->has())
+    <div class="alert alert-warning animate shake">
+        <b>Atenção</b><br />
+        @foreach ($errors->all() as $error)
+        {{ $error }}<br />
+        @endforeach
+    </div>
+    @endif
+
+    <form method="POST" action="" id="principal-form"  enctype="multipart/form-data">
+        <h3>Informações</h3>
+        <div class="alert alert-warning animate shake" style="display: none">
             <b>Atenção</b><br />
-            @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-            @endforeach
+            <div id="empresa-erros"></div>
         </div>
-        @endif
 
-        <form method="POST" action="" id="principal-form"  enctype="multipart/form-data">
-
-            <h3>Informações</h3>
-            <div class="alert alert-warning animate shake" style="display: none">
-                <b>Atenção</b><br />
-                <div id="empresa-erros"></div>
-            </div>
+        {{ csrf_field() }}
+        <input type="hidden" value="J" name='tipo' />
+        <div class='col-md-12'>
             <p>Preencha os campos abaixo e clique em "enviar solicitação" para que possamos dar início ao processo de abertura de empresa.Se precisarmos de mais alguma informação entraremos diretamente em contato com você.</p>
             <p>Campos com * são obrigatórios.</p>
-            {{ csrf_field() }}
-            <input type="hidden" value="J" name='tipo' />
             <p>É necessário que você nos forneça 3 possíveis nomes para sua empresa para que possamos fazer uma análise de viabilidade.</p>
+            <br />
+        </div>
+        <div class="col-md-6">
             <div class='form-group'>
                 <label>Nome Empresarial Preferencial *</label>
                 <input type='text' class='form-control' name='nome_empresarial1' value="{{Input::old('nome_empresarial1')}}" required=""/>
@@ -290,6 +296,8 @@ $(function () {
                 <label>Nome Empresarial Alternativo 2 *</label>
                 <input type='text' class='form-control' name='nome_empresarial3' value="{{Input::old('nome_empresarial3')}}" required=""/>
             </div>
+        </div>
+        <div class="col-md-6">
             <div class='form-group'>
                 <label>Natureza Jurídica *</label>
                 <select class="form-control" name="id_natureza_juridica">
@@ -307,13 +315,22 @@ $(function () {
                     <option value="normal" {{Input::old('enquadramento') == 'normal' ? 'selected' : ''}}>Normal</option>
                 </select>
             </div>
+
+        </div>
+        <div class="col-md-12">
             <div class='form-group'>
                 <label>Capital Social * <span data-trigger="hover" class="text-info" title="Capital Social é o valor, a integralizar ou integralizado, correspondente à contra-partida do titular, sócios ou acionistas de um empreendimento, para o início ou a manutenção dos negócios. Para fins de registro do comércio, deverá constar, no documento de constituição empresarial, o montante da subscrição, e como sera feita a conferência do valor: em moeda corrente, bens ou direitos." data-toggle="tooltip" data-placement="top">(o que é isso?)</span></label>
                 <p>Descreva o capital social da empresa</p>
                 <textarea class='form-control' name='capital_social'>{{Input::old('capital_social')}}</textarea>
             </div>
-            <h3>Endereço</h3>
-            <p>Complete os campos abaixo com o endereço da sua empresa.</p>
+        </div>
+        <div class="clearfix"></div>
+        <br />
+        <h3>Endereço</h3>
+        <div class='col-md-12'>
+        <p>Complete os campos abaixo com o endereço da sua empresa.</p>
+        </div>
+        <div class="col-md-6">
             <div class='form-group'>
                 <label>CEP *</label>
                 <input type='text' class='form-control cep-mask' name='cep' value="{{Input::old('cep')}}" />
@@ -344,6 +361,8 @@ $(function () {
                 <label>Complemento</label>
                 <input type='text' class='form-control' name='complemento'  value="{{Input::old('complemento')}}"/>
             </div>
+        </div>
+        <div class="col-md-6">
             <div class='form-group'>
                 <label>Inscrição IPTU *</label>
                 <input type='text' class='form-control' name='iptu'  value="{{Input::old('iptu')}}"/>
@@ -360,12 +379,17 @@ $(function () {
                 <label>CPF ou CNPJ do proprietário do imóvel *</label>
                 <input type='text' class='form-control' name='cpf_cnpj_proprietario' value="{{Input::old('cpf_cnpj_proprietario')}}"/>
             </div>
-            <h3>Sócios</h3>
-            <p>Clique em 'Adicionar novo sócio' para cadastrar um sócio.</p><p><b>Atenção:</b> É necessário ter pelo menos um sócio cadastrado.</p>
+        </div>
+        <div class="clearfix"></div>
+        <br />
+        <h3>Sócios</h3>
+        <div class='col-md-12'>
+        <p>Clique em 'Adicionar novo sócio' para cadastrar um sócio.</p><p><b>Atenção:</b> É necessário ter pelo menos um sócio cadastrado.</p>
+        </div>
+        
+        <div class="col-md-12">
             <div id='socios'></div>
-            <div class='form-group'>
-                <button id="mostrar-socio" type="button" class='btn btn-primary'>Adicionar novo sócio</button>
-            </div>
+
             <table class='table table-striped'>
                 <thead>
                     <tr>
@@ -380,21 +404,16 @@ $(function () {
                     </tr>
                 </tbody>
             </table> 
-            <h3>CNAEs</h3>
-            <p>Adicione os CNAEs relacionados à sua empresa. Caso não saiba os códigos, clique em Pesquisar CNAE.</p>
-            <p><b>Atenção:</b> não adicione nenhum CNAE caso você não saiba quais CNAEs você deseja ou se precisa de ajuda.</p>
             <div class='form-group'>
-                <label>CNAE</label>
-                <div class='input-group col-md-6'>
-                    <input type='text' class='form-control cnae-search cnae-mask'/>
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-success" id='adicionar-cnae' disabled="disabled"><span class="fa fa-plus"></span> Adicionar</button>
-                    </span>
-                </div>
-                <br />
-                <button type="button" class="btn btn-info" id='abrir-modal-cnae'><span class="fa fa-search"></span> Pesquisar CNAE</button>
-                <div class="cnae-search-box"><div class="result"></div></div>
+                <button id="mostrar-socio" type="button" class='btn btn-primary'><span class="fa fa-plus"></span> Adicionar novo sócio</button>
             </div>
+        </div>
+        <div class="clearfix"></div>
+        <br />
+        <h3>CNAEs</h3>
+        <div class='col-md-12'>
+        <p>Adicione os CNAEs relacionados à sua empresa. Caso não saiba os códigos, clique em Pesquisar CNAE.</p>
+        <p><b>Atenção:</b> não adicione nenhum CNAE caso você não saiba quais CNAEs você deseja ou se precisa de ajuda.</p>
             <table class='table table-striped'>
                 <thead>
                     <tr>
@@ -409,16 +428,36 @@ $(function () {
                     </tr>
                 </tbody>
             </table>
+            <div class='form-group'>
+                <label>CNAE</label>
+                <div class='input-group col-md-6'>
+                    <input type='text' class='form-control cnae-search cnae-mask'/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-success" id='adicionar-cnae' disabled="disabled"><span class="fa fa-plus"></span> Adicionar</button>
+                    </span>
+                </div>
+                <br />
+                <button type="button" class="btn btn-info" id='abrir-modal-cnae'><span class="fa fa-search"></span> Pesquisar CNAE</button>
+                <div class="cnae-search-box"><div class="result"></div></div>
+            </div>
+
+        </div>
+        <div class="col-md-12">
             <div class="form-group">
                 <label>Caso tenha dúvida na escolha de seu CNAE, digite no campo abaixo a descrição detalhada da(s) atividade(s) que pretende realizar em sua empresa e retornaremos com a lista dos possíveis CNAE's.</label>
                 <textarea class="form-control" name="cnae_duvida"></textarea>
             </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12">
             <div class='form-group'>
-                <button type="button" id="cadastrar" class='btn btn-success'>Enviar solicitação</button>
+                <button type="button" id="cadastrar" class='btn btn-success'><span class="fa fa-send"></span> Enviar solicitação</button>
+                <a href="{{URL::previous()}}" class="btn btn-primary"><span class='fa fa-history'></span> Voltar</a>
             </div>
-        </form>
-        <div class='clearfix'></div>
-    </div>
+        </div>
+    </form>
+    <div class='clearfix'></div>
+</div>
 @stop
 @section('modal')
 <div class="modal fade" id="socio-modal" tabindex="-1" role="dialog">

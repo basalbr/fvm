@@ -138,7 +138,9 @@
 
             {{ csrf_field() }}
             <h3>Informações</h3>
+            <div class='col-xs-12'>
             <p>Preencha os campos abaixo e clique em "salvar atelrações" para atualizar os dados de sua empresa em nosso sistema.</p>
+            </div>
             <div class='form-group'>
                 <label>Nome Fantasia</label>
                 <input type='text' class='form-control' name='nome_fantasia' value="{{$empresa->nome_fantasia}}"/>
@@ -179,7 +181,9 @@
                 <input type='text' class='form-control' name='codigo_acesso_simples_nacional' value="{{$empresa->codigo_acesso_simples_nacional}}"/>
             </div>
             <h3>Endereço</h3>
+            <div class='col-xs-12'>
             <p>Complete os campos abaixo com o endereço da sua empresa.</p>
+            </div>
             <div class='form-group'>
                 <label>CEP</label>
                 <input type='text' class='form-control cep-mask' name='cep' value="{{$empresa->cep}}" />
@@ -208,7 +212,9 @@
             </div>
 
             <h3>CNAEs</h3>
+            <div class='col-xs-12'>
             <p>Adicione os CNAEs relacionados à sua empresa. Caso não saiba os códigos, clique em Pesquisar CNAE.</p>
+            </div>
             <div class='form-group'>
                 <label>CNAE</label>
                 <div class='input-group col-md-6'>

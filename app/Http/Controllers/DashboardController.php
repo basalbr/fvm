@@ -9,8 +9,7 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use App\Processo;
 use App\ChamadoResposta;
-use App\Pessoa;
-use App\Socio;
+use App\Pagamento;
 
 class DashboardController extends Controller {
 
@@ -29,20 +28,11 @@ class DashboardController extends Controller {
             '11' => 'Novembro',
             '12' => 'Dezembro'
         );
-        $impostos = \App\Imposto::join('imposto_mes', 'imposto_mes.id_imposto', '=', 'imposto.id')->where('imposto_mes.mes', '=', (int) date('m'))->orderBy('imposto.vencimento')->select('imposto.*')->get();
         $notificacoes = \App\Notificacao::where('id_usuario', '=', Auth::user()->id)->orderBy('created_at', 'desc')->get();
-        $mensagens = ChamadoResposta::join("chamado", "chamado.id", '=', "chamado_resposta.id_chamado")->where('chamado.id_usuario', '=', Auth::user()->id)->groupBy('chamado_resposta.id_chamado')->orderBy('chamado_resposta.created_at', 'desc')->select('chamado_resposta.*')->limit(5)->get();
-        $empresas = Pessoa::where('id_usuario', '=', Auth::user()->id)->orderBy('nome_fantasia')->limit(5)->get();
-        $socios = Socio::join('pessoa', 'pessoa.id', '=', 'socio.id_pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id)->select('socio.*')->orderBy('socio.nome')->limit(5)->get();
-        $apuracoes = Processo::join('pessoa', 'pessoa.id', '=', 'processo.id_pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.status', '<>', 'concluido')->select('processo.*')->get();
-        $apuracoes_urgentes = [];
-        foreach ($apuracoes as $apuracao) {
-            if ($apuracao->imposto->informacoes_extras()->count() > 0 && $apuracao->informacoes_extras()->count() < 1) {
-                $apuracoes_urgentes[] = $apuracao;
-            }
-        }
-
-        return view('dashboard.index', ['mensagens' => $mensagens, 'empresas' => $empresas, 'impostos' => $impostos, 'apuracoes' => $apuracoes, 'meses' => $meses, 'notificacoes' => $notificacoes]);
+        $mensagens = ChamadoResposta::join("chamado", "chamado.id", '=', "chamado_resposta.id_chamado")->where('chamado.id_usuario', '=', Auth::user()->id)->where('chamado.status', '<>', 'Concluído')->groupBy('chamado_resposta.id_chamado')->orderBy('chamado_resposta.created_at', 'desc')->select('chamado_resposta.*')->count();
+        $apuracoes = Processo::join('pessoa', 'pessoa.id', '=', 'processo.id_pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.status', '<>', 'concluido')->select('processo.*')->count();
+        $qtde_pagamentos = Pagamento::join('mensalidade', 'mensalidade.id', '=', 'pagamento.id_mensalidade')->where('mensalidade.id_usuario', '=', Auth::user()->id)->where('pagamento.status', '!=', 'Paga')->where('pagamento.status', '!=', 'Concluída')->orderBy('pagamento.created_at', 'desc')->select('pagamento.*')->count();
+        return view('dashboard.index', ['qtde_chamados' => $mensagens, 'qtde_pagamentos' => $qtde_pagamentos, 'qtde_apuracoes' => $apuracoes, 'meses' => $meses, 'notificacoes' => $notificacoes]);
     }
 
     public function acessar() {
@@ -89,7 +79,9 @@ class DashboardController extends Controller {
     }
 
     public function ajaxNotificacao(Request $request) {
-        \App\Notificacao::where('id', '=', $request->get('id'))->where('id_usuario', '=', Auth::user()->id)->first()->delete();
+        if ($request->get('id')) {
+            \App\Notificacao::where('id', '=', $request->get('id'))->where('id_usuario', '=', Auth::user()->id)->first()->delete();
+        }
         $notificacoes = \App\Notificacao::where('id_usuario', '=', Auth::user()->id)->orderBy('created_at', 'desc')->get();
         return response()->json($notificacoes);
     }

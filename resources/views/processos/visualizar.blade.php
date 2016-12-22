@@ -1,10 +1,9 @@
 @extends('layouts.dashboard')
 @section('header_title', $processo->imposto->nome .' - Competência: '. date_format(date_create($processo->competencia), 'm/Y'))
 @section('main')
-<h1>Visualizar Processo</h1>
-<hr class="dash-title">
-<div class="col-xs-12">
+
     <div class="card">
+        <h1>Visualizar Processo</h1>
         @if($errors->has())
         <div class="alert alert-warning shake">
             <b>Atenção</b><br />
@@ -143,7 +142,8 @@
                 </div>
                 @endif
                 <div class='form-group'>
-                    <input type='submit' value="Enviar mensagem" class='btn btn-primary' />
+                    <button type='submit'class='btn btn-success'><span class='fa fa-send'></span>  Enviar Mensagem</button>
+                <a href="{{URL::previous()}}" class="btn btn-primary"><span class='fa fa-history'></span> Voltar</a>
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -161,7 +161,6 @@
         </div>
         <div class="clearfix"></div>
     </div>
-</div>
 @endforeach
 @endif
 @stop

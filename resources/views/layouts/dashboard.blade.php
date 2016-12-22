@@ -2,7 +2,53 @@
 @section('js')
 @parent
 <script type='text/javascript'>
+    var qtde_notificacoes = 0;
+    function animarNotificacao() {
+        if (!$("#notification-bell").hasClass('active')) {
+            if (parseInt($('#notification-count').text()) > 0) {
+                $("#notification-bell").toggleClass('swing');
+            }
+        }
+    }
+    function getNotificacoes() {
+        $.post("{{route('ajax-notificacao')}}", function (data) {
+            $("#notification-count").text(data.length)
+            if (data.length > 0 && data.length != qtde_notificacoes) {
+                atualizarListaNotificacao(data);
+                qtde_notificacoes = data.length;
+            }
+        });
+    }
+    function atualizarListaNotificacao(data) {
+        qtde_notificacoes = data.length;
+        var html = '';
+        for (i in data) {
+            html += '<li><div class="notificacao-mensagem">' + data[i].mensagem + '</div>';
+            html += '<div class="text-success"><a href="" data-id="' + data[i].id + '" class="text-success mark-read"><span class="fa fa-check"></span> Marcar como lida</a></div></li>'
+        }
+        $("#lista-notificacao").html(html);
+        if ($("#lista-notificacao li").length < 1) {
+            $("#lista-notificacao").html('<li>Você não possui nenhuma notificação</li>');
+        }
+    }
+
+    function lerNotificacao(id) {
+        $.post("{{route('ajax-notificacao')}}", {'id': id}, function (data) {
+            atualizarListaNotificacao(data);
+        });
+    }
     $(function () {
+        $("#notification-bell").on('click', function (e) {
+            e.preventDefault();
+            $('#notification-bar').toggle();
+            $(this).toggleClass('active');
+        });
+        setInterval('getNotificacoes()', 3000);
+        setInterval('animarNotificacao()', 3000);
+        $('#lista-notificacao').on('click', '.mark-read', function (e) {
+            e.preventDefault();
+            lerNotificacao($(this).data('id'));
+        });
         $('.remover-registro').on('click', function (e) {
             e.preventDefault();
             $('#remove-register').attr('href', $(this).attr('href'));
@@ -36,7 +82,7 @@
             Impostos
         </li>
         <li class='{{Request::is('apuracoes*') ? "active" : ""}}'>
-            <a href="{{route('listar-processos')}}"><div class="icon"><span class="fa fa-file"></span></div>apurações em aberto</a>
+            <a href="{{route('listar-processos')}}"><div class="icon"><span class="fa fa-file"></span></div>apurações</a>
         </li>
         <li class='{{Route::is('calendario') ? "active" : ""}}'>
             <a href="{{route('calendario')}}"><div class="icon"><span class="fa fa-calendar"></span></div>Calendário</a>
@@ -71,7 +117,7 @@
             <a href="{{route('listar-mensalidades')}}"><div class="icon"><span class="fa fa-book"></span></div>mensalidades ativas</a>
         </li>
         <li class='{{Request::is('pagamentos-pendentes*') ? "active" : ""}}'>
-            <a href="{{route('listar-pagamentos-pendentes')}}"><div class="icon"><span class="fa fa-exclamation"></span></div>pagamentos pendentes</a>
+            <a href="{{route('listar-pagamentos-pendentes')}}"><div class="icon"><span class="fa fa-exclamation"></span></div>pagamentos ativos</a>
         </li>
         <li class='{{Request::is('historico-pagamentos*') ? "active" : ""}}'>
             <a href="{{route('listar-historico-pagamentos')}}"><div class="icon"><span class="fa fa-cart-arrow-down"></span></div>histórico pagamentos</a>

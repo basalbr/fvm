@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Processo;
+use App\AberturaEmpresa;
+use Illuminate\Support\Facades\Input;
 
 class AberturaEmpresaController extends Controller {
 
@@ -15,7 +17,45 @@ class AberturaEmpresaController extends Controller {
     }
 
     public function indexAdmin() {
-        $empresas = \App\AberturaEmpresa::orderBy('nome_empresarial1')->get();
+        $empresas = AberturaEmpresa::query();
+        $empresas->join('usuario', 'usuario.id', '=', 'abertura_empresa.id_usuario');
+        $empresas->join('pagamento', 'pagamento.id_abertura_empresa', '=', 'abertura_empresa.id');
+
+        if (Input::get('usuario')) {
+            $empresas->where('usuario.nome', 'like', '%' . Input::get('usuario') . '%');
+        }
+        if (Input::get('nome_preferencial')) {
+            $empresas->where('abertura_empresa.nome_empresarial1', 'like', '%' . Input::get('nome_preferencial') . '%');
+        }
+        if (Input::get('status_processo')) {
+            $empresas->where('abertura_empresa.status', '=',Input::get('status_processo'));
+        }
+        if (Input::get('status_pagamento')) {
+            $empresas->where('pagamento.status', '=',Input::get('status_pagamento'));
+        }
+        if (Input::get('ordenar')) {
+            if (Input::get('ordenar') == 'usuario_asc') {
+                $empresas->orderBy('usuario.nome', 'asc');
+            }
+            if (Input::get('ordenar') == 'usuario_asc') {
+                $empresas->orderBy('usuario.nome', 'desc');
+            }
+            if (Input::get('ordenar') == 'status_pagamento') {
+                $empresas->orderBy('pagamento.status', 'asc');
+            }
+            if (Input::get('ordenar') == 'status_processo') {
+                $empresas->orderBy('abertura_empresa.status', 'asc');
+            }
+            if (Input::get('ordenar') == 'nome_preferencial_asc') {
+                $empresas->orderBy('abertura_empresa.nome_empresarial1', 'asc');
+            }
+            if (Input::get('ordenar') == 'nome_preferencial_desc') {
+                $empresas->orderBy('abertura_empresa.nome_empresarial1', 'desc');
+            }
+        } else {
+            $empresas->orderBy('abertura_empresa.updated_at', 'desc');
+        }
+        $empresas = $empresas->select('abertura_empresa.*')->paginate(5);
         return view('admin.abertura_empresa.index', ['empresas' => $empresas]);
     }
 
@@ -31,7 +71,7 @@ class AberturaEmpresaController extends Controller {
         $empresa->save();
         return redirect(route('abertura-empresa'));
     }
-    
+
     public function removeAdmin($id) {
         $empresa = \App\AberturaEmpresa::where('id', '=', $id)->first();
         $empresa->delete();
@@ -88,9 +128,9 @@ class AberturaEmpresaController extends Controller {
             $pagamento->status = 'Pendente';
             $pagamento->vencimento = date('Y-m-d H:i:s', strtotime("+7 day"));
             $pagamento->save();
-            
+
             $empresa->enviar_notificacao_criacao();
-            
+
             return redirect(route('abertura-empresa'));
         } else {
             return redirect(route('cadastrar-abertura-empresa'))->withInput()->withErrors($empresa->errors());
@@ -100,7 +140,6 @@ class AberturaEmpresaController extends Controller {
     public function storeAdmin($id, Request $request) {
 //        dd($request->all());
         $empresa = new \App\Pessoa;
-        $request->merge(['id_usuario' => Auth::user()->id]);
         if (count($request->get('cnaes'))) {
             foreach ($request->get('cnaes') as $cnae) {
                 if (\App\Cnae::where('id', '=', $cnae)->first()->id_tabela_simples_nacional == null) {
@@ -142,42 +181,10 @@ class AberturaEmpresaController extends Controller {
             $abertura_empresa->status = 'Concluído';
             $abertura_empresa->enviar_notificacao_conclusao($request->get('nome_fantasia'));
             $abertura_empresa->save();
-                    
-            $impostos_mes = \App\ImpostoMes::where('mes', '=', date('n'))->get();
-            $competencia = date('Y-m-d', strtotime(date('Y-m') . " -1 month"));
-            foreach ($impostos_mes as $imposto_mes) {
-                if ($imposto_mes->imposto->vencimento > ((int) date('d'))) {
-                    $imposto = $imposto_mes->imposto;
-                    $processo = new Processo;
-                    $processo->create([
-                        'id_pessoa' => $empresa->id,
-                        'competencia' => $competencia,
-                        'id_imposto' => $imposto_mes->id_imposto,
-                        'vencimento' => $imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento, 'Y-m-d'),
-                        'status' => 'novo'
-                    ]);
-                }
-            }
 
-            $plano = \App\Plano::where('total_documentos', '>=', $request->get('total_documentos'))->where('total_documentos_contabeis', '>=', $request->get('total_contabeis'))->where('pro_labores', '>=', $request->get('pro_labores'))->orderBy('valor', 'asc')->first();
-
-            $mensalidade = new \App\Mensalidade;
-            $mensalidade->id_usuario = Auth::user()->id;
-            $mensalidade->id_pessoa = $empresa->id;
-            $mensalidade->duracao = $plano->duracao;
-            $mensalidade->valor = $plano->valor;
-            $mensalidade->documentos_fiscais = $plano->total_documentos;
-            $mensalidade->documentos_contabeis = $plano->total_documentos_contabeis;
-            $mensalidade->pro_labores = $plano->pro_labores;
-            $mensalidade->funcionarios = $plano->funcionarios;
-            $mensalidade->save();
-
-            $pagamento = new \App\Pagamento;
-            $pagamento->id_mensalidade = $mensalidade->id;
-            $pagamento->status = 'Paga';
-            $pagamento->valor = 0.0;
-            $pagamento->vencimento = date('Y-m-d H:i:s');
-            $pagamento->save();
+            $empresa->enviar_notificacao_nova_empresa();
+            $empresa->abrir_processos();
+            $empresa->criar_mensalidade($request);
 
             return redirect(route('empresas-admin'));
         } else {

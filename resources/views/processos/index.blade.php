@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 @section('js')
-@parent()
+@parent
 <script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.min.js')}}"></script>
 <script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.pt-BR.min.js')}}"></script>
 <script type="text/javascript" language="javascript">
@@ -17,12 +17,12 @@ $(function () {
 });
 </script>
 @stop
-@section('header_title', 'Processos')
+@section('header_title', 'Apurações')
 @section('main')
-<h1>Apurações em aberto</h1>
-<p>Para visualizar os detalhes de uma apuração ou enviar informações adicionar, clique em visualizar.</p>
-<hr class="dash-title">
+
 <div class="card">
+    <h1>Apurações</h1>
+    <p>Para visualizar os detalhes de uma apuração ou enviar informações adicionar, clique em visualizar.</p>
     <h3>Filtros de Pesquisa <small><a href=''>mostrar</a></small></h3>
     <form class="form-inline form-pesquisa">
         <div class="form-group" style="width: 200px">
@@ -63,7 +63,7 @@ $(function () {
             <label>Status</label>
             <select name="status" class="form-control">
                 <option value="" {{Input::get('status') ? 'selected' : ''}}>Todos</option>
-                <option value="aberto" {{Input::get('status') == 'aberto' ? 'selected' : ''}}>Aberto</option>
+                <option value="aberto" {{Input::get('status') == 'aberto' || !Input::get('status') ? 'selected' : ''}}>Aberto</option>
                 <option value="fechado" {{Input::get('status') == 'fechado' ? 'selected' : ''}}>Fechado</option>
             </select>
         </div>
@@ -72,7 +72,7 @@ $(function () {
             <select name="ordenar" class="form-control">
                 <option value="vencimento_desc" {{Input::get('ordenar') == 'atualizado_desc' ? 'selected' : ''}}>Vencimento</option>
                 <option value="competencia_desc" {{Input::get('ordenar') == 'competencia_desc' ? 'selected' : ''}}>Competência</option>
-                
+
             </select>
         </div>
         <div class="form-group"  style="width: 50px">
@@ -82,8 +82,8 @@ $(function () {
         <div class="clearfix"></div>
     </form>
     <br />
-    <h3>Lista de apurações em aberto</h3>
-    <table class='table'>
+    <h3>Lista de apurações</h3>
+    <table class='table table-hover table-striped'>
         <thead>
             <tr>
                 <th>Empresa</th>
@@ -103,7 +103,7 @@ $(function () {
                 <td>{{$processo->competencia_formatado()}}</td>
                 <td>{{$processo->vencimento_formatado()}}</td>
                 <td>{{$processo->status}}</td>
-                <td><a class='btn btn-primary' href="{{route('responder-processo-usuario', ['id' => $processo->id])}}">Visualizar</a></td>
+                <td><a class='btn btn-primary' href="{{route('responder-processo-usuario', ['id' => $processo->id])}}"><span class="fa fa-search"></span> Visualizar</a></td>
             </tr>
             @endforeach
             @else

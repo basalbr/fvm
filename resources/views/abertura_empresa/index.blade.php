@@ -2,18 +2,17 @@
 @section('header_title', 'Abertura de Empresas')
 @section('js')
 @section('main')
-<h1>Processos de abertura de empresa</h1>
+
+<div class="card">
+    <h1>Processos de abertura de empresa</h1>
 <p>Abaixo estão as solicitações de abertura de empresa feita por você.</p>
 <p><b>É necessário efetuar o pagamento de R$ 59,00 referente ao processo para que possamos abrir a empresa para você.</b></p>
-<hr class="dash-title">
-<div class="card">
     <h3>Lista de processos de abertura de empresa</h3>
     <div class="table-responsive">
-        <table class='table'>
+        <table class='table table-hover table-striped'>
             <thead>
                 <tr>
                     <th>Nome Preferencial</th>
-                    <th>Nome do Sócio Principal</th>
                     <th>Status do Processo</th>
                     <th>Status do Pagamento</th>
                     <th></th>
@@ -24,16 +23,15 @@
                 @foreach($empresas as $empresa)
                 <tr>
                     <td>{{$empresa->nome_empresarial1}}</td>
-                    <td>{{$empresa->socios()->where('principal','=',1)->first()->nome}}</td>
                     <td>{{$empresa->status}}</td>
                     <td>{{$empresa->pagamento ? $empresa->pagamento->status : 'Cancelado'}}</td>
                     <td>
                         @if($empresa->status != 'Cancelado')
-                        <a class='btn btn-primary' href="{{route('editar-abertura-empresa', ['id' => $empresa->id])}}">Visualizar Processo</a>
+                        <a class='btn btn-primary' href="{{route('editar-abertura-empresa', ['id' => $empresa->id])}}"><span class="fa fa-search"></span> Visualizar Processo</a>
                         @endif
                         {!!$empresa->botao_pagamento()!!}
                         @if($empresa->status != 'Concluído' && $empresa->status != 'Cancelado')
-                        <a class='btn btn-danger remover-registro' href="{{route('deletar-abertura-empresa',[$empresa->id])}}">Cancelar Processo</a>
+                        <a class='btn btn-danger remover-registro' href="{{route('deletar-abertura-empresa',[$empresa->id])}}"><span class="fa fa-remove"></span> Cancelar Processo</a>
                         @endif
                     </td>
                 </tr>
@@ -48,6 +46,6 @@
     </div>
     <div class="clearfix"></div>
     <br />
-    <a class='btn btn-success' href='{{route('cadastrar-abertura-empresa')}}'>solicitar abertura de empresa</a>
+    <a class='btn btn-success' href='{{route('cadastrar-abertura-empresa')}}'><span class="fa fa-child"></span> solicitar abertura de empresa</a>
 </div>
 @stop

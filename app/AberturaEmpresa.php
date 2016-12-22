@@ -91,22 +91,22 @@ class AberturaEmpresa extends Model {
     ];
 
     public function delete() {
-        if($this->pagamento instanceof Pagamento){
+        if ($this->pagamento instanceof Pagamento) {
             $this->pagamento->delete();
         }
-        if($this->socios->count()){
-            foreach($this->socios as $socio){
+        if ($this->socios->count()) {
+            foreach ($this->socios as $socio) {
                 $socio->delete();
             }
         }
-        if($this->mensagens->count()){
-            foreach($this->mensagens as $mensagem){
+        if ($this->mensagens->count()) {
+            foreach ($this->mensagens as $mensagem) {
                 $mensagem->delete();
             }
         }
         parent::delete();
     }
-    
+
     public function validate($data) {
 // make a new validator object
         $v = Validator::make($data, $this->rules);
@@ -154,7 +154,7 @@ class AberturaEmpresa extends Model {
     }
 
     public function enviar_notificacao_nova_mensagem_usuario() {
-        $usuario = \App\Usuario::where('id','=',$this->id_usuario)->first();
+        $usuario = \App\Usuario::where('id', '=', $this->id_usuario)->first();
         $notificacao = new Notificacao;
         $notificacao->mensagem = 'Você possui uma nova mensagem em seu processo de abertura de empresa. <a href="' . route('editar-abertura-empresa', ['id' => $this->id]) . '">Visualizar.</a>';
         $notificacao->id_usuario = Auth::user()->id;
@@ -259,7 +259,7 @@ class AberturaEmpresa extends Model {
             $checkout = Pagseguro::checkout()->createFromArray($data);
             $credentials = PagSeguro::credentials()->get();
             $information = $checkout->send($credentials); // Retorna um objeto de laravel\pagseguro\Checkout\Information\Information
-            return '<a href="' . $information->getLink() . '" class="btn btn-success">Clique para pagar</a>';
+            return '<a href="' . $information->getLink() . '" class="btn btn-success"><span class="fa fa-credit-card"></span> Clique para pagar</a>';
         }
         if ($this->status == 'Disponível' || $this->status == 'Em análise') {
             return '<a href="" class="btn btn-success" disabled>Em processamento</a>';

@@ -26,7 +26,7 @@
         <script name="text/javascript" src="{{url(public_path().'js/jquery.easing.min.js')}}"></script>
         <script type="text/javascript"  language="javascript">
 $(function () {
- $('#inicio, #como-funciona, #planos, #faq, #servicos, #noticias, #contato').addClass("hiddenSection").viewportChecker({
+    $('#inicio, #como-funciona, #planos, #faq, #servicos, #noticias, #contato').addClass("hiddenSection").viewportChecker({
         classToAdd: 'animated visibleSection fadeIn',
         classToRemove: 'hiddenSection',
         classToAddForFullView: '',
@@ -109,7 +109,7 @@ $(function () {
     $('.cnae-mask').mask('0000-0/00');
     $('.irpf-mask').mask('000000000000');
     $('.pis-mask').mask('000.00000.00-0');
-      $(".time-mask").mask("99:99", {placeholder: "--:--", clearIfNotMatch: true});
+    $(".time-mask").mask("99:99", {placeholder: "--:--", clearIfNotMatch: true});
     $(".multiplier-mask").mask('##0%', {reverse: true, placeholder: "0%"});
 
     jQuery.support.cors = true;
@@ -182,8 +182,36 @@ $(function () {
                                 <a href="/#contato">Contato</a>
                             </li>
                             @endif
-                            @if(Auth::user())
-                            <li><a href="" target="" id="login-link"><b>Olá {{Auth::user()->nome}}</b></a></li>
+                            @if(Auth::user() && !(Request::is('')||Request::is('/')) )
+
+                            <li>
+                                @if(\App\Notificacao::where('id_usuario','=',Auth::user()->id)->count())
+                                <a id="notification-bell" href="" class="animated swing">
+                                    <span class="fa fa-bell"></span>
+                                    <span id='notification-count'>{{\App\Notificacao::where('id_usuario','=',Auth::user()->id)->count()}}</span>
+                                </a>
+                                @else
+                                <a id="notification-bell" href="" class='animated'>
+                                    <span class="fa fa-bell"></span>
+                                    <span id='notification-count'>{{\App\Notificacao::where('id_usuario','=',Auth::user()->id)->count()}}</span>
+                                </a>
+                                @endif
+                                <div id='notification-bar' class='card'>
+                                    <ul class='lista-apuracoes-urgentes' id="lista-notificacao">
+                                        @if(\App\Notificacao::where('id_usuario','=',Auth::user()->id)->count())
+                                        @foreach(\App\Notificacao::where('id_usuario','=',Auth::user()->id)->get() as $notificacao)
+                                        <li>
+                                            <div class="notificacao-mensagem">{!!$notificacao->mensagem!!}</div>
+                                            <div class="text-success"><a href="" data-id="{{$notificacao->id}}" class="text-success mark-read"><span class="fa fa-check"></span> Marcar como lida</a></div>
+                                        </li>
+                                        @endforeach
+                                        @else
+                                        <li>Você não possui nenhuma notificação</li>
+                                        @endif
+                                    </ul>
+                                </div>
+                                <a href="" target="" id="login-link"><b>Olá {{Auth::user()->nome}}</b></a>
+                            </li>
                             <li><a href="{{route('sair')}}" target="" id="register-link"><b>Sair</b></a></li>
                             @else
                             <li><a href="{{route('registrar')}}" target="" id="register-link"><b>Registrar</b></a></li>

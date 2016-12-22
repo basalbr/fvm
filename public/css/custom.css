@@ -24,6 +24,36 @@ body.relative{
     margin-bottom: 10px;
 }
 
+#dash-container .card{
+    padding-top: 75px;    
+}
+
+.card h1{
+    border-left: 6px solid gray;
+    padding-left: 8px;
+    background: linear-gradient(to right, rgba(47,58,73, 1), rgba(47,58,73, 0.2));
+    color: #fff;
+    height: 50px;
+    line-height: 49px;
+    box-shadow: 1px 2px 3px rgba(0,0,0,.4);
+    text-transform: uppercase;
+    font-size: 25px;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    position: fixed;
+    top: 50px;
+    left: 275px;
+    right: 0px;
+    z-index: 5;
+}
+
+.card h1+p{
+    line-height: 25px;
+}
+
+.nav-tabs>li>a {
+    border: 0;
+}
+
 /*#empresa-card .card-body ul, #mensagem-card .card-body ul, #apuracao-card .card-body ul, #imposto-card .card-body ul{
     height: 250px;
     overflow: auto;
@@ -39,8 +69,8 @@ body.relative{
 }*/
 
 .notificacao-mensagem{
-        margin-bottom: 2px;
-        padding-bottom: 2px;
+    margin-bottom: 2px;
+    padding-bottom: 2px;
 }
 
 .form-inline .form-control{
@@ -51,9 +81,7 @@ body.relative{
     margin-bottom: 4px;
 }
 
-.text-success {
-    color: #3c763d!important;
-}
+
 
 .card h3{
     margin: 5px 5px 10px 0px;
@@ -159,6 +187,7 @@ button:active, button:focus{
     text-transform: uppercase;
     font-weight: bold;
     line-height: 35px;
+
 }
 
 #contato label{
@@ -361,7 +390,7 @@ label{
     position: fixed;
     height: calc(100% - 60px);
     top: 60px;
-    background-color: #D7D6DB;
+    background-color: #fff;
     box-shadow: inset -9px 0 8px -11px rgba(0,0,0,.4);
     z-index: 49;
 }
@@ -379,17 +408,17 @@ label{
 
 #sidebar-left ul{
     list-style: none;
-    padding-left: 5px;
+    padding-left: 0px;
 }
 
 #sidebar-left > ul > li.sidebar-header{
     margin-left: 2px!important;
     border-left: 3px solid gray;
     padding-left: 8px;
-    background-color: #2F3A49 !important;
+    background: linear-gradient(to right, rgba(47,58,73, 1), rgba(47,58,73, 0.2));
     color: #fff;
     height: 35px;
-    line-height: 35px;
+    line-height: 37px;
     box-shadow: 1px 2px 3px rgba(0,0,0,.4);
 }
 
@@ -400,30 +429,31 @@ label{
     text-transform: uppercase;
     font-weight: bold;
     line-height: 50px;
+    transition: all ease-in 0.2s
 }
 
 #sidebar-left > ul > li.active{
-    box-shadow: 1px 0px 2px 1px rgba(0,0,0,0.3)
+    /*box-shadow: 1px 0px 2px 1px rgba(0,0,0,0.3)*/
 }
 
 #sidebar-left > ul > li > a{
     width: 100%;
     height: 100%;
-    background-color: #C1C0C5;
+    /*background-color: #C1C0C5;*/
     display: block;
     color: #8e8e93;
-    padding-left: 50px;
+    padding-left: 45px;
     position: relative;
+    transition: all ease-in 0.2s
 }
 
 #sidebar-left > ul > li.active > a{
-    background-color: #f7f7ff;
-    color: #2C2F3B;
+    color: #006983;
 }
 
 #sidebar-left > ul > li:hover > a{
-    background-color: #e3e2e5;
-    color: #636366;
+    /*background-color: #e3e2e5;*/
+    color: #0097bc;
     text-decoration: none!important;
 }
 
@@ -433,29 +463,33 @@ label{
 }
 
 #sidebar-left > ul > li.active:hover > a{
-    background-color: #f7f7ff;
-    color: #2C2F3B;
+    /*background-color: #f7f7ff;*/
+    color: #006983;
 }
 
 #sidebar-left > ul > li > a div.icon{
     width: 30px;
     height: 30px;
-    background-color: #aaabb0;
-    color: #fff;
+    /*background-color: #aaabb0;*/
+    color: #8e8e93;
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 9px;
+    left: 5px;
     line-height: 30px;
     font-size: 20px;
     text-align: center;
+    border-radius: 25px; 
+    transition: all ease-in 0.2s
 }
-
 #sidebar-left > ul > li.active > a div.icon,#sidebar-left > ul > li.active:hover > a div.icon{
-    background-color: #41434e;
+    background-color: #006983;
+    color: #fff;
 }
 
 #sidebar-left > ul > li:hover > a div.icon{
-    background-color: #808289;
+    /*background-color: #808289;*/
+    background-color: #0097bc;
+    color: #fff;
 }
 
 hr.dash-title {
@@ -935,6 +969,7 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
     background-color: #C1C0C5!important;
 }
 
+
 #paginacao-instrucao-container{
     width: 100%;
     position: relative;
@@ -1007,6 +1042,7 @@ body.basic-calendar .chute-center .fc-toolbar .fc-center h2 {
     color: #fff;
     background-color: #11a8bb;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.12) rgba(0, 0, 0, 0.15);
+
 }
 
 .pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover {
@@ -1077,9 +1113,7 @@ ul.lista-impostos li:hover{
 }
 
 .tab-content{
-    background-color: #66ffff;
-    box-shadow: 1px 2px 3px rgba(0,0,0,.25);
-    z-index:2;
+    background-color: #fff;
 }
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
@@ -1269,7 +1303,8 @@ ul.lista-impostos li:hover{
 
 }
 .lista-apuracoes-urgentes li a{
-    color: #11a8bb;
+    color: #11a8bb!important;
+    font-weight: bold!important;
 }
 
 .lista-apuracoes-urgentes li a:hover{
@@ -1560,4 +1595,157 @@ th,td{
     font-size: 20px;
     vertical-align: text-top;
     padding: 0;
+}
+
+#apuracao-icon{
+    font-size: 50px;
+    color: #269abc;
+    text-align: center;
+    width: 100%;
+}
+
+#notificacao-icon{
+    font-size: 20px;
+    color: #fff;
+    position: absolute;
+    left:8px;
+    top:8px;
+}
+
+.big-icon{
+    font-size: 50px;
+    text-align: center;
+    width: 100%;
+}
+
+a.shortcut h3.text-center{
+    padding: 5px!important;
+    margin: 0 5px!important;
+    border: 0;
+}
+
+a.shortcut{
+    color: #0aa89e;
+    margin-bottom: 15px;
+    display: block;
+    /*text-shadow: 1px 1px 1px rgba(0,0,0,.2);*/   
+    transition: all ease-in 0.1s;
+}
+
+a.shortcut .contador{
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    top: 40px;
+    left: 55%;
+    background: #f7f7f7;
+    border-radius: 25px;
+    text-align: center;
+    border: solid 2px #0aa89e;
+    font-weight: bold;
+    line-height: 19px;
+}
+
+a.shortcut:hover, a.shortcut:focus{
+    color: #2196f3;
+    text-decoration: none;
+    outline: none;
+}
+
+a.shortcut.blue:hover{
+    color:#0097bc;
+}
+
+a.shortcut.green:hover{
+    color:#00bf86;
+}
+a.shortcut.mint:hover{
+    color:#0fb0c0;
+}
+a.shortcut.orange:hover{
+    color:#ffa000;
+}
+a.shortcut.blue:hover .contador{
+    border-color: #0097bc;
+    color:#0097bc;
+}
+
+a.shortcut.green:hover .contador{
+    border-color: #00bf86;
+    color:#00bf86;
+}
+a.shortcut.mint:hover .contador{
+    border-color: #0fb0c0;
+    color:#0fb0c0;
+}
+a.shortcut.orange:hover .contador{
+    border-color: #ffa000;
+    color:#ffa000;
+}
+
+a.shortcut:active{
+    text-shadow: none;
+}
+
+.subcard:hover{
+    background-color: #f7f7f7;
+}
+
+#notification-bar{
+    right: -40px;
+    height: auto;
+    position: absolute;
+    top: 60px;
+    left: -60px;
+    padding: 5px;
+    padding-bottom: 10px;
+    transition: all ease-in 0.3s;   
+    display: none;
+}
+
+#notification-bar h3{
+    color: #fff;
+    background: linear-gradient(to right, rgba(47,58,73, 1), rgba(47,58,73, 0.2));
+    margin: 0;
+    padding: 10px;
+}
+
+#notification-bar .lista-apuracoes-urgentes li:last-child{
+    border-bottom: 0;
+    padding-bottom: 5px;
+}
+
+#notification-bar ul{
+    padding-left: 10px!important; 
+    padding-right: 10px; 
+    transition: all ease-in 0.3s;   
+}
+
+#notification-count{
+    width: 17px;
+    height: 17px;
+    position: absolute;
+    top: 15px;
+    left: 55%;
+    background: #fff;
+    border-radius: 25px;
+    text-align: center;
+    border: solid 1px #0097bc;
+    font-weight: bold;
+    line-height: 14px;
+    color: #0097bc;
+    font-size: 12px;
+}
+
+#notification-bell{
+    position: absolute; font-size: 20px; top: 0px; left: -60px;
+}
+
+#notification-bell.active{
+    background-color: #fff;
+    color: #0097bc!important;
+}
+
+.text-success {
+    color: #3c763d!important;
 }

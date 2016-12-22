@@ -48,12 +48,12 @@ class Mensalidade extends Model {
         return $this->errors;
     }
 
-    public function proximo_pagamento() {
+    public function proximo_pagamento($formato = 'Y-m-d') {
         try {
              $data_vencimento = $this->created_at->format('d');
             $ultimo_pagamento = date_format($this->pagamentos()->where('tipo', '=','mensalidade')->orderBy('created_at', 'desc')->first()->created_at, 'Y-m');
             $date = strtotime("+1 month", strtotime($ultimo_pagamento . '-' . $data_vencimento));
-            $vencimento = date('Y-m-d', strtotime("+5 days", $date));
+            $vencimento = date($formato, strtotime("+5 days", $date));
             return $vencimento;
         } catch (Exception $ex) {
             return false;

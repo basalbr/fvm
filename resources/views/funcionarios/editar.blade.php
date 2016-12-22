@@ -769,7 +769,9 @@ $('#mostrar-dependente').on('click', function () {
             <div class="clearfix"></div>
             <br />        
             <h3>Dependente</h3>
+            <div class='col-xs-12'>
             <p>Clique em 'Adicionar novo dependente' para cadastrar um dependente.</p><p><b>Atenção:</b> Se o funcionário possuir dependentes é de suma importância informá-los no sistema.</p>
+            </div>
             <div id='dependentes'></div>
             <div class='form-group'>
                 <button id="mostrar-dependente" type="button" class='btn btn-primary'>Adicionar novo dependente</button>
@@ -802,7 +804,9 @@ $('#mostrar-dependente').on('click', function () {
 
                 </div>
             </div>
+            <div class='col-xs-12'>
             <p><b>Digite na tabela abaixo o horário de trabalho do funcionário de acordo com o dia da semana.</b></p>
+            </div>
             <div class="col-md-12">
                 <table class='table table-hover table-bordered table-striped'>
                     <thead>
@@ -873,8 +877,9 @@ $('#mostrar-dependente').on('click', function () {
                         <b>Atenção</b><br />
                         <div id="dependente-erros"></div>
                     </div>
+                    <div class='col-xs-12'>
                     <p>Complete os campos abaixo com as informações do <b>dependente.</b><br />
-
+</div>
                     <div class='form-group'>
                         <label>Nome *</label>
                         <input type='text' class='form-control' name='nome' value="" />

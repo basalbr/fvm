@@ -89,7 +89,7 @@ class Pagamento extends Model {
             $checkout = Pagseguro::checkout()->createFromArray($data);
             $credentials = PagSeguro::credentials()->get();
             $information = $checkout->send($credentials); // Retorna um objeto de laravel\pagseguro\Checkout\Information\Information
-            return '<a href="'.$information->getLink().'" class="btn btn-success">Clique para pagar</a>';
+            return '<a href="'.$information->getLink().'" class="btn btn-success"><span class="fa fa-credit-card"></span> Clique para pagar</a>';
         }
         if ($this->status == 'Disponível' || $this->status == 'Em análise') {
             return '<a href="" class="btn btn-success" disabled>Em processamento</a>';

@@ -12,67 +12,69 @@
 </script>
 @stop
 @section('main')
-<h1>Processo de abertura de empresa</h1>
-<hr class="dash-title">
-<div class="col-xs-12">
-    <div class="card">
-        <div class="processo-info">
-            <h3>Processo de Abertura de Empresa</h3>
-            <blockquote>
-                <div class="pull-left">
-                    <div class="titulo">Status do Processo</div>
-                    <div class='text-success info'>{{$empresa->status}}</div>
-                </div>
-                <div class="pull-left">
-                    <div class="titulo">Status do Pagamento</div>
-                    <div class='text-success info'>{{$empresa->pagamento->status}}</div>
-                </div>
-                <div class="pull-left">
-                    <div class="titulo">Nome Preferencial</div>
-                    <div class="info">{{$empresa->nome_empresarial1}}</div>
-                </div>
-                <div class="pull-left">
-                    <div class="titulo">Nome do Sócio Principal</div>
-                    <div class="info">{{$empresa->socios()->where('principal','=',1)->first()->nome}}</div>
-                </div>
-                <div class='clearfix'></div>
-                <div class="pull-left">
-                    <div class="titulo"></div>
-                    <div class="info"><a href='' id="show-info">Clique aqui para ver todas as informações</a></div>
-                </div>
-                <div class='clearfix'></div>
-            </blockquote>
 
-        </div>
-        @if($errors->has())
-        <div class="alert alert-warning shake">
-            <b>Atenção</b><br />
-            @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-            @endforeach
-        </div>
-        @endif
-        @if($empresa->status != 'Cancelado' && $empresa->status != 'Concluído')
-        <form method="POST" action="" enctype="multipart/form-data">
-            <h3>Nova Mensagem</h3>
-            <div class='col-xs-12'>
+<div class="card">
+    <h1>Processo de abertura de empresa</h1>
+    <div class="processo-info">
+        <h3>Informações</h3>
+        <blockquote>
+            <div class="pull-left">
+                <div class="titulo">Status do Processo</div>
+                <div class='text-success info'>{{$empresa->status}}</div>
+            </div>
+            <div class="pull-left">
+                <div class="titulo">Status do Pagamento</div>
+                <div class='text-success info'>{{$empresa->pagamento->status}}</div>
+            </div>
+            <div class="pull-left">
+                <div class="titulo">Nome Preferencial</div>
+                <div class="info">{{$empresa->nome_empresarial1}}</div>
+            </div>
+            <div class="pull-left">
+                <div class="titulo">Nome do Sócio Principal</div>
+                <div class="info">{{$empresa->socios()->where('principal','=',1)->first()->nome}}</div>
+            </div>
+            <div class='clearfix'></div>
+            <div class="pull-left">
+                <div class="titulo"></div>
+                <div class="info"><a href='' id="show-info">Clique aqui para ver todas as informações</a></div>
+            </div>
+            <div class='clearfix'></div>
+        </blockquote>
+
+    </div>
+    @if($errors->has())
+    <div class="alert alert-warning shake">
+        <b>Atenção</b><br />
+        @foreach ($errors->all() as $error)
+        {{ $error }}<br />
+        @endforeach
+    </div>
+    @endif
+    @if($empresa->status != 'Cancelado' && $empresa->status != 'Concluído')
+    <form method="POST" action="" enctype="multipart/form-data">
+        <h3>Nova Mensagem</h3>
+        <div class='col-xs-12'>
             {{ csrf_field() }}
-            
+
             <div class='form-group'>
                 <label>Anexar arquivo</label>
                 <input type='file' class='form-control' value="" name='anexo'/>
             </div>
             <div class='form-group'>
+                <label>Mensagem</label>
                 <textarea class="form-control" name='mensagem'></textarea>
             </div>
             <div class='form-group'>
-                <input type='submit' value="Enviar mensagem" class='btn btn-primary' />
+                <button type='submit' class='btn btn-success'><span class="fa fa-send"></span> Enviar Mensagem</button>
             </div>
-            </div>
-        </form>
-        @endif
-        <h3>Últimas mensagens:</h3>
-        <div class='col-xs-12'>
+        </div>
+    </form>
+    @endif
+    <div class="clearfix"></div>
+    <br />
+    <h3>Últimas mensagens:</h3>
+    <div class='col-xs-12'>
         @if($empresa->mensagens->count())
         @foreach($empresa->mensagens()->orderBy('updated_at', 'desc')->get() as $resposta)
         <div class='form-group'>
@@ -88,9 +90,8 @@
         @else
         <p>Nenhuma mensagem encontrada</p>
         @endif
-        </div>
-        <div class="clearfix"></div>
     </div>
+    <div class="clearfix"></div>
 </div>
 @stop
 
@@ -116,8 +117,8 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="pane-empresa">
-                        <div class='col-xs-12'>
-                            <br />
+                        <br />
+                        <div class='col-md-6'>
                             <div class='form-group'>
                                 <label>Nome Empresarial Preferencial</label>
                                 <input type='text' class='form-control' value="{{$empresa->nome_empresarial1}}"/>
@@ -130,6 +131,8 @@
                                 <label>Nome Empresarial Alternativo 2</label>
                                 <input type='text' class='form-control' value="{{$empresa->nome_empresarial3}}"/>
                             </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class='form-group'>
                                 <label>Natureza Jurídica</label>
                                 <input type='text' class='form-control' value='{{$empresa->natureza_juridica->descricao}}' />
@@ -143,10 +146,11 @@
                                 <textarea class='form-control' >{{$empresa->capital_social}}</textarea>
                             </div>
                         </div>
+                        <div class="clearfix"></div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="pane-endereco">
-                        <div class='col-xs-12'>
-                            <br />
+                        <br />
+                        <div class='col-md-6'>
                             <div class='form-group'>
                                 <label>CEP</label>
                                 <input type='text' class='form-control' value="{{$empresa->capital_social}}" />
@@ -175,6 +179,8 @@
                                 <label>Complemento</label>
                                 <input type='text' class='form-control' value="{{$empresa->complemento}}"/>
                             </div>
+                        </div>
+                        <div class='col-md-6'>
                             <div class='form-group'>
                                 <label>Inscrição IPTU *</label>
                                 <input type='text' class='form-control' value="{{$empresa->iptu}}"/>
@@ -192,10 +198,12 @@
                                 <input type='text' class='form-control' value="{{$empresa->cpf_cnpj_proprietario}}"/>
                             </div>
                         </div>
+                        <div class="clearfix"></div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="pane-socios">
+                        <br />
                         <div class='col-xs-12'>
-                            <br />
+
                             <div class='table-responsive'>
                                 <table class='table table-bordered table-hover table-striped'>
                                     <thead>
@@ -251,10 +259,12 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="clearfix"></div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="pane-cnae">
+                        <br />
                         <div class='col-xs-12'>
-                            <br />
+
                             <table class='table table-hover table-striped table-bordered'>
                                 <thead>
                                     <tr>
@@ -283,6 +293,7 @@
                             </div>
                         </div>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
 
                 <div class="clearfix"></div>

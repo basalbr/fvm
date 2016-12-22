@@ -4,7 +4,7 @@
 <h1>Funcionários</h1>
 <hr class="dash-title">
 <div class="card">
-    <h3>Lista de empresas</h3>
+    <h3>Lista de funcionários</h3>
     <table class='table'>
         <thead>
             <tr>

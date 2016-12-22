@@ -62,9 +62,9 @@ $(function(){
 </script>
 @stop
 @section('main')
-<h1 class="header">Calendário de Impostos</h1>
-<hr class="dash-title">
-<div class="col-xs-12 card">
+
+<div class="card">
+    <h1 class="header">Calendário de Impostos</h1>
     <div id="calendar"></div>
 </div>
 @stop

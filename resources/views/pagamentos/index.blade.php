@@ -1,12 +1,13 @@
 @extends('layouts.dashboard')
 @section('header_title', 'Mensalidades')
 @section('main')
-<h1>Pagamentos</h1>
-<p>Abaixo estão as ordens de pagamento em aberto no nosso sistema. É necessário estar com a mensalidade em dia para que você possa receber nossos serviços.</p>
-<hr class="dash-title">
+
 <div class="card">
+    <h1>Pagamentos</h1>
+        <p>Abaixo estão as ordens de pagamento em aberto no nosso sistema. É necessário estar com a mensalidade em dia para que você possa receber nossos serviços.</p>
+
     <h3>Lista de Pagamentos Pendentes</h3>
-    <table class='table'>
+    <table class='table table-hover table-striped'>
         <thead>
             <tr>
                 <th>Empresa</th>
@@ -23,7 +24,7 @@
                 <td>{{$pagamento->mensalidade->empresa->nome_fantasia}}</td>
                 <td>R${{number_format($pagamento->mensalidade->valor,2,',','.')}}</td>
                 <td>{{DateTime::createFromFormat('Y-m-d H:i:s', $pagamento->vencimento)->format('d/m/Y')}}</td>
-                <td>{{$pagamento->status}}</td>
+                <td><b>{{$pagamento->status}}</b></td>
                 <td>{!!$pagamento->botao_pagamento()!!}</td>
             </tr>
             @endforeach

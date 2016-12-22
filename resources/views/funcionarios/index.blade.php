@@ -24,12 +24,13 @@ $(function(){
 </script>
 @stop
 @section('main')
-<h1>Funcionários</h1>
-<p>Selecione uma empresa para ver os funcionários.</p>
-<hr class="dash-title">
+
 <div class="card">
+    <h1>Funcionários</h1>
+    <p>Selecione uma empresa para ver os funcionários.</p>
+
     <h3>Lista de empresas</h3>
-    <table class='table'>
+    <table class='table table-hover table-striped'>
         <thead>
             <tr>
                 <th>Nome Fantasia</th>
@@ -46,8 +47,8 @@ $(function(){
                 <td>
                     <!--<a class='btn btn-warning' href="{{route('editar-empresa', ['id' => $empresa->id])}}">Editar</a>-->
                     @if($empresa->status != 'Em Análise')
-                    <a class='btn btn-info' href="{{route('cadastrar-funcionario', [$empresa->id])}}">Cadastrar Funcionário</a>
-                    <a class='btn btn-primary' href="{{route('listar-funcionarios', [$empresa->id])}}">Listar Funcionários</a>
+                    <a class='btn btn-success' href="{{route('cadastrar-funcionario', [$empresa->id])}}"><span class='fa fa-user-plus'></span> Cadastrar Funcionário</a>
+                    <a class='btn btn-primary' href="{{route('listar-funcionarios', [$empresa->id])}}"><span class='fa fa-list-alt'></span> Listar Funcionários</a>
                     @endif
                 </td>
             </tr>

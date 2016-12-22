@@ -3,33 +3,34 @@
 @section('js')
 @parent
 <script>
-$(function(){
-   $('#verificar-empresa').on('click', function(){
-      $('#empresa-modal').modal('show'); 
-   });
-   $('#validar-empresa').on('click', function(e){
-       if(!$('input[name="santa_catarina"]:checked').val() || !$('input[name="simples_nacional"]:checked').val()){
-          e.preventDefault();
-          $('#empresa-modal').modal('hide'); 
-          $('#erro-modal').modal('show');
-      } 
-      if($('input[name="santa_catarina"]:checked').val() == 'nao' || $('input[name="simples_nacional"]:checked').val() == 'nao'){
-          e.preventDefault();
-          $('#empresa-modal').modal('hide'); 
-          $('#erro-modal').modal('show');
-      } 
-      return true;
-   });
-});
+    $(function () {
+        $('#verificar-empresa').on('click', function () {
+            $('#empresa-modal').modal('show');
+        });
+        $('#validar-empresa').on('click', function (e) {
+            if (!$('input[name="santa_catarina"]:checked').val() || !$('input[name="simples_nacional"]:checked').val()) {
+                e.preventDefault();
+                $('#empresa-modal').modal('hide');
+                $('#erro-modal').modal('show');
+            }
+            if ($('input[name="santa_catarina"]:checked').val() == 'nao' || $('input[name="simples_nacional"]:checked').val() == 'nao') {
+                e.preventDefault();
+                $('#empresa-modal').modal('hide');
+                $('#erro-modal').modal('show');
+            }
+            return true;
+        });
+    });
 </script>
 @stop
 @section('main')
-<h1>Empresas</h1>
-<p>Abaixo estão as empresas cadastradas por você, caso queira editar ou visualizar alguma informação, clique em editar.<br/>Se você deseja gerenciar os sócios de uma empresa, clique em sócios.<br />Empresas em processo de análise não podem ser editadas.</p>
-<hr class="dash-title">
+
+
 <div class="card">
+    <h1>Empresas</h1>
+    <p>Abaixo estão as empresas cadastradas por você, caso queira editar ou visualizar alguma informação, clique em editar empresa.<br/>Se você deseja gerenciar os sócios de uma empresa, clique em listar sócios.<br />Empresas em processo de análise não podem ser editadas.</p>
     <h3>Lista de empresas</h3>
-    <table class='table'>
+    <table class='table table-hover table-striped'>
         <thead>
             <tr>
                 <th>Nome Fantasia</th>
@@ -51,8 +52,8 @@ $(function(){
                 <td class="hidden-xs hidden-sm">{{$empresa->status}}</td>
                 <td>
                     @if($empresa->status != 'Em Análise')
-                    <a class='btn btn-info' href="{{route('cadastrar-socio', [$empresa->id])}}">Cadastrar Sócio</a>
-                    <a class='btn btn-primary' href="{{route('listar-socios', [$empresa->id])}}">Listar Sócios</a>
+                    <a class='btn btn-info' href="{{route('cadastrar-socio', [$empresa->id])}}"><span class="fa fa-plus"></span> Cadastrar Sócio</a>
+                    <a class='btn btn-primary' href="{{route('listar-socios', [$empresa->id])}}"><span class="fa fa-list-alt"></span> Listar Sócios</a>
                     @endif
                 </td>
             </tr>
@@ -64,8 +65,8 @@ $(function(){
             @endif
         </tbody>
     </table>
-    <a class='btn btn-primary' id="verificar-empresa">Transferir Empresa para webcontabilidade</a>
-    <a class='btn btn-success' href='{{route('cadastrar-abertura-empresa')}}'>solicitar abertura de empresa</a>
+    <a class='btn btn-primary' id="verificar-empresa"><span class="fa fa-exchange"></span> <span class="visible-lg-inline">migrar Empresa para webcontabilidade</span><span class="hidden-lg">migrar Empresa</span></a>
+    <a class='btn btn-success' href='{{route('cadastrar-abertura-empresa')}}'><span class="fa fa-child"></span> <span class="visible-lg-inline">solicitar abertura de empresa</span><span class="hidden-lg">abrir empresa</span></a>
 </div>
 @stop
 @section('modal')

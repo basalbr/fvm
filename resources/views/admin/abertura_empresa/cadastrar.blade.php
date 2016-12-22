@@ -10,8 +10,9 @@
     var maxValor;
     var minValor;
     $(function () {
-        $.get("{{route('ajax-simular-plano')}}", function (data) {
+         $.get("{{route('ajax-simular-plano')}}", function (data) {
             planos = data.planos;
+//            max_funcionarios = parseInt(data.total_funcionarios);
             max_documentos = parseInt(data.max_documentos);
             max_contabeis = parseInt(data.max_contabeis);
             max_pro_labores = parseInt(data.max_pro_labores);
@@ -22,8 +23,9 @@
             $('#mensalidade').text('R$' + parseFloat(data.min_valor).toFixed(2));
             $('#economia').text('R$' + economia.toFixed(2));
         });
-        $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores').on('keyup', function () {
-
+        $('#total_documentos, #funcionarios, #contabilidade, #total_contabeis, #pro_labores').on('keyup', function () {
+            var funcionarios = $('#funcionarios').val() ? parseInt($('#funcionarios').val()) : 0;
+            var acrescimo_funcionarios = 0;
             var pro_labores = $('#pro_labores').val();
             var total_documentos = $('#total_documentos').val();
             var total_contabeis = $('#total_contabeis').val();
@@ -37,22 +39,21 @@
             if (total_contabeis > max_contabeis) {
                 $('#total_contabeis').val(max_contabeis);
             }
-            if (!pro_labores) {
-                $('#pro_labores').val(0);
+            if (funcionarios >= 10) {
+                acrescimo_funcionarios = funcionarios * 20;
+            } else {
+                acrescimo_funcionarios = funcionarios * 25;
             }
-            if (!total_documentos) {
-                $('#total_documentos').val(0);
-            }
-            if (!total_contabeis) {
-                $('#total_contabeis').val(0);
-            }
+
+
             for (i in planos) {
 
                 if (total_contabeis <= parseInt(planos[i].total_documentos_contabeis) && total_documentos <= parseInt(planos[i].total_documentos) && pro_labores <= parseInt(planos[i].pro_labores) && parseFloat(planos[i].valor) < minValor) {
                     minValor = parseFloat(planos[i].valor);
                 }
             }
-            $('#mensalidade').text('R$' + parseFloat(minValor).toFixed(2));
+            minValor = parseFloat(minValor + acrescimo_funcionarios).toFixed(2);
+            $('#mensalidade').text('R$' + minValor);
             contabilidade = $('#contabilidade').val().replace(".", "");
             contabilidade = parseFloat(contabilidade.replace(",", "."));
             totalDesconto = (contabilidade * 12) - (minValor * 12) > 0 ? (contabilidade * 12) - (minValor * 12) : 0;
@@ -67,7 +68,7 @@
 
         $('#cadastrar-empresa').on('click', function (e) {
             e.preventDefault();
-            $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores').clone().appendTo('#principal-form');
+            $('#total_documentos, #contabilidade, #total_contabeis, #pro_labores, #funcionarios').clone().appendTo('#principal-form');
             $('#principal-form').submit();
         });
         $('#mostrar-socio').on('click', function () {
@@ -292,23 +293,25 @@
 </script>
 @stop
 @section('main')
-<h1>Cadastrar Empresa</h1>
-<hr class="dash-title">
-<div class='col-xs-12'>
-    <div class='card'>
-        @if($errors->has())
-        <div class="alert alert-warning shake">
-            <b>Atenção</b><br />
-            @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-            @endforeach
-        </div>
-        @endif
-        <form method="POST" action="" id="principal-form">
+<div class='card'>
+    <h1>Cadastrar Empresa</h1>
 
-            {{ csrf_field() }}
-            <h3>Informações</h3>
-            <p>Preencha os campos abaixo e clique em "salvar atelrações" para atualizar os dados de sua empresa em nosso sistema.</p>
+    @if($errors->has())
+    <div class="alert alert-warning shake">
+        <b>Atenção</b><br />
+        @foreach ($errors->all() as $error)
+        {{ $error }}<br />
+        @endforeach
+    </div>
+    @endif
+    <form method="POST" action="" id="principal-form">
+        <input type='hidden' value='{{$empresa->usuario->id}}' name='id_usuario'>
+        {{ csrf_field() }}
+        <h3>Informações</h3>
+        <div class='col-xs-12'>
+            <p>Preencha os campos abaixo e clique em "cadastrar" para cadastrar a empresa para o usuário <b>{{$empresa->usuario->nome}}</b>.</p>
+        </div>
+        <div class='col-md-6'>
             <div class='form-group'>
                 <label>Nome Fantasia</label>
                 <input type='hidden' name='tipo' value="J"/>
@@ -337,6 +340,9 @@
                 <label>Inscrição Estadual</label>
                 <input type='text' class='form-control' name='inscricao_estadual'  value=""/>
             </div>
+
+        </div>
+        <div class='col-md-6'>
             <div class='form-group'>
                 <label>Inscrição Municipal</label>
                 <input type='text' class='form-control' name='inscricao_municipal' value="" />
@@ -353,135 +359,154 @@
                 <label>Código de Acesso do Simples Nacional</label>
                 <input type='text' class='form-control' name='codigo_acesso_simples_nacional' value=""/>
             </div>
-            <h3>Endereço</h3>
-            <p>Complete os campos abaixo com o endereço da sua empresa.</p>
-            <div class='form-group'>
-                <label>CEP</label>
-                <input type='text' class='form-control cep-mask' name='cep' value="{{$empresa->cep}}" />
-            </div>
-            <div class='form-group'>
-                <label>Estado</label>
-                <select class="form-control" name='id_uf'>
-                    <option value="24">Santa Catarina</option>
-                </select> 
-            </div>
-            <div class='form-group'>
-                <label>Cidade</label>
-                <input type='text' class='form-control' name='cidade'  value="{{$empresa->cidade}}"/>
-            </div>
-            <div class='form-group'>
-                <label>Endereço</label>
-                <input type='text' class='form-control' name='endereco'  value="{{$empresa->endereco}}"/>
-            </div>
-            <div class='form-group'>
-                <label>Bairro</label>
-                <input type='text' class='form-control' name='bairro'  value="{{$empresa->bairro}}"/>
-            </div>
-            <div class='form-group'>
-                <label>Número</label>
-                <input type='text' class='form-control numero-mask' name='numero' value="{{$empresa->numero}}"/>
-            </div>
-            <h3>Sócios</h3>
-            <p>Clique em 'Adicionar novo sócio' para cadastrar um sócio.</p><p><b>Atenção:</b> É necessário ter pelo menos um sócio cadastrado.</p>
-            <div id='socios'>
+        </div>
+        <div class='clearfix'></div>
+        <br />
+        <h3>Endereço</h3>
+        <div class='col-xs-12'>
+        <p>Complete os campos abaixo com o endereço da sua empresa.</p>
+        </div>
+        <div class='col-md-6'>
+        <div class='form-group'>
+            <label>CEP</label>
+            <input type='text' class='form-control cep-mask' name='cep' value="{{$empresa->cep}}" />
+        </div>
+        <div class='form-group'>
+            <label>Estado</label>
+            <select class="form-control" name='id_uf'>
+                <option value="24">Santa Catarina</option>
+            </select> 
+        </div>
+        <div class='form-group'>
+            <label>Cidade</label>
+            <input type='text' class='form-control' name='cidade'  value="{{$empresa->cidade}}"/>
+        </div>
+        </div>
+        <div class='col-md-6'>
+        <div class='form-group'>
+            <label>Endereço</label>
+            <input type='text' class='form-control' name='endereco'  value="{{$empresa->endereco}}"/>
+        </div>
+        <div class='form-group'>
+            <label>Bairro</label>
+            <input type='text' class='form-control' name='bairro'  value="{{$empresa->bairro}}"/>
+        </div>
+        <div class='form-group'>
+            <label>Número</label>
+            <input type='text' class='form-control numero-mask' name='numero' value="{{$empresa->numero}}"/>
+        </div>
+        </div>
+        <div class='clearfix'></div>
+        <br />
+        <h3>Sócios</h3>
+        <div class='col-xs-12'>
+        <p>Clique em 'Adicionar novo sócio' para cadastrar um sócio.</p><p><b>Atenção:</b> É necessário ter pelo menos um sócio cadastrado.</p>
+        <div id='socios'>
+            @foreach($empresa->socios as $socio)
+            <input type='hidden' name='socio[{{$socio->id}}][nome]' value="{{$socio->nome}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][email]' value="{{$socio->email}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][nome_mae]' value="{{$socio->nome_mae}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][nome_pai]' value="{{$socio->nome_pai}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][data_nascimento]' value="{{$socio->data_nascimento}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][estado_civil]' value="{{$socio->estado_civil}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][regime_casamento]' value="{{$socio->regime_casamento}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][telefone]' value="{{$socio->telefone}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][cpf]' value="{{$socio->cpf}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][rg]' value="{{$socio->rg}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][orgao_expedidor]' value="{{$socio->orgao_expedidor}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][nacionalidade]' value="{{$socio->nacionalidade}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][cep]' value="{{$socio->cep}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][id_uf]' value="{{$socio->id_uf}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][cidade]' value="{{$socio->cidade}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][bairro]' value="{{$socio->bairro}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][endereco]' value="{{$socio->endereco}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][numero]' value="{{$socio->numero}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][complemento]' value="{{$socio->complemento}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][principal]' value="{{$socio->principal}}" data-id="{{$socio->id}}"/>
+            @endforeach
+        </div>
+        
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id='lista-socios'>
+                <tr><td colspan="3" class="nenhum-socio" style="display: none;">Por favor adicione pelo menos um Sócio.</td><tr/>
                 @foreach($empresa->socios as $socio)
-                <input type='hidden' name='socio[{{$socio->id}}][nome]' value="{{$socio->nome}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][email]' value="{{$socio->email}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][nome_mae]' value="{{$socio->nome_mae}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][nome_pai]' value="{{$socio->nome_pai}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][data_nascimento]' value="{{$socio->data_nascimento}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][estado_civil]' value="{{$socio->estado_civil}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][regime_casamento]' value="{{$socio->regime_casamento}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][telefone]' value="{{$socio->telefone}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][cpf]' value="{{$socio->cpf}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][rg]' value="{{$socio->rg}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][orgao_expedidor]' value="{{$socio->orgao_expedidor}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][nacionalidade]' value="{{$socio->nacionalidade}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][cep]' value="{{$socio->cep}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][id_uf]' value="{{$socio->id_uf}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][cidade]' value="{{$socio->cidade}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][bairro]' value="{{$socio->bairro}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][endereco]' value="{{$socio->endereco}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][numero]' value="{{$socio->numero}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][complemento]' value="{{$socio->complemento}}" data-id="{{$socio->id}}"/>
-                <input type='hidden' name='socio[{{$socio->id}}][principal]' value="{{$socio->principal}}" data-id="{{$socio->id}}"/>
-                @endforeach
-            </div>
-            <div class='form-group'>
-                <button id="mostrar-socio" type="button" class='btn btn-primary'>Adicionar novo sócio</button>
-            </div>
-            <table class='table table-striped'>
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>CPF</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id='lista-socios'>
-                    <tr><td colspan="3" class="nenhum-socio" style="display: none;">Por favor adicione pelo menos um Sócio.</td><tr/>
-                    @foreach($empresa->socios as $socio)
-                    <tr>
-                        <td>{{$socio->nome}}</td>
-                        <td>{{$socio->cpf}}</td>
-                        <td>
-                            <button type='button' class='btn btn-warning editar-socio' data-id='{{$socio->id}}'><span class='fa fa-edit'></span> Editar</button> 
-                            <button type='button' class='btn btn-danger remover-socio' data-id='{{$socio->id}}'><span class='fa fa-remove'></span> Remover</button>
-                        </td>
-                    </tr>
-                    @endforeach
-                    </tr>
-                </tbody>
-            </table> 
-            <h3>CNAEs</h3>
-            <p>Adicione os CNAEs relacionados à sua empresa. Caso não saiba os códigos, clique em Pesquisar CNAE.</p>
-            <div class='form-group'>
-                <label>CNAE</label>
-                <div class='input-group col-md-6'>
-                    <input type='text' class='form-control cnae-search cnae-mask'/>
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-success" id='adicionar-cnae' disabled="disabled"><span class="fa fa-plus"></span> Adicionar</button>
-                    </span>
-                </div>
-                <br />
-                <button type="button" class="btn btn-info" id='abrir-modal-cnae'><span class="fa fa-search"></span> Pesquisar CNAE</button>
-                <div class="cnae-search-box"><div class="result"></div></div>
-            </div>
-            <table class='table table-striped'>
-                <thead>
-                    <tr>
-                        <th>Descrição</th>
-                        <th>Código</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id='lista-cnaes'>
-                    @if($empresa->cnaes->count())
-                    <tr><td colspan="3" class="nenhum-cnae" style="display: none;">Por favor adicione pelo menos um CNAE.</td><tr/>
-                    @foreach($empresa->cnaes as $cnae)
-                    <tr>
-                        <td>{{$cnae->cnae->descricao}}</td>
-                        <td>{{$cnae->cnae->codigo}}</td>
-                        <td>
-
-                            <button type='button' class='btn btn-danger remover-cnae' data-id='{{$cnae->cnae->id}}'><span class='fa fa-remove'></span> Remover</button>
-                        </td>
-                <input type="hidden" value="{{$cnae->cnae->id}}" name="cnaes[]"/>
+                <tr>
+                    <td>{{$socio->nome}}</td>
+                    <td>{{$socio->cpf}}</td>
+                    <td>
+                        <button type='button' class='btn btn-warning editar-socio' data-id='{{$socio->id}}'><span class='fa fa-edit'></span> Editar</button> 
+                        <button type='button' class='btn btn-danger remover-socio' data-id='{{$socio->id}}'><span class='fa fa-remove'></span> Remover</button>
+                    </td>
                 </tr>
                 @endforeach
-                @else
-                <tr><td colspan="3" class="nenhum-cnae">Por favor adicione pelo menos um CNAE.</td><tr/>
-                @endif
+                </tr>
+            </tbody>
+        </table> 
+        <div class='form-group'>
+            <button id="mostrar-socio" type="button" class='btn btn-primary'><span class='fa fa-plus'></span> Adicionar novo sócio</button>
+        </div>
+        </div>
+        <div class='clearfix'></div>
+        <br />
+        <h3>CNAEs</h3>
+        <div class='col-md-12'>
+        <p>Adicione os CNAEs relacionados à sua empresa. Caso não saiba os códigos, clique em Pesquisar CNAE.</p>
+        
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th>Código</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id='lista-cnaes'>
+                @if($empresa->cnaes->count())
+                <tr><td colspan="3" class="nenhum-cnae" style="display: none;">Por favor adicione pelo menos um CNAE.</td><tr/>
+                @foreach($empresa->cnaes as $cnae)
+                <tr>
+                    <td>{{$cnae->cnae->descricao}}</td>
+                    <td>{{$cnae->cnae->codigo}}</td>
+                    <td>
+
+                        <button type='button' class='btn btn-danger remover-cnae' data-id='{{$cnae->cnae->id}}'><span class='fa fa-remove'></span> Remover</button>
+                    </td>
+            <input type="hidden" value="{{$cnae->cnae->id}}" name="cnaes[]"/>
+            </tr>
+            @endforeach
+            @else
+            <tr><td colspan="3" class="nenhum-cnae">Por favor adicione pelo menos um CNAE.</td><tr/>
+            @endif
 
 
-                </tbody>
-            </table>
-            <div class='form-group'>
-                <button type='button' id="mostrar-simulador" class='btn btn-primary'>Cadastrar</button>
+            </tbody>
+        </table>
+        <div class='form-group'>
+            <label>CNAE</label>
+            <div class='input-group col-md-6'>
+                <input type='text' class='form-control cnae-search cnae-mask'/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-success" id='adicionar-cnae' disabled="disabled"><span class="fa fa-plus"></span> Adicionar</button>
+                </span>
             </div>
-            <div class='clearfix'></div>
-        </form>
-    </div>
+            <br />
+            <button type="button" class="btn btn-info" id='abrir-modal-cnae'><span class="fa fa-search"></span> Pesquisar CNAE</button>
+            <div class="cnae-search-box"><div class="result"></div></div>
+        </div>
+        <hr>
+        <div class='form-group'>
+            <button type='button' id="mostrar-simulador" class='btn btn-success'><span class='fa fa-plus'></span> Cadastrar Empresa</button>
+        </div>
+        </div>
+        <div class='clearfix'></div>
+    </form>
 </div>
 @stop
 
@@ -496,10 +521,14 @@
             <div class="modal-body">
                 <p>Complete os campos abaixo e confira os valores de nossas mensalidades.
                     <br />Ao cadastrar sua empresa você receberá <b>30 dias grátis</b> em nosso sistema, somente após esse período de 30 dias é que começaremos a cobrar mensalidade.</p>
-                <div class='col-xs-6'>
+               <div class='col-xs-6'>
                     <div class='form-group'>
                         <label>Quantos sócios retiram pró-labore? <span data-trigger="hover" class="text-info" title="Pró-labore é o salário dos sócios que constam no contrato social da empresa, e recolhem o INSS mensalmente para a previdência social." data-toggle="tooltip" data-placement="top">(o que é isso?)</span></label>
                         <input type='text' class='form-control numero-mask2' id='pro_labores' name="pro_labores" data-mask-placeholder='0' value="0"/>
+                    </div>
+                    <div class='form-group'>
+                        <label>Quantos funcionários possui? <span data-trigger="hover" class="text-info" title="Quantidade de funcionários registrados na empresa. Exigido certificado digital A1." data-toggle="tooltip" data-placement="top">(o que é isso?)</span></label>
+                        <input type='text' class='form-control numero-mask2' id='funcionarios' data-mask-placeholder='0' />
                     </div>
                     <div class='form-group'>
                         <label> Quantos documentos fiscais são emitidos e recebidos por mês? <span data-trigger="hover" class="text-info" title="Documentos fiscais, são as notas fiscais de venda ou prestação de serviço emitidas, e as notas fiscais de aquisição de mercadorias ou serviços." data-toggle="tooltip" data-placement="top" >(o que é isso?)</span></label>
