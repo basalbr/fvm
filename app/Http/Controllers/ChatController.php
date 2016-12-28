@@ -7,11 +7,52 @@ use App\Chat;
 use App\ChatMensagem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 
 class ChatController extends Controller {
 
     public function index() {
-        $chats = Chat::orderBy('updated_at', 'desc')->paginate(15);
+        $chats = Chat::query();
+        if (Input::get('de')) {
+            $data = explode('/', Input::get('de'));
+            $data = $data[2] . '-' . $data[1] . '-' . $data[0];
+            $chats->where('created_at', '>=', $data);
+        }
+        if (Input::get('ate')) {
+            $data = explode('/', Input::get('ate'));
+            $data = $data[2] . '-' . $data[1] . '-' . $data[0];
+            $chats->where('created_at', '<=', $data);
+        }
+        if (Input::get('nome')) {
+            $chats->where('nome', 'like', '%' . Input::get('nome') . '%');
+        }
+        if (Input::get('email')) {
+            $chats->where('email', 'like', '%' . Input::get('email') . '%');
+        }
+
+        if (Input::get('ordenar')) {
+            if (Input::get('ordenar') == 'atualizado_desc') {
+                $chats->orderBy('updated_at', 'desc');
+            }
+            if (Input::get('ordenar') == 'atualizado_asc') {
+                $chats->orderBy('updated_at', 'asc');
+            }
+            if (Input::get('ordenar') == 'nome_desc') {
+                $chats->orderBy('nome', 'desc');
+            }
+            if (Input::get('ordenar') == 'nome_asc') {
+                $chats->orderBy('nome', 'asc');
+            }
+            if (Input::get('ordenar') == 'email_desc') {
+                $chats->orderBy('email', 'desc');
+            }
+            if (Input::get('ordenar') == 'email_asc') {
+                $chats->orderBy('email', 'asc');
+            }
+        } else {
+            $chats->orderBy('updated_at', 'desc');
+        }
+        $chats = $chats->paginate(10);
         return view('admin.chat.index', ['chats' => $chats]);
     }
 
@@ -27,7 +68,7 @@ class ChatController extends Controller {
     public function storeAjax(Request $request) {
         $chat = new Chat;
         if (Auth::user()) {
-            $request->merge(['id_usuario' => Auth::user()->id, 'nome' => Auth::user()->nome, 'email' => Auth::user()->nome]);
+            $request->merge(['id_usuario' => Auth::user()->id, 'nome' => Auth::user()->nome, 'email' => Auth::user()->email]);
         }
         if ($chat->validate($request->all())) {
             $chat = $chat->create($request->all());
@@ -47,7 +88,8 @@ class ChatController extends Controller {
         $request->merge(['id_usuario' => Auth::user()->id]);
         $request->merge(['id_chat' => $id]);
         if ($resposta->validate($request->only('mensagem'))) {
-            $resposta->create($request->only('mensagem', 'id_usuario', 'id_chat'));
+            $mensagem = $resposta->create($request->only('mensagem', 'id_usuario', 'id_chat'));
+            $mensagem->chat()->touch();
             if ($request->is('admin/*')) {
                 return redirect(route('listar-chat'));
             }
@@ -63,8 +105,9 @@ class ChatController extends Controller {
     public function updateAjax(Request $request) {
         $nova_mensagem = new ChatMensagem;
         if ($nova_mensagem->validate($request->all())) {
-            $nova_mensagem->create($request->all());
+            $mensagem = $nova_mensagem->create($request->all());
         }
+        $mensagem->chat()->touch();
     }
 
     public function getMensagensAjax(Request $request) {

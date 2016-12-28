@@ -14,6 +14,7 @@ class Pagamento extends Model {
     protected $rules = ['id_mensalidade' => 'required', 'status' => 'required', 'vencimento' => 'required'];
     protected $errors;
     protected $niceNames = ['descricao' => 'Descrição', 'valor' => 'Valor', 'nome' => 'Nome', 'duracao' => 'Duração'];
+    protected $dates = ['created_at', 'updated_at'];
 
     /**
      * The database table used by the model.

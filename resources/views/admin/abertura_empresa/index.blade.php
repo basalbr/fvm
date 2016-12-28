@@ -1,28 +1,7 @@
 @extends('layouts.admin')
 @section('header_title', 'Abertura de Empresas')
 @section('js')
-@parent
-<script>
-    $(function () {
-        $('#verificar-empresa').on('click', function () {
-            $('#empresa-modal').modal('show');
-        });
-        $('#validar-empresa').on('click', function (e) {
-            if (!$('input[name="santa_catarina"]:checked').val() || !$('input[name="funcionarios"]:checked').val() || !$('input[name="simples_nacional"]:checked').val()) {
-                e.preventDefault();
-                $('#empresa-modal').modal('hide');
-                $('#erro-modal').modal('show');
-            }
-            if ($('input[name="santa_catarina"]:checked').val() == 'nao' || $('input[name="funcionarios"]:checked').val() == 'sim' || $('input[name="simples_nacional"]:checked').val() == 'nao') {
-                e.preventDefault();
-                $('#empresa-modal').modal('hide');
-                $('#erro-modal').modal('show');
-            }
-            return true;
-        });
-    });
-</script>
-@stop
+
 @section('main')
 
 <div class="card">
@@ -83,7 +62,7 @@
     <h3>Lista de processos de abertura de empresa</h3>
 
     <div class='table-responsive'>
-        <table class='table'>
+        <table class='table table-hover table-striped'>
             <thead>
                 <tr>
                     <th>Usuário</th>
@@ -114,6 +93,8 @@
                 @endif
             </tbody>
         </table>
+        {!! str_replace('/?', '?', $empresas->render()) !!}
+        <div class="clearfix"></div>
     </div>
 </div>
 @stop

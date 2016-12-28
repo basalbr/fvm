@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Processo;
 use App\AberturaEmpresa;
 use Illuminate\Support\Facades\Input;
 
@@ -37,7 +36,7 @@ class AberturaEmpresaController extends Controller {
             if (Input::get('ordenar') == 'usuario_asc') {
                 $empresas->orderBy('usuario.nome', 'asc');
             }
-            if (Input::get('ordenar') == 'usuario_asc') {
+            if (Input::get('ordenar') == 'usuario_desc') {
                 $empresas->orderBy('usuario.nome', 'desc');
             }
             if (Input::get('ordenar') == 'status_pagamento') {

@@ -27,6 +27,7 @@
         @endif
     </tbody>
 </table>
-<a class='btn btn-primary' href='{{route('cadastrar-informacao-extra',['id_imposto' =>$imposto->id])}}'>Cadastrar uma informação extra</a><br />
+<a class='btn btn-primary' href='{{route('cadastrar-informacao-extra',['id_imposto' =>$imposto->id])}}'><span class="fa fa-plus"></span> Cadastrar uma informação extra</a>
+<a href="{{URL::previous()}}" class="btn btn-primary"><span class='fa fa-history'></span> Voltar</a>
 
 @stop

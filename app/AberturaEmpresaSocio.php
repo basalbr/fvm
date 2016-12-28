@@ -10,9 +10,7 @@ class AberturaEmpresaSocio extends Model {
 
     use SoftDeletes;
 
-    protected $dates = ['data_nascimento','created_at','updated_at','deleted_at'];
-
-
+    protected $dates = ['data_nascimento', 'created_at', 'updated_at', 'deleted_at'];
     protected $rules = [
         'id_abertura_empresa' => 'sometimes|required',
         'nome' => 'required',
@@ -57,8 +55,8 @@ class AberturaEmpresaSocio extends Model {
         'complemento' => 'Complemento',
         'id_uf' => 'Estado',
         'orgao_expedidor' => 'Órgão Expedidor do RG (Ex: SSP/SC)'
-        ];
-    
+    ];
+
     /**
      * The database table used by the model.
      *
@@ -116,25 +114,20 @@ class AberturaEmpresaSocio extends Model {
         return true;
     }
 
-
     public function errors() {
         return $this->errors;
     }
 
-    public function pessoa() {
-        return $this->belongsTo('App\Pessoa', 'id_abertura_empresa');
+    public function empresa() {
+        return $this->belongsTo('App\AberturaEmpresa', 'id_abertura_empresa');
     }
 
-    public function pro_labores() {
-        return $this->hasMany('App\Prolabore', 'id_abertura_empresa_socio');
+    public function uf() {
+        return $this->hasOne('App\Uf', 'id', 'id_uf');
     }
-    
-     public function uf() {
-        return $this->hasOne('App\Uf','id', 'id_uf');
-    }
-    
-    public function pro_labore_formatado(){
-        return number_format($this->pro_labore, 2, ',','.');
+
+    public function pro_labore_formatado() {
+        return number_format($this->pro_labore, 2, ',', '.');
     }
 
 }

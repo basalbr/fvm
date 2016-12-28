@@ -5,11 +5,45 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Faq;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class FaqController extends Controller {
 
     public function index() {
-        $faqs = Faq::orderBy('local', 'asc')->orderBy('pergunta', 'asc')->paginate(10);
+        $faqs = Faq::query();
+        if (Input::get('pergunta')) {
+            $faqs->where('pergunta', 'like', '%' . Input::get('pergunta') . '%');
+        }
+        if (Input::get('resposta')) {
+            $faqs->where('resposta', 'like', '%' . Input::get('resposta') . '%');
+        }
+        if (Input::get('local')) {
+            $faqs->where('local', '=', Input::get('local'));
+        }
+      
+        if (Input::get('ordenar')) {
+            if (Input::get('ordenar') == 'pergunta_asc') {
+                $faqs->orderBy('pergunta', 'asc');
+            }
+            if (Input::get('ordenar') == 'pergunta_desc') {
+                $faqs->orderBy('pergunta', 'desc');
+            }
+            if (Input::get('ordenar') == 'resposta_asc') {
+                $faqs->orderBy('resposta', 'asc');
+            }
+            if (Input::get('ordenar') == 'resposta_desc') {
+                $faqs->orderBy('resposta', 'desc');
+            }
+            if (Input::get('ordenar') == 'area_asc') {
+                $faqs->orderBy('local', 'asc');
+            }
+            if (Input::get('ordenar') == 'area_desc') {
+                $faqs->orderBy('local', 'desc');
+            }
+        } else {
+            $faqs->orderBy('pergunta', 'asc');
+        }
+        $faqs = $faqs->paginate(10);
         return view('admin.faq.index', ['faqs' => $faqs]);
     }
 

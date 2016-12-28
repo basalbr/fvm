@@ -1749,3 +1749,43 @@ a.shortcut:active{
 .text-success {
     color: #3c763d!important;
 }
+
+.item-list{
+    width: 100%;
+    position: relative;
+    display: block;
+}
+
+.item-list .item{
+    padding: 5px 0;
+    border-top: 1px solid #ddd;
+    width: 100%;
+}
+
+.item-list .item:hover{
+    background-color: #f5f5f5!important;
+}
+
+.item-list .item .item-content{
+    padding: 7px;
+    float: left;
+    width: auto;
+}
+
+.item-list .item .item-content .item-content-header{
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+    padding: 0 0 8px 0;
+}
+.item-list .item .item-content .item-content-description{
+    padding-top: 8px;
+}
+
+.item-list .item:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.item-list a{
+    font-weight: bold;
+    text-decoration: none;
+}

@@ -141,7 +141,7 @@ class Pessoa extends Model {
 
     public function iniciar_periodo_gratis() {
         $mensalidade = Mensalidade::where('id_pessoa', '=', $this->id)->first();
-        
+
         $pagamento = new \App\Pagamento;
         $pagamento->tipo = 'mensalidade';
         $pagamento->id_mensalidade = $mensalidade->id;
@@ -155,7 +155,7 @@ class Pessoa extends Model {
     }
 
     public function abrir_processos() {
-        $impostos_mes = \App\ImpostoMes::where('mes', '=', (date('n')-1))->get();
+        $impostos_mes = \App\ImpostoMes::where('mes', '=', (date('n') - 1))->get();
         $competencia = date('Y-m-d', strtotime(date('Y-m') . " -1 month"));
         if (count($impostos_mes)) {
             foreach ($impostos_mes as $imposto_mes) {
@@ -207,10 +207,11 @@ class Pessoa extends Model {
             return true;
         }
     }
+
     public function enviar_notificacao_nova_empresa() {
         $usuario = Auth::user();
         try {
-          \Illuminate\Support\Facades\Mail::send('emails.nova-empresa', ['nome' => $usuario->nome, 'empresa' => $this], function ($m) use ($usuario) {
+            \Illuminate\Support\Facades\Mail::send('emails.nova-empresa', ['nome' => $usuario->nome, 'empresa' => $this], function ($m) use ($usuario) {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                 $m->to($usuario->email)->subject('Nova empresa cadastrada');
             });
@@ -256,6 +257,29 @@ class Pessoa extends Model {
 
     public function usuario() {
         return $this->belongsTo('App\Usuario', 'id_usuario');
+    }
+
+    public function delete() {
+        
+        if ($this->processos->count()) {
+            foreach ($this->processos as $processo) {
+                $processo->delete();
+            }
+        }
+        
+        if ($this->funcionarios->count()) {
+            foreach ($this->funcionarios as $funcionarios) {
+                $funcionarios->delete();
+            }
+        }
+        
+        if ($this->socios->count()) {
+            foreach ($this->socios as $socios) {
+                $socios->delete();
+            }
+        }
+        
+        parent::delete();
     }
 
 }

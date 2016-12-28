@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Processo;
+use App\Pessoa;
+use Illuminate\Support\Facades\Input;
 
 class EmpresaController extends Controller {
 
@@ -15,7 +16,44 @@ class EmpresaController extends Controller {
     }
 
     public function indexAdmin() {
-        $empresas = \App\Pessoa::orderBy('nome_fantasia')->get();
+        $empresas = Pessoa::query();
+        $empresas->join('usuario', 'usuario.id', '=', 'pessoa.id_usuario');
+
+        if (Input::get('usuario')) {
+            $empresas->where('usuario.nome', 'like', '%' . Input::get('usuario') . '%');
+        }
+        if (Input::get('cnpj')) {
+            $empresas->where('pessoa.cpf_cnpj', 'like', '%' . Input::get('cnpj') . '%');
+        }
+        if (Input::get('nome_fantasia')) {
+            $empresas->where('pessoa.nome_fantasia', 'like', '%' . Input::get('nome_fantasia') . '%');
+        }
+        if (Input::get('razao_social')) {
+            $empresas->where('pessoa.razao_social', 'like', '%' . Input::get('razao_social') . '%');
+        }
+        if (Input::get('ordenar')) {
+            if (Input::get('ordenar') == 'usuario_asc') {
+                $empresas->orderBy('usuario.nome', 'asc');
+            }
+            if (Input::get('ordenar') == 'usuario_desc') {
+                $empresas->orderBy('usuario.nome', 'desc');
+            }
+            if (Input::get('ordenar') == 'razao_social_asc') {
+                $empresas->orderBy('pessoa.razao_social', 'asc');
+            }
+            if (Input::get('ordenar') == 'razao_social_desc') {
+                $empresas->orderBy('pessoa.razao_social', 'desc');
+            }
+            if (Input::get('ordenar') == 'nome_fantasia_asc') {
+                $empresas->orderBy('pessoa.nome_fantasia', 'asc');
+            }
+            if (Input::get('ordenar') == 'nome_fantasia_desc') {
+                $empresas->orderBy('pessoa.nome_fantasia', 'desc');
+            }
+        } else {
+            $empresas->orderBy('pessoa.nome_fantasia', 'asc');
+        }
+        $empresas = $empresas->select('pessoa.*')->paginate(5);
         return view('admin.empresa.index', ['empresas' => $empresas]);
     }
 

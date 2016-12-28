@@ -122,21 +122,21 @@
 </script>
 @stop
 @section('main')
-<h1>Editar Empresa</h1>
-<hr class="dash-title">
-<div class='col-xs-12'>
-    <div class='card'>
-        @if($errors->has())
-        <div class="alert alert-warning shake">
-            <b>Atenção</b><br />
-            @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-            @endforeach
-        </div>
-        @endif
-        <form method='POST' action=''>
-             {{ csrf_field() }}
-            <h3>Status</h3>
+
+<div class='card'>
+    <h1>Editar Empresa</h1>
+    @if($errors->has())
+    <div class="alert alert-warning shake">
+        <b>Atenção</b><br />
+        @foreach ($errors->all() as $error)
+        {{ $error }}<br />
+        @endforeach
+    </div>
+    @endif
+    <form method='POST' action=''>
+        {{ csrf_field() }}
+        <h3>Status</h3>
+        <div class="col-xs-12">
             <div class='form-group'>
                 <label>Status</label>
                 <select class="form-control" name="id_natureza_juridica">
@@ -148,12 +148,18 @@
             <div class='form-group'>
                 <input type='submit' value="Mudar Status" class='btn btn-primary' />
             </div>
-        </form>
-        <form method="POST" action="" id="principal-form">
-
-            {{ csrf_field() }}
-            <h3>Informações</h3>
+        </div>
+        <div class="clearfix"></div>
+    </form>
+    <form method="POST" action="" id="principal-form">
+        <br />
+        {{ csrf_field() }}
+        <h3>Informações</h3>
+        <div class="col-xs-12">
             <p>Preencha os campos abaixo e clique em "salvar atelrações" para atualizar os dados de sua empresa em nosso sistema.</p>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-6">
             <div class='form-group'>
                 <label>Nome Fantasia</label>
                 <input type='text' class='form-control' name='nome_fantasia' value="{{$empresa->nome_fantasia}}"/>
@@ -176,7 +182,8 @@
                 <label>CNPJ</label>
                 <input type='text' class='form-control cnpj-mask' name='cpf_cnpj' value="{{$empresa->cpf_cnpj}}"/>
             </div>
-
+        </div>
+        <div class="col-md-6">
             <div class='form-group'>
                 <label>Inscrição Estadual</label>
                 <input type='text' class='form-control' name='inscricao_estadual'  value="{{$empresa->inscricao_estadual}}"/>
@@ -193,8 +200,14 @@
                 <label>Código de Acesso do Simples Nacional</label>
                 <input type='text' class='form-control' name='codigo_acesso_simples_nacional' value="{{$empresa->codigo_acesso_simples_nacional}}"/>
             </div>
-            <h3>Endereço</h3>
+        </div>
+        <div class="clearfix"></div>
+        <br />
+        <h3>Endereço</h3>
+        <div class="col-xs-12">
             <p>Complete os campos abaixo com o endereço da sua empresa.</p>
+        </div>
+        <div class="col-md-6">
             <div class='form-group'>
                 <label>CEP</label>
                 <input type='text' class='form-control cep-mask' name='cep' value="{{$empresa->cep}}" />
@@ -209,6 +222,8 @@
                 <label>Cidade</label>
                 <input type='text' class='form-control' name='cidade'  value="{{$empresa->cidade}}"/>
             </div>
+        </div>
+        <div class="col-md-6">
             <div class='form-group'>
                 <label>Endereço</label>
                 <input type='text' class='form-control' name='endereco'  value="{{$empresa->endereco}}"/>
@@ -221,49 +236,46 @@
                 <label>Número</label>
                 <input type='text' class='form-control numero-mask' name='numero' value="{{$empresa->numero}}"/>
             </div>
-            <h3>Contabilidade Atual</h3>
+        </div>
+        <div class="clearfix"></div>
+        <br />
+        <h3>Contabilidade Atual</h3>
+        <div class="col-xs-12">
             <div class='form-group'>
                 <label>Número de registro do CRC do contador atual</label>
                 <input type='text' class='form-control' name='crc' value="{{$empresa->crc}}"/>
             </div>
-            <h3>CNAEs</h3>
-            <p>Adicione os CNAEs relacionados à sua empresa. Caso não saiba os códigos, clique em Pesquisar CNAE.</p>
-            <div class='form-group'>
-                <label>CNAE</label>
-                <div class='input-group col-md-6'>
-                    <input type='text' class='form-control cnae-search cnae-mask'/>
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-success" id='adicionar-cnae' disabled="disabled"><span class="fa fa-plus"></span> Adicionar</button>
-                    </span>
-                </div>
-                <br />
-                <button type="button" class="btn btn-info" id='abrir-modal-cnae'><span class="fa fa-search"></span> Pesquisar CNAE</button>
-                <div class="cnae-search-box"><div class="result"></div></div>
-            </div>
+        </div>
+        <div class="clearfix"></div>
+        <br />
+        <h3>CNAEs</h3>
+        <div class="col-xs-12">
             <table class='table table-striped'>
                 <thead>
                     <tr>
                         <th>Descrição</th>
                         <th>Código</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody id='lista-cnaes'>
                     <tr><td colspan="3" class="nenhum-cnae" style="display: none;">Por favor adicione pelo menos um CNAE.</td><tr/>
                     @foreach($empresa->cnaes as $cnae)
                     <tr>
-                        <td>{{$cnae->cnae->descricao}}</td><td>{{$cnae->cnae->codigo}}</td><td><button type='button' class='btn btn-danger remover-cnae' data-id='{{$cnae->cnae->id}}'><span class='fa fa-remove'></span> Remover</button></td>
+                        <td>{{$cnae->cnae->descricao}}</td><td>{{$cnae->cnae->codigo}}</td>
                 <input type="hidden" value="{{$cnae->cnae->id}}" name="cnaes[]"/>
                 </tr>
                 @endforeach
                 </tbody>
             </table>
+        </div>
+        <div class='clearfix'></div>
+        <div class="col-md-12">
             <div class='form-group'>
-                <!--<input type='submit' value="Salvar alterações" class='btn btn-primary' />-->
+                <a href="{{URL::previous()}}" class="btn btn-primary"><span class='fa fa-history'></span> Voltar</a>
             </div>
-            <div class='clearfix'></div>
-        </form>
-    </div>
+        </div>
+    </form>
+    <div class='clearfix'></div>
 </div>
 @stop
 

@@ -1,22 +1,19 @@
-@extends('layouts.master')
+@extends('layouts.admin')
 @section('header_title', 'Home')
-@section('content')
-<section id='page-header' style="margin-top: 55px" class="page-header">
-    <div class='container'>
-        <h1>CNAE</h1>
-    </div>
-</section>
-<section>
-    <div class="container">
+@section('main')
 
-        @if($errors->has())
-        <div class="alert alert-warning shake">
-            <b>Atenção</b><br />
-            @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-            @endforeach
-        </div>
-        @endif
+<div class="card">
+    <h1>CNAE</h1>
+    @if($errors->has())
+    <div class="alert alert-warning shake">
+        <b>Atenção</b><br />
+        @foreach ($errors->all() as $error)
+        {{ $error }}<br />
+        @endforeach
+    </div>
+    @endif
+    <h3>Informações</h3>
+    <div class="col-xs-12">
         <form method="POST" action="">
             {{ csrf_field() }}
             <div class='form-group'>
@@ -38,11 +35,12 @@
                     @endif
                 </select>
             </div>
-            <div class='form-group'>
-                <input type='submit' value="Salvar alterações" class='btn btn-primary' />
+                <div class='form-group'>
+                <button type="submit" class='btn btn-success'><span class="fa fa-save"></span> Salvar Alterações</button>
+                <a href="{{URL::previous()}}" class="btn btn-primary"><span class='fa fa-history'></span> Voltar</a>
             </div>
         </form>
     </div>
+    <div class="clearfix"></div>
 </div>
-</section>
 @stop

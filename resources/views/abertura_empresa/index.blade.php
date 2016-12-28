@@ -5,8 +5,8 @@
 
 <div class="card">
     <h1>Processos de abertura de empresa</h1>
-<p>Abaixo estão as solicitações de abertura de empresa feita por você.</p>
-<p><b>É necessário efetuar o pagamento de R$ 59,00 referente ao processo para que possamos abrir a empresa para você.</b></p>
+    <p>Abaixo estão as solicitações de abertura de empresa feita por você.</p>
+    <p><b>É necessário efetuar o pagamento de R$ 59,00 referente ao processo para que possamos abrir a empresa para você.</b></p>
     <h3>Lista de processos de abertura de empresa</h3>
     <div class="table-responsive">
         <table class='table table-hover table-striped'>
