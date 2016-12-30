@@ -32,7 +32,7 @@
                 <td>Até {{$mensalidade->documentos_contabeis}}</td>
                 <td>Até {{$mensalidade->pro_labores}}</td>
                 <td>Até {{$mensalidade->funcionarios}}</td>
-                <td>{{date_format($mensalidade->pagamentos()->where('status','=','Paga')->orderBy('created_at', 'desc')->first()->updated_at, 'd/m/Y')}}</td>
+                <td>{{$mensalidade->ultimo_pagamento('d/m/Y')}}</td>
                 <td>{{$mensalidade->proximo_pagamento('d/m/Y')}}</td>
             </tr>
             @endforeach

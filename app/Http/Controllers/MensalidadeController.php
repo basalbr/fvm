@@ -25,7 +25,7 @@ class MensalidadeController extends Controller {
         $mensalidades = Mensalidade::query();
         $mensalidades->join('usuario', 'usuario.id', '=', 'mensalidade.id_usuario');
         $mensalidades->join('pessoa', 'pessoa.id', '=', 'mensalidade.id_pessoa');
-
+        $mensalidades->where('pessoa.status', '=', 'Aprovado');
         if (Input::get('usuario')) {
             $mensalidades->where('usuario.nome', 'like', '%' . Input::get('usuario') . '%');
         }

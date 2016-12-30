@@ -50,7 +50,7 @@ class Mensalidade extends Model {
     }
 
     public function ultimo_pagamento($formato = 'Y-m-d') {
-        $ultimo_pagamento = $this->where('status', '=', 'pago')->orderBy('created_at', 'desc')->first();
+        $ultimo_pagamento = Pagamento::where('id_mensalidade','=',$this->id)->where('status', '=', 'Paga')->orderBy('created_at', 'desc')->first();
         if ($ultimo_pagamento instanceof Pagamento) {
             return $ultimo_pagamento->updated_at->format($formato);
         }

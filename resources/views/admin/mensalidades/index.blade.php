@@ -81,7 +81,7 @@
             </div>
             <div class="item-content">
                 <div class="item-content-header">Último Pagamento</div>
-                <div class="item-content-description">&zwnj;{{$mensalidade->ultimo_pagamento()}}</div>
+                <div class="item-content-description">&zwnj;{{$mensalidade->ultimo_pagamento('d/m/Y')}}</div>
             </div>
             <div class="item-content">
                 <div class="item-content-header">Próximo Pagamento</div>
