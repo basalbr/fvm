@@ -46,7 +46,7 @@ class Chamado extends Model {
     }
 
     public function enviar_notificacao_novo_chamado() {
-        $usuario = Auth::user();
+        $usuario = $this->usuario;
         try {
             \Illuminate\Support\Facades\Mail::send('emails.novo-chamado', ['nome' => $usuario->nome, 'id_chamado' => $this->id], function ($m) use($usuario) {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');

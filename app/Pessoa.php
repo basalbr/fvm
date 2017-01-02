@@ -170,10 +170,10 @@ class Pessoa extends Model {
                         'vencimento' => $imposto->corrigeData(date('Y') . '-' . date('m') . '-' . $imposto->vencimento, 'Y-m-d'),
                         'status' => 'novo'
                     ]);
-                    $usuario = Auth::user();
+                    $usuario = $this->usuario;
                     $notificacao = new Notificacao;
                     $notificacao->mensagem = '<a href="' . $processo->id . '">Você possui uma nova apuração. Clique aqui para visualizar.</a>';
-                    $notificacao->id_usuario = Auth::user()->id;
+                    $notificacao->id_usuario = $this->id_usuario;
                     $notificacao->save();
                     try {
                         \Illuminate\Support\Facades\Mail::send('emails.novo-processo', ['nome' => $usuario->nome, 'id_processo' => $processo->id], function ($m) use($usuario) {
@@ -280,6 +280,6 @@ class Pessoa extends Model {
         }
         
         parent::delete();
-    }
+    }   
 
 }

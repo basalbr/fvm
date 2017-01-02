@@ -10,7 +10,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
 class ChatController extends Controller {
-
+  public function delete($id) {
+        $chat = Chat::where('id', '=', $id)->first();
+        $chat->delete();
+        return redirect()->route('listar-chat');
+    }
     public function index() {
         $chats = Chat::query();
         if (Input::get('de')) {

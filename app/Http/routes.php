@@ -39,6 +39,7 @@ Route::post('/pagseguro', [
 Route::get('/abrir_processos', ['as' => 'testeimposto', 'uses' => 'ProcessoController@abreProcessos']);
 Route::get('/abrir_pagamentos', ['as' => 'testepagamento', 'uses' => 'MensalidadeController@abrePagamentos']);
 Route::get('/admin/chat/', ['as' => 'listar-chat', 'uses' => 'ChatController@index', 'middleware' => 'admin']);
+Route::get('/admin/chat/remover/{id}', ['as' => 'remover-chat', 'uses' => 'ChatController@delete', 'middleware' => 'admin']);
 Route::get('/admin/chat/visualizar/{id}', ['as' => 'visualizar-chat', 'uses' => 'ChatController@edit', 'middleware' => 'admin']);
 
 Route::get('/admin/pro-labore/', ['as' => 'listar-pro-labore', 'uses' => 'ProlaboreController@index', 'middleware' => 'admin']);

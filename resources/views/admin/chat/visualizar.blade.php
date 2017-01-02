@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('header_title')
+@section('header_title','Chat')
 @section('js')
 @parent
 <script type='text/javascript'>
@@ -41,6 +41,7 @@
             $.post('{{route("envia-mensagem-chat")}}', {id_chat: chat_id, mensagem: $('textarea[name="mensagem"]').val(), id_atendente: $('#id-atendente').val()}, function (data) {
 
             });
+            $('textarea[name="mensagem"]').val('');
         });
         getLastId();
         setInterval(updateChat, 2000);
@@ -113,7 +114,6 @@
             <p class='title'>{{$chat->nome}} em {{date_format($chat->created_at, 'd/m/Y')}} às {{date_format($chat->created_at, 'H:i')}}</p>
             {{$chat->mensagem}}
         </div>
-        @stop
     </div>
     <div class="clearfix"></div>
 </div>
