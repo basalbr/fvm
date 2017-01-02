@@ -34,7 +34,7 @@ class ChamadoResposta extends Model {
         $usuario = $this->usuario;
         $notificacao = new Notificacao;
         $notificacao->mensagem = 'Você possui uma nova mensagem no chamado: '.$this->chamado->titulo.'. <a href="' . route('responder-chamado-usuario', ['id' => $this->id_chamado]) . '">Visualizar.</a>';
-        $notificacao->id_usuario = Auth::user()->id;
+        $notificacao->id_usuario = $usuario->id;
         $notificacao->save();
         try {
             \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-chamado', ['nome' => $usuario->nome, 'id_chamado'=>$this->id_chamado], function ($m) use($usuario){
