@@ -31,7 +31,7 @@ class ChamadoResposta extends Model {
     protected $fillable = ['mensagem', 'id_usuario', 'id_chamado', 'anexo'];
 
     public function enviar_notificacao_nova_mensagem_chamado() {
-        $usuario = $this->usuario;
+        $usuario = $this->chamado->usuario;
         $notificacao = new Notificacao;
         $notificacao->mensagem = 'Você possui uma nova mensagem no chamado: '.$this->chamado->titulo.'. <a href="' . route('responder-chamado-usuario', ['id' => $this->id_chamado]) . '">Visualizar.</a>';
         $notificacao->id_usuario = $usuario->id;
