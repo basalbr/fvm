@@ -1,30 +1,30 @@
 @extends('layouts.admin')
 @section('header_title', 'Chamados')
 @section('main')
-<h1>FAQ</h1>
-<hr class="dash-title">
+
 <div class="card">
+    <h1>Natureza Jurídica</h1>
     <h3>Filtros de Pesquisa</h3>
     <form class="form-inline">
         <div class="form-group" style="width: 300px">
-            <label>Pergunta</label>
+            <label>Descrição</label>
             <div class="clearfix"></div>
-            <input type="text" class="form-control" name='pergunta' value='{{Input::get('pergunta')}}'/>
+            <input type="text" class="form-control" name='descricao' value='{{Input::get('descricao')}}'/>
         </div>
         <div class="form-group" style="width: 300px">
-            <label>Resposta</label>
+            <label>Representante</label>
             <div class="clearfix"></div>
-            <input type="text" class="form-control" name='resposta' value='{{Input::get('resposta')}}'/>
+            <input type="text" class="form-control" name='representante' value='{{Input::get('representante')}}'/>
         </div>
         <div class="form-group" style="width: 250px">
             <label>Ordenar por</label>
             <select name="ordenar" class="form-control">
-                <option value="pergunta_asc" {{Input::get('ordenar') == 'pergunta_asc' ? 'selected' : ''}}>Pergunta - A/Z</option>
-                <option value="pergunta_desc" {{Input::get('ordenar') == 'pergunta_desc' ? 'selected' : ''}}>Resposta - Z/A</option>
+                <option value="descricao_asc" {{Input::get('ordenar') == 'descricao_asc' ? 'selected' : ''}}>Descrição - A/Z</option>
+                <option value="descricao_desc" {{Input::get('ordenar') == 'descricao_desc' ? 'selected' : ''}}>Descrição - Z/A</option>
             </select>
         </div>
+        <div class='clearfix'></div>
         <div class="form-group"  style="width: 50px">
-            <label>&zwnj;</label>
             <button type="submit" class="btn btn-primary"><span class="fa fa-search"></span> Pesquisar</button>
         </div>
         <div class="clearfix"></div>
@@ -47,7 +47,7 @@
                 <td>{{$natureza_juridica->descricao}}</td>
                 <td>{{$natureza_juridica->representante}}</td>
                 <td>{{$natureza_juridica->qualificacao}}</td>
-                <td><a class="btn btn-warning" href="{{route('editar-natureza-juridica', ['id' => $natureza_juridica->id])}}">Editar</a> <a class="btn btn-danger" href="{{$natureza_juridica->id}}">Remover</a></td>
+                <td><a class="btn btn-warning" href="{{route('editar-natureza-juridica', ['id' => $natureza_juridica->id])}}"><span class='fa fa-edit'></span> Editar</a> <a class="btn btn-danger" href="{{$natureza_juridica->id}}"><span class='fa fa-remove'></span> Remover</a></td>
             </tr>
             @endforeach
             @else
@@ -61,7 +61,7 @@
 
     {!! str_replace('/?', '?', $naturezas_juridicas->render()) !!}
     <div class="clearfix"></div>
-    <a class='btn btn-primary' href='{{route('cadastrar-natureza-juridica')}}'>Cadastrar uma natureza jurídica</a><br />
+    <a class='btn btn-primary' href='{{route('cadastrar-natureza-juridica')}}'><span class='fa fa-plus'></span> Cadastrar</a><br />
     <div class="clearfix"></div>
 </div>
 @stop

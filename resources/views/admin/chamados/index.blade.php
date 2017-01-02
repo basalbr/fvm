@@ -68,8 +68,8 @@ $(function () {
                 <th>Status</th>
                 <th>Usuário</th>
                 <th>Título</th>
-                <th>Aberto em</th>
                 <th>Última mensagem</th>
+                <th>Aberto em</th>
                 <th></th>
             </tr>
         </thead>
@@ -78,10 +78,10 @@ $(function () {
             @foreach($chamados as $chamado)
             <tr>
                 <td><b>{{$chamado->status}}</b></td>
-                <td>{{$chamado->usuario->nome}}</td>
+                <td><a href="{{route('visualizar-usuario-admin',[$chamado->id_usuario])}}">{{$chamado->usuario->nome}}</a></td>
                 <td>{{str_limit($chamado->titulo, 35)}}</td>
-                <td>{{$chamado->created_at->format('d/m/Y H:i')}}</td>
                 <td>{{$chamado->updated_at->format('d/m/Y H:i')}}</td>
+                <td>{{$chamado->created_at->format('d/m/Y H:i')}}</td>
                 <td><a class="btn btn-primary" href="{{route('visualizar-chamados', ['id' => $chamado->id])}}"><span class="fa fa-comment"></span> Responder</a></td>
             </tr>
             @endforeach

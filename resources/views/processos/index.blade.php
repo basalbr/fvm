@@ -63,8 +63,10 @@ $(function () {
             <label>Status</label>
             <select name="status" class="form-control">
                 <option value="" {{Input::get('status') ? 'selected' : ''}}>Todos</option>
-                <option value="aberto" {{Input::get('status') == 'aberto' || !Input::get('status') ? 'selected' : ''}}>Aberto</option>
-                <option value="fechado" {{Input::get('status') == 'fechado' ? 'selected' : ''}}>Fechado</option>
+                <option value="aberto" {{Input::get('status') == 'aberto' ? 'selected' : ''}}>Aberto</option>
+                <option value="cancelado" {{Input::get('status') == 'cancelado' ? 'selected' : ''}}>Cancelado</option>
+                <option value="concluido" {{Input::get('status') == 'concluido' ? 'selected' : ''}}>Concluído</option>
+                <option value="novo" {{Input::get('status') == 'novo' ? 'selected' : ''}}>Novo</option>
             </select>
         </div>
         <div class="form-group" style="width: 220px">
@@ -75,8 +77,8 @@ $(function () {
 
             </select>
         </div>
+                <div class="clearfix"></div>
         <div class="form-group"  style="width: 50px">
-            <label>&zwnj;</label>
             <button type="submit" class="btn btn-primary"><span class="fa fa-search"></span> Pesquisar</button>
         </div>
         <div class="clearfix"></div>

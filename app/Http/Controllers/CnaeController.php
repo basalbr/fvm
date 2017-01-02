@@ -41,7 +41,7 @@ class CnaeController extends Controller {
                 $cnaes->orderBy('tabela_simples_nacional.descricao', 'asc');
             }
         } else {
-            $cnaes->orderBy('cnae.descricao', 'desc');
+            $cnaes->orderBy('cnae.descricao', 'asc');
         }
         $cnaes = $cnaes->select('cnae.*')->paginate(10);
         return view('admin.cnae.index', ['cnaes' => $cnaes]);

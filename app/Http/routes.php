@@ -158,6 +158,8 @@ Route::post('/apuracoes/responder/{id}', ['as' => 'responder-processo-usuario', 
 
 Route::get('/usuario', ['as' => 'editar-usuario', 'uses' => 'UsuarioController@edit', 'middleware' => 'auth']);
 Route::post('/usuario', ['uses' => 'UsuarioController@update', 'middleware' => 'auth']);
+Route::get('/admin/usuarios', ['as' => 'listar-usuarios-admin', 'uses' => 'UsuarioController@index', 'middleware' => 'admin']);
+Route::get('/admin/usuarios/visualizar/{id}', ['as' => 'visualizar-usuario-admin', 'uses' => 'UsuarioController@editAdmin', 'middleware' => 'admin']);
 
 // Empresa routes...
 Route::get('/empresas', ['as' => 'empresas', 'uses' => 'EmpresaController@index', 'middleware' => 'auth']);

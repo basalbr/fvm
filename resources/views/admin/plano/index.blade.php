@@ -1,41 +1,18 @@
 @extends('layouts.admin')
 @section('header_title', 'Chamados')
 @section('main')
-<h1>FAQ</h1>
-<hr class="dash-title">
+
 <div class="card">
-    <h3>Filtros de Pesquisa</h3>
-    <form class="form-inline">
-        <div class="form-group" style="width: 300px">
-            <label>Pergunta</label>
-            <div class="clearfix"></div>
-            <input type="text" class="form-control" name='pergunta' value='{{Input::get('pergunta')}}'/>
-        </div>
-        <div class="form-group" style="width: 300px">
-            <label>Resposta</label>
-            <div class="clearfix"></div>
-            <input type="text" class="form-control" name='resposta' value='{{Input::get('resposta')}}'/>
-        </div>
-        <div class="form-group" style="width: 250px">
-            <label>Ordenar por</label>
-            <select name="ordenar" class="form-control">
-                <option value="pergunta_asc" {{Input::get('ordenar') == 'pergunta_asc' ? 'selected' : ''}}>Pergunta - A/Z</option>
-                <option value="pergunta_desc" {{Input::get('ordenar') == 'pergunta_desc' ? 'selected' : ''}}>Resposta - Z/A</option>
-            </select>
-        </div>
-        <div class="form-group"  style="width: 50px">
-            <label>&zwnj;</label>
-            <button type="submit" class="btn btn-primary"><span class="fa fa-search"></span> Pesquisar</button>
-        </div>
-        <div class="clearfix"></div>
-    </form>
-    <br />
-    <h3>Lista de Naturezas Jurídicas</h3>
+    <h1>Planos</h1>
+  
+    <h3>Lista de Planos de Pagamentos</h3>
     <table class='table'>
         <thead>
             <tr>
-                <th>Nome</th>
-                <th>Duração</th>
+                <th>Doc. Fiscais</th>
+                <th>Doc. Contábeis</th>
+                <th>Funcionários</th>
+                <th>Pró-labores</th>
                 <th>Valor</th>
                 <th></th>
             </tr>
@@ -44,10 +21,12 @@
             @if($planos->count())
             @foreach($planos as $plano)
             <tr>
-                <td>{{$plano->nome}}</td>
-                <td>{{$plano->duracao}}</td>
+                <td>{{$plano->total_documentos}}</td>
+                <td>{{$plano->total_documentos_contabeis}}</td>
+                <td>{{$plano->funcionarios}}</td>
+                <td>{{$plano->pro_labores}}</td>
                 <td>R$ {{number_format($plano->valor, 2, ',','.')}}</td>
-                <td><a class="btn btn-warning" href="{{route('editar-plano', ['id' => $plano->id])}}">Editar</a> <a class="btn btn-danger" href="{{$plano->id}}">Remover</a></td>
+                <td><a class="btn btn-warning" href="{{route('editar-plano', ['id' => $plano->id])}}"><span class='fa fa-edit'></span> Editar</a> <a class="btn btn-danger" href="{{$plano->id}}"><span class='fa fa-remove'></span> Remover</a></td>
             </tr>
             @endforeach
             @else
@@ -60,7 +39,7 @@
 
     {!! str_replace('/?', '?', $planos->render()) !!}
     <div class="clearfix"></div>
-    <a class='btn btn-primary' href='{{route('cadastrar-plano')}}'>Cadastrar um plano de pagamento</a><br />
+    <a class='btn btn-primary' href='{{route('cadastrar-plano')}}'><span class='fa fa-plus'></span> Cadastrar</a><br />
     <div class="clearfix"></div>
 </div>
 @stop

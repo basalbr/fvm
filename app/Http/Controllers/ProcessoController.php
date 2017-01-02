@@ -20,8 +20,9 @@ class ProcessoController extends Controller {
     }
 
     public function index() {
-        $processos = Processo::query();
-        $processos->join('pessoa', 'pessoa.id', '=', 'processo.id_pessoa');
+          $processos = Processo::query();
+
+
         if (Input::get('competencia_de')) {
             $data = explode('/', Input::get('competencia_de'));
             $data = $data[2] . '-' . $data[1] . '-' . '01';
@@ -60,12 +61,11 @@ class ProcessoController extends Controller {
                 $processos->orderBy('processo.competencia', 'desc');
             }
         } else {
-            $processos->orderByRaw("FIELD(processo.status , 'novo', 'aberto', 'concluido','cancelado') ASC");
             $processos->orderBy('processo.competencia', 'desc');
-            $processos->orderBy('pessoa.nome_fantasia', 'asc');
         }
 
         $processos = $processos->select('processo.*')->paginate(10);
+
         return view('admin.processos.index', ['processos' => $processos]);
     }
 

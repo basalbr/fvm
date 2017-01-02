@@ -1,23 +1,18 @@
-@extends('layouts.master')
-@section('header_title', 'Home')
-@section('content')
-<section id='page-header' style="margin-top: 55px" class="page-header">
-    <div class='container'>
-        <h1>Natureza Jurídica</h1>
+@extends('layouts.admin')
+@section('header_title', 'Cadastrar Natureza Jurídica')
+@section('main')
+<div class="card">
+    <h1>Cadastrar Natureza Jurídica</h1>
+    @if($errors->has())
+    <div class="alert alert-warning shake">
+        <b>Atenção</b><br />
+        @foreach ($errors->all() as $error)
+        {{ $error }}<br />
+        @endforeach
     </div>
-</section>
-<section>
-    <div class="container">
-
-        @if($errors->has())
-        <div class="alert alert-warning shake">
-            <b>Atenção</b><br />
-            @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-            @endforeach
-        </div>
-        @endif
-        <form method="POST" action="">
+    @endif
+    <form method="POST" action="">
+          <div class='col-xs-12'>
             {{ csrf_field() }}
             <div class='form-group'>
                 <label>Código</label>
@@ -35,11 +30,12 @@
                 <label>Qualificação</label>
                 <input type='text' class='form-control' name='qualificacao' value="{{Input::old('qualificacao')}}"/>
             </div>
-            <div class='form-group'>
-                <input type='submit' value="Cadastrar" class='btn btn-primary' />
+             <div class='form-group'>
+              <button type="submit" class='btn btn-success'><span class="fa fa-plus"></span> Cadastrar</button>
+                <a href="{{URL::previous()}}" class="btn btn-primary"><span class='fa fa-history'></span> Voltar</a>
             </div>
-        </form>
-    </div>
+        </div>
+        <div class='clearfix'></div>
+    </form>
 </div>
-</section>
 @stop

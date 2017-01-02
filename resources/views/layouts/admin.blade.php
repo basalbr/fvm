@@ -97,6 +97,9 @@
         <li class='{{Request::is('admin/noticias*') ? "active" : ""}}'>
             <a href="{{route('listar-noticias')}}"><div class="icon"><span class="fa fa-newspaper-o"></span></div>Notícias</a>
         </li>
+        <li class='{{Request::is('admin/usuarios*') ? "active" : ""}}'>
+            <a href="{{route('listar-usuarios-admin')}}"><div class="icon"><span class="fa fa-users"></span></div>Usuários</a>
+        </li>
     </ul>
 </div>
 <div id="dash-container" class='bg-ltblue'>

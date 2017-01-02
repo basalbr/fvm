@@ -31,25 +31,31 @@ class ChamadoResposta extends Model {
     protected $fillable = ['mensagem', 'id_usuario', 'id_chamado', 'anexo'];
 
     public function enviar_notificacao_nova_mensagem_chamado() {
-        $usuario = $this->chamado->usuario;
-        $notificacao = new Notificacao;
-        $notificacao->mensagem = 'Você possui uma nova mensagem no chamado: '.$this->chamado->titulo.'. <a href="' . route('responder-chamado-usuario', ['id' => $this->id_chamado]) . '">Visualizar.</a>';
-        $notificacao->id_usuario = $usuario->id;
-        $notificacao->save();
+        $remetente = $this->usuario;
+        $email_usuario = $this->chamado->usuario->email;
+        if ($remetente->admin) {
+            $notificacao = new Notificacao;
+            $notificacao->mensagem = 'Você possui uma nova mensagem no chamado: ' . $this->chamado->titulo . '. <a href="' . route('responder-chamado-usuario', ['id' => $this->id_chamado]) . '">Visualizar.</a>';
+            $notificacao->id_usuario = $this->chamado->id_usuario;
+            $notificacao->save();
+        }
         try {
-            \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-chamado', ['nome' => $usuario->nome, 'id_chamado'=>$this->id_chamado], function ($m) use($usuario){
-                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
-                $m->to($usuario->email)->subject('Nova Mensagem');
-            });
-            \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-chamado-admin', ['nome' => $usuario->nome, 'id_chamado'=>$this->id_chamado], function ($m) {
-                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
-                $m->to('admin@webcontabilidade.com')->subject('Nova Mensagem');
-            });
+            if ($remetente->admin) {
+                \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-chamado', ['nome' => $remetente->nome, 'id_chamado' => $this->id_chamado], function ($m) use ($email_usuario) {
+                    $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                    $m->to($email_usuario)->subject('Nova Mensagem');
+                });
+            } else {
+                \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-chamado-admin', ['nome' => $remetente->nome, 'id_chamado' => $this->id_chamado], function ($m) {
+                    $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                    $m->to('admin@webcontabilidade.com')->subject('Nova Mensagem');
+                });
+            }
         } catch (\Exception $ex) {
             return true;
         }
     }
-    
+
     public function validate($data) {
         // make a new validator object
         $v = Validator::make($data, $this->rules);
@@ -63,8 +69,8 @@ class ChamadoResposta extends Model {
 
         // validation pass
         return true;
-    } 
-    
+    }
+
     public function errors() {
         return $this->errors;
     }

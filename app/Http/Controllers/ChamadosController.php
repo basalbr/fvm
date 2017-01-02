@@ -13,7 +13,6 @@ class ChamadosController extends Controller {
 
     public function index() {
         $chamados = Chamado::query();
-        $chamados->where('id_usuario', '=', Auth::user()->id);
         if (Input::get('de')) {
             $data = explode('/', Input::get('de'));
             $data = $data[2].'-'.$data[1].'-'.$data[0];

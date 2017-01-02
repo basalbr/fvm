@@ -1,5 +1,5 @@
-@extends('layouts.master')
-@section('header_title', 'Home')
+@extends('layouts.admin')
+@section('header_title', 'Cadastrar Plano de Pagamento')
 
 @section('js')
 @parent
@@ -8,41 +8,36 @@
 <script type="text/javascript" language="javascript">
 $(document).ready(function () {
     //CKFinder.setupCKEditor();
-    CKEDITOR.editorConfig = function( config ) {
-	// Define changes to default configuration here. For example:
-	// config.language = 'fr';
-	// config.uiColor = '#AADC6E';
-	 config.filebrowserBrowseUrl = '{{url("public/kcfinder/browse.php?opener=ckeditor&type=files")}}';
-   config.filebrowserImageBrowseUrl =  '{{url("public/kcfinder/browse.php?opener=ckeditor&type=images")}}';
-   config.filebrowserFlashBrowseUrl = '{{url("public/kcfinder/browse.php?opener=ckeditor&type=flash")}}';
-   config.filebrowserUploadUrl = '{{url("public/kcfinder/upload.php?opener=ckeditor&type=files")}}';
-   config.filebrowserImageUploadUrl = '{{url("public/kcfinder/upload.php?opener=ckeditor&type=images")}}';
-   config.filebrowserFlashUploadUrl = '{{url("public/kcfinder/upload.php?opener=ckeditor&type=flash")}}';
-   config.contentsCss = '{{url("public/css/custom.css")}}'
-};
+    CKEDITOR.editorConfig = function (config) {
+        // Define changes to default configuration here. For example:
+        // config.language = 'fr';
+        // config.uiColor = '#AADC6E';
+        config.filebrowserBrowseUrl = '{{url("public/kcfinder/browse.php?opener=ckeditor&type=files")}}';
+        config.filebrowserImageBrowseUrl = '{{url("public/kcfinder/browse.php?opener=ckeditor&type=images")}}';
+        config.filebrowserFlashBrowseUrl = '{{url("public/kcfinder/browse.php?opener=ckeditor&type=flash")}}';
+        config.filebrowserUploadUrl = '{{url("public/kcfinder/upload.php?opener=ckeditor&type=files")}}';
+        config.filebrowserImageUploadUrl = '{{url("public/kcfinder/upload.php?opener=ckeditor&type=images")}}';
+        config.filebrowserFlashUploadUrl = '{{url("public/kcfinder/upload.php?opener=ckeditor&type=flash")}}';
+        config.contentsCss = '{{url("public/css/custom.css")}}'
+    };
     CKEDITOR.replace('ckeditor');
 });
 </script>
 @stop
-@section('content')
-<section id='page-header' style="margin-top: 55px" class="page-header">
-    <div class='container'>
-        <h1>Planos de Pagamento</h1>
+@section('main')
+<div class="card">
+    <h1>Cadastrar Plano de Pagamento</h1>
+    @if($errors->has())
+    <div class="alert alert-warning shake">
+        <b>Atenção</b><br />
+        @foreach ($errors->all() as $error)
+        {{ $error }}<br />
+        @endforeach
     </div>
-</section>
-<section>
-    <div class="container">
-
-        @if($errors->has())
-        <div class="alert alert-warning shake">
-            <b>Atenção</b><br />
-            @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-            @endforeach
-        </div>
-        @endif
-        <form method="POST" action="">
-            {{ csrf_field() }}
+    @endif
+    <form method="POST" action="">
+        {{ csrf_field() }}
+        <div class='col-xs-6'>
             <div class='form-group'>
                 <label>Nome</label>
                 <input type='text' class='form-control' name='nome' value="{{Input::old('nome')}}"/>
@@ -59,6 +54,9 @@ $(document).ready(function () {
                 <label>Quantidade Total de Pró-labores</label>
                 <input type='text' class='form-control numero-mask' name='pro_labores' value="{{Input::old('pro_labores')}}"/>
             </div>
+        </div>
+        <div class='col-xs-6'>
+
             <div class='form-group'>
                 <label>Quantidade Total de Funcionários</label>
                 <input type='text' class='form-control numero-mask' name='funcionarios' value="{{Input::old('funcionarios')}}"/>
@@ -71,15 +69,18 @@ $(document).ready(function () {
                 <label>Valor</label>
                 <input type='text' class='form-control dinheiro-mask' name='valor' value="{{Input::old('valor')}}"/>
             </div>
+        </div>
+        <div class='col-xs-12'>
             <div class='form-group'>
                 <label>Descrição</label>
                 <textarea id='ckeditor'class='form-control' name='descricao'>{{Input::old('descricao')}}</textarea>
             </div>
             <div class='form-group'>
-                <input type='submit' value="Cadastrar" class='btn btn-primary' />
+                <button type="submit" class='btn btn-success'><span class="fa fa-plus"></span> Cadastrar</button>
+                <a href="{{URL::previous()}}" class="btn btn-primary"><span class='fa fa-history'></span> Voltar</a>
             </div>
-        </form>
-    </div>
+        </div>
+        <div class='clearfix'></div>
+    </form>
 </div>
-</section>
 @stop

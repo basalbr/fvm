@@ -5,11 +5,29 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\NaturezaJuridica;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class NaturezaJuridicaController extends Controller {
 
     public function index() {
-        $naturezas_juridicas = NaturezaJuridica::orderBy('descricao', 'asc')->paginate(10);
+         $naturezas_juridicas = NaturezaJuridica::query();
+        if (Input::get('descricao')) {
+            $naturezas_juridicas->where('descricao', 'like', '%' . Input::get('descricao') . '%');
+        }
+        if (Input::get('representante')) {
+            $naturezas_juridicas->where('representante', 'like', '%' . Input::get('representante') . '%');
+        }
+        if (Input::get('ordenar')) {
+            if (Input::get('ordenar') == 'descricao_asc') {
+                $naturezas_juridicas->orderBy('descricao', 'asc');
+            }
+            if (Input::get('ordenar') == 'descricao_desc') {
+                $naturezas_juridicas->orderBy('descricao', 'desc');
+            }
+        }else{
+            $naturezas_juridicas->orderBy('descricao','asc');
+        }
+        $naturezas_juridicas = $naturezas_juridicas->paginate(10);
         return view('admin.natureza_juridica.index', ['naturezas_juridicas' => $naturezas_juridicas]);
     }
 

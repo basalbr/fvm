@@ -35,7 +35,7 @@
                     @endif
                 </select>
             </div>
-                <div class='form-group'>
+            <div class='form-group'>
                 <button type="submit" class='btn btn-success'><span class="fa fa-save"></span> Salvar Alterações</button>
                 <a href="{{URL::previous()}}" class="btn btn-primary"><span class='fa fa-history'></span> Voltar</a>
             </div>

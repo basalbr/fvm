@@ -1,5 +1,5 @@
-@extends('layouts.master')
-@section('header_title', 'Home')
+@extends('layouts.admin')
+@section('header_title', 'Editar Plano de Pagamento')
 @section('js')
 @parent
 <script type="text/javascript" src="{{url('public/ckeditor/ckeditor.js')}}"></script>
@@ -23,15 +23,9 @@ $(document).ready(function () {
 });
 </script>
 @stop
-@section('content')
-<section id='page-header' style="margin-top: 55px" class="page-header">
-    <div class='container'>
-        <h1>Planos de Pagamento</h1>
-    </div>
-</section>
-<section>
-    <div class="container">
-
+@section('main')
+    <div class="card">
+<h1>Editar Plano de Pagamento</h1>
         @if($errors->has())
         <div class="alert alert-warning shake">
             <b>Atenção</b><br />
@@ -42,6 +36,7 @@ $(document).ready(function () {
         @endif
         <form method="POST" action="">
             {{ csrf_field() }}
+            <div class='col-xs-6'>
            <div class='form-group'>
                 <label>Nome</label>
                 <input type='text' class='form-control' name='nome' value="{{$plano->nome}}"/>
@@ -58,6 +53,8 @@ $(document).ready(function () {
                 <label>Quantidade Total de Pró-labores</label>
                 <input type='text' class='form-control numero-mask' name='pro_labores' value="{{$plano->pro_labores}}"/>
             </div>
+                </div>
+            <div class='col-xs-6'>
             <div class='form-group'>
                 <label>Quantidade Total de Funcionários</label>
                 <input type='text' class='form-control numero-mask' name='funcionarios' value="{{$plano->funcionarios}}"/>
@@ -70,15 +67,18 @@ $(document).ready(function () {
                 <label>Valor</label>
                 <input type='text' class='form-control dinheiro-mask' name='valor' value="{{$plano->valor}}"/>
             </div>
+                </div>
+            <div class='col-xs-12'>
             <div class='form-group'>
                 <label>Descrição</label>
                 <textarea id='ckeditor'class='form-control' name='descricao'>{{$plano->descricao}}</textarea>
             </div>
             <div class='form-group'>
-                <input type='submit' value="Salvar alterações" class='btn btn-primary' />
+              <button type="submit" class='btn btn-success'><span class="fa fa-save"></span> Salvar Alterações</button>
+                <a href="{{URL::previous()}}" class="btn btn-primary"><span class='fa fa-history'></span> Voltar</a>
             </div>
+            </div>
+            <div class='clearfix'></div>
         </form>
     </div>
-</div>
-</section>
 @stop

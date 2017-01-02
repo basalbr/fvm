@@ -17,12 +17,12 @@ $(function () {
 });
 </script>
 @stop
-@section('header_title', 'Processos')
+@section('header_title', 'Apurações')
 @section('main')
-<h1>Apurações</h1>
-<p>Para visualizar os detalhes de uma apuração ou enviar informações adicionar, clique em visualizar.</p>
-<hr class="dash-title">
+
 <div class="card">
+    <h1>Apurações</h1>
+    <p>Para visualizar os detalhes de uma apuração ou enviar informações adicionar, clique em visualizar.</p>
     <h3>Filtros de Pesquisa <small><a href=''>mostrar</a></small></h3>
     <form class="form-inline form-pesquisa">
         <div class="form-group" style="width: 200px">
@@ -64,9 +64,9 @@ $(function () {
             <select name="status" class="form-control">
                 <option value="" {{Input::get('status') ? 'selected' : ''}}>Todos</option>
                 <option value="aberto" {{Input::get('status') == 'aberto' ? 'selected' : ''}}>Aberto</option>
-                <option value="cancelado" {{Input::get('status') == 'fechado' ? 'selected' : ''}}>Cancelado</option>
-                <option value="concluido" {{Input::get('status') == 'fechado' ? 'selected' : ''}}>Concluído</option>
-                <option value="novo" {{Input::get('status') == 'fechado' ? 'selected' : ''}}>Novo</option>
+                <option value="cancelado" {{Input::get('status') == 'cancelado' ? 'selected' : ''}}>Cancelado</option>
+                <option value="concluido" {{Input::get('status') == 'concluido' ? 'selected' : ''}}>Concluído</option>
+                <option value="novo" {{Input::get('status') == 'novo' ? 'selected' : ''}}>Novo</option>
             </select>
         </div>
         <div class="form-group" style="width: 220px">
@@ -74,17 +74,18 @@ $(function () {
             <select name="ordenar" class="form-control">
                 <option value="vencimento_desc" {{Input::get('ordenar') == 'atualizado_desc' ? 'selected' : ''}}>Vencimento</option>
                 <option value="competencia_desc" {{Input::get('ordenar') == 'competencia_desc' ? 'selected' : ''}}>Competência</option>
+
             </select>
         </div>
+                <div class="clearfix"></div>
         <div class="form-group"  style="width: 50px">
-            <label>&zwnj;</label>
             <button type="submit" class="btn btn-primary"><span class="fa fa-search"></span> Pesquisar</button>
         </div>
         <div class="clearfix"></div>
     </form>
     <br />
-    <h3>Lista de apurações em aberto</h3>
-    <table class='table'>
+    <h3>Lista de apurações</h3>
+    <table class='table table-hover table-striped'>
         <thead>
             <tr>
                 <th>Empresa</th>
@@ -104,16 +105,17 @@ $(function () {
                 <td>{{$processo->competencia_formatado()}}</td>
                 <td>{{$processo->vencimento_formatado()}}</td>
                 <td>{{$processo->status}}</td>
-                <td><a class='btn btn-primary' href="{{route('visualizar-processo-admin', ['id' => $processo->id])}}">Visualizar</a></td>
+                <td><a class='btn btn-primary' href="{{route('visualizar-processo-admin', ['id' => $processo->id])}}"><span class="fa fa-search"></span> Visualizar</a></td>
             </tr>
             @endforeach
             @else
             <tr>
-                <td colspan="3">Nenhum registro cadastrado</td>
+                <td colspan="6">Nenhum registro cadastrado</td>
             </tr>
             @endif
         </tbody>
     </table>
     {!! str_replace('/?', '?', $processos->render()) !!}
+    <div class="clearfix"></div>
 </div>
 @stop
