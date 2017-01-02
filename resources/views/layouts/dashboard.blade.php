@@ -59,7 +59,7 @@
 @if(\App\Pessoa::where('id_usuario','=',auth()->user()->id)->count() < 1)
 <script type='text/javascript'>
     $(function () {
-        $('#empresa-modal').modal('show');
+        $('#atalho-modal').modal('show');
     });
 </script>
 @endif

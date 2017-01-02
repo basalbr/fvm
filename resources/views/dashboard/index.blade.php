@@ -58,7 +58,7 @@
 @stop
 @section('modal')
 
-<div class="modal fade" id="empresa-modal" tabindex="-1" role="dialog">
+<div class="modal fade" id="atalho-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document" style="width: 807px">
         <div class="modal-content">
             <div class="modal-header">
