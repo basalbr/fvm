@@ -4,7 +4,10 @@
 @parent
 <script type='text/javascript'>
     $(function () {
-
+        $("#show-socios").on('click', function (e) {
+            e.preventDefault();
+            $("#socios-modal").modal('show')
+        })
         $('.cnae-search').on('keyup', function () {
             $("#adicionar-cnae").prop('disabled', true);
             if ($(this).val().length == 9) {
@@ -248,6 +251,11 @@
         </div>
         <div class="clearfix"></div>
         <br />
+        <h3>Sócios</h3>
+        <div class="col-xs-12"><a href='' class="btn btn-info" id="show-socios"><span class="fa fa-list-ul"></span> Lista de Sócios</a></div>
+
+        <div class="clearfix"></div>
+        <br />
         <h3>CNAEs</h3>
         <div class="col-xs-12">
             <table class='table table-striped'>
@@ -280,6 +288,108 @@
 @stop
 
 @section('modal')
+<div class="modal fade" id="socios-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document"  style="width: 1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Lista de Sócios</h4>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-body">
+                <div class='col-xs-12'>
+                    <ul class="nav nav-tabs" role="tablist">
+                        @foreach($empresa->socios as $k => $socio)
+
+                        <li role="presentation" class="{{$k == 0 ? 'active':''}}"><a href="#socio-{{$k}}" aria-controls="socio-{{$k}}" role="tab" data-toggle="tab">{{$socio->nome}}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class='clearfix'></div>
+                <br />
+                @foreach($empresa->socios as $k => $socio)
+                <div role="tabpanel" class="tab-pane" id="socio-{{$k}}">
+                    <div class='col-md-6'>
+                        <div class='form-group'>
+                            <label>Principal?</label>
+                            <input type='text' class='form-control' value="{{$socio->principal ? 'Sim' : 'Não' }}"/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Nome</label>
+                            <input type='text' class='form-control' value="{{$socio->nome}}"/>
+                        </div>
+
+                        <div class='form-group'>
+                            <label>Data de nascimento</label>
+                            <input type='text' class='form-control' value="{{$socio->data_nascimento ? $socio->data_nascimento->format('d/m/Y') : ''}}"/>
+                        </div>
+
+                        <div class='form-group'>
+                            <label>Telefone</label>
+                            <input type='text' class='form-control' value="{{$socio->telefone}}"/>
+                        </div>
+                        <div class='form-group'>
+                            <label>PIS</label>
+                            <input type='text' class='form-control' value="{{$socio->pis}}"/>
+                        </div>
+
+                        <div class='form-group'>
+                            <label>CPF</label>
+                            <input type='text' class='form-control' value="{{$socio->cpf}}"/>
+                        </div>
+                        <div class='form-group'>
+                            <label>RG</label>
+                            <input type='text' class='form-control' value="{{$socio->rg}}"/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Órgão Expeditor</label>
+                            <input type='text' class='form-control' value="{{$socio->orgao_expedidor}}"/>
+                        </div>
+                    </div>
+                    <div class='col-md-6'>
+                        <div class='form-group'>
+                            <label>Título de Eleitor</label>
+                            <input type='text' class='form-control' value="{{$socio->titulo_eleitor}}"/>
+                        </div>
+
+                        <div class='form-group'>
+                            <label>CEP</label>
+                            <input type='text' class='form-control' value="{{$socio->cep}}"/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Estado</label>
+                            <input type='text' class='form-control' value="{{$socio->uf->nome}}"/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Cidade</label>
+                            <input type='text' class='form-control' value="{{$socio->cidade}}"/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Bairro</label>
+                            <input type='text' class='form-control' value="{{$socio->bairro}}"/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Endereço</label>
+                            <input type='text' class='form-control' value="{{$socio->endereco}}"/>
+                        </div>
+
+                        <div class='form-group'>
+                            <label>Pró-labore</label>
+                            <input type='text' class='form-control' value="{{$socio->pro_labore_formatado()}}"/>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar Janela</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <div class="modal fade" id="cnae-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document"  style="width: 900px;">
         <div class="modal-content">

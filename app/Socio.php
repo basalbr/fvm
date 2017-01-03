@@ -24,7 +24,9 @@ class Socio extends Model {
         'id_uf' => 'required',
         'pro_labore' => 'numeric',
         'orgao_expedidor' => 'required',
-        'pis'=>'size:14'
+        'pis' => 'size:14',
+        'data_nascimento' => 'required|date',
+        'titulo_eleitor' => 'required',
     ];
     protected $errors;
     protected $niceNames = [
@@ -41,9 +43,10 @@ class Socio extends Model {
         'id_uf' => 'Estado',
         'pro_labore' => 'Pró-Labore',
         'orgao_expedidor' => 'Órgão Expedidor',
-        'pis'=>'PIS'
-        ];
-    
+        'pis' => 'PIS',
+        'data_nascimento' => 'Data de Nascimento',
+    ];
+
     /**
      * The database table used by the model.
      *
@@ -75,6 +78,7 @@ class Socio extends Model {
         'orgao_expedidor',
         'telefone',
     ];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'data_nascimento'];
 
     public function validate($data, $update = false) {
         // make a new validator object
@@ -97,7 +101,6 @@ class Socio extends Model {
         return true;
     }
 
-
     public function errors() {
         return $this->errors;
     }
@@ -105,13 +108,16 @@ class Socio extends Model {
     public function pessoa() {
         return $this->belongsTo('App\Pessoa', 'id_pessoa');
     }
+    public function uf() {
+        return $this->belongsTo('App\Uf', 'id_uf');
+    }
 
     public function pro_labores() {
         return $this->hasMany('App\Prolabore', 'id_socio');
     }
-    
-    public function pro_labore_formatado(){
-        return number_format($this->pro_labore, 2, ',','.');
+
+    public function pro_labore_formatado() {
+        return number_format($this->pro_labore, 2, ',', '.');
     }
 
 }

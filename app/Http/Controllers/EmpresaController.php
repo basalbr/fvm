@@ -108,6 +108,9 @@ class EmpresaController extends Controller {
                 $socio = new \App\Socio;
                 $socioData = $request->get('socio');
                 $socioData['id_pessoa'] = $empresa->id;
+                $old_date = explode('/', $socioData['data_nascimento']);
+                $new_date = $old_date[2] . '-' . $old_date[1] . '-' . $old_date[0];
+                $socioData['data_nascimento'] = $new_date;
                 if ($request->get('socio')['pro_labore']) {
                     $socioData['pro_labore'] = str_replace(',', '.', preg_replace('#[^\d\,]#is', '', $request->get('socio')['pro_labore']));
                 }

@@ -2,6 +2,8 @@
 @section('header_title', 'Empresas')
 @section('js')
 @parent
+<script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.min.js')}}"></script>
+<script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.pt-BR.min.js')}}"></script>
 <script type='text/javascript'>
     var planos;
     var max_documentos;
@@ -10,6 +12,14 @@
     var maxValor;
     var minValor;
     $(function () {
+         $('.date-mask').on('keypress', function () {
+        return false;
+    });
+    $('.date-mask').datepicker({
+        language: 'pt-BR',
+        autoclose: true,
+        format: 'dd/mm/yyyy'
+    });
         $.get("{{route('ajax-simular-plano')}}", function (data) {
             planos = data.planos;
 //            max_funcionarios = parseInt(data.total_funcionarios);
@@ -290,7 +300,10 @@
                 <label>Nome do responsável *</label>
                 <input type='text' class='form-control' name='socio[nome]' value="{{Input::old('socio')['nome']}}" />
             </div> 
-
+            <div class='form-group'>
+                <label>Data de Nascimento *</label>
+                <input type='text' class='form-control date-mask' name='socio[data_nascimento]' value="{{Input::old('socio')['data_nascimento']}}" />
+            </div>
             <div class='form-group'>
                 <label>Telefone do responsável *</label>
                 <input type='text' class='form-control fone-mask' name='socio[telefone]' value="{{Input::old('socio')['telefone']}}" />
@@ -308,10 +321,7 @@
                 <label>Órgão Expedidor do RG (Ex: SSP/SC) *</label>
                 <input type='text' class='form-control' name='socio[orgao_expedidor]' value="{{Input::old('socio')['orgao_expedidor']}}"/>
             </div>
-            <div class='form-group'>
-                <label>Código de Acesso do Simples Nacional *</label>
-                <input type='text' class='form-control' name='codigo_acesso_simples_nacional' value="{{Input::old('codigo_acesso_simples_nacional')}}"/>
-            </div>
+           
             <div class='form-group'>
                 <label>Nº Título de Eleitor do responsável *</label>
                 <input type='text' class='form-control' name='socio[titulo_eleitor]' value="{{Input::old('socio')['titulo_eleitor']}}"/>
@@ -356,6 +366,10 @@
             <div class='form-group'>
                 <label>Valor de Pró-Labore do responsável (Deixe em branco caso não receba pró-labore)</label>
                 <input type='text' class='form-control dinheiro-mask' name='socio[pro_labore]' value="{{Input::old('socio')['pro_labore']}}"/>
+            </div>
+             <div class='form-group'>
+                <label>Código de Acesso do Simples Nacional *</label>
+                <input type='text' class='form-control' name='codigo_acesso_simples_nacional' value="{{Input::old('codigo_acesso_simples_nacional')}}"/>
             </div>
             <input type='hidden' name='socio[principal]' value="1"/>
         </div>
@@ -430,8 +444,8 @@
             </div>
             <div class="modal-body">
                 <div class='col-xs-12'>
-                <p>Complete os campos abaixo e confira os valores de nossas mensalidades.
-                    <br />Após migrarmos sua empresa, você receberá <b>30 dias grátis</b> em nosso sistema. Somente após esse período de 30 dias é que começaremos a cobrar a mensalidade.</p>
+                    <p>Complete os campos abaixo e confira os valores de nossas mensalidades.
+                        <br />Após migrarmos sua empresa, você receberá <b>30 dias grátis</b> em nosso sistema. Somente após esse período de 30 dias é que começaremos a cobrar a mensalidade.</p>
                 </div>
                 <div class='col-xs-6'>
                     <div class='form-group'>
@@ -479,7 +493,7 @@
             </div>
             <div class="modal-body">
                 <div class='col-xs-12'>
-                <p>Digite parte da descrição e pressione pesquisar. Algumas opções irão aparecer, selecione a desejada clicando em "adicionar".</p>
+                    <p>Digite parte da descrição e pressione pesquisar. Algumas opções irão aparecer, selecione a desejada clicando em "adicionar".</p>
                 </div>
                 <form id="cnae-form">
                     <div class='form-group'>
