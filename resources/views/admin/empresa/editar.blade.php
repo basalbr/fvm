@@ -252,7 +252,7 @@
         <div class="clearfix"></div>
         <br />
         <h3>Sócios</h3>
-        <div class="col-xs-12"><a href='' class="btn btn-info" id="show-socios"><span class="fa fa-list-ul"></span> Lista de Sócios</a></div>
+        <div class="col-xs-12"> <div class='form-group'><a href='' class="btn btn-info" id="show-socios"><span class="fa fa-list-ul"></span> Lista de Sócios</a> </div></div>
 
         <div class="clearfix"></div>
         <br />
