@@ -23,8 +23,8 @@
                 <option value="nome_desc" {{Input::get('ordenar') == 'nome_desc' ? 'selected' : ''}}>Nome - Z/A</option>
                 <option value="email_asc" {{Input::get('ordenar') == 'email_asc' ? 'selected' : ''}}>E-mail - A/Z</option>
                 <option value="email_desc" {{Input::get('ordenar') == 'email_desc' ? 'selected' : ''}}>E-mail - Z/A</option>
-                <option value="cadastrado_asc" {{Input::get('ordenar') == 'cadastrado_asc' ? 'selected' : ''}}>Mais novo</option>
-                <option value="cadastrado_desc" {{Input::get('ordenar') == 'cadastrado_desc' ? 'selected' : ''}}>Mais antigo</option>
+                <option value="cadastrado_asc" {{Input::get('ordenar') == 'cadastrado_asc' ? 'selected' : ''}}>Mais antigo</option>
+                <option value="cadastrado_desc" {{Input::get('ordenar') == 'cadastrado_desc' ? 'selected' : ''}}>Mais novo</option>
             </select>
         </div>
         <div class="clearfix"></div>
