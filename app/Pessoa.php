@@ -127,7 +127,7 @@ class Pessoa extends Model {
             }
         }
         $mensalidade = new \App\Mensalidade;
-        $mensalidade->id_usuario = Auth::user()->id;
+        $mensalidade->id_usuario = $this->id_usuario;
         $mensalidade->id_pessoa = $this->id;
         $mensalidade->duracao = $plano->duracao;
         $mensalidade->valor = $valor;
@@ -193,10 +193,10 @@ class Pessoa extends Model {
     }
 
     public function enviar_notificacao_status() {
-        $usuario = Auth::user();
+        $usuario = $this->usuario;
         $notificacao = new Notificacao;
         $notificacao->mensagem = '<a href="' . route('editar-empresa', [$this->id]) . '">A empresa ' . $this->nome_fantasia . ' mudou seu status para ' . $this->status . '. Clique aqui para visualizar a empresa.</a>';
-        $notificacao->id_usuario = Auth::user()->id;
+        $notificacao->id_usuario = $usuario->id;
         $notificacao->save();
         try {
             \Illuminate\Support\Facades\Mail::send('emails.status-empresa', ['nome' => $usuario->nome, 'id_empresa' => $this->id, 'nome_empresa' => $this->nome_fantasia, 'status' => $this->status], function ($m) use($usuario) {
