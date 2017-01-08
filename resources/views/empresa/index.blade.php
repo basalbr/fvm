@@ -60,7 +60,7 @@
             @endforeach
             @else
             <tr>
-                <td colspan="5">Nenhum registro cadastrado</td>
+                <td colspan="6">Nenhum registro cadastrado</td>
             </tr>
             @endif
         </tbody>

@@ -416,7 +416,7 @@
         </div>
         <div class='col-xs-12'>
             <div class='form-group'>
-                <label>Número de registro do CRC do contador atual</label>
+                <label>Número de registro do CRC do contador atual *</label>
                 <input type='text' class='form-control' name='crc' value="{{Input::old('crc')}}"/>
             </div>
         </div>
