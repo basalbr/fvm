@@ -2,8 +2,8 @@
 @section('header_title', 'Empresas')
 @section('js')
 @parent
-<script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.min.js')}}"></script>
-<script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.pt-BR.min.js')}}"></script>
+<script type="text/javascript" src="{{url(public_path().'js/bootstrap-datepicker.min.js')}}"></script>
+<script type="text/javascript" src="{{url(public_path().'js/bootstrap-datepicker.pt-BR.min.js')}}"></script>
 <script type='text/javascript'>
     var planos;
     var max_documentos;

@@ -21,7 +21,7 @@
 </script>
 @stop
 @section('content')
-<img id="parallax" src="{{url('public/images/banner.jpg')}}"/>
+<img id="parallax" src="{{url(public_path().'images/banner.jpg')}}"/>
 <section id="noticia"> 
     <div class="container bg-white bg-shadow">
         <br />

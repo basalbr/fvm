@@ -2,8 +2,8 @@
 @section('header_title', 'Editar Plano de Pagamento')
 @section('js')
 @parent
-<script type="text/javascript" src="{{url('public/ckeditor/ckeditor.js')}}"></script>
-<script type="text/javascript" src="{{url('public/ckfinder/ckfinder.js')}}"></script>
+<script type="text/javascript" src="{{url(public_path().'ckeditor/ckeditor.js')}}"></script>
+<script type="text/javascript" src="{{url(public_path().'ckfinder/ckfinder.js')}}"></script>
 <script type="text/javascript">
 $(document).ready(function () {
     //CKFinder.setupCKEditor();

@@ -2,8 +2,8 @@
 @section('header_title', 'Solicitar abertura de empresa')
 @section('js')
 @parent
-<script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.min.js')}}"></script>
-<script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.pt-BR.min.js')}}"></script>
+<script type="text/javascript" src="{{url(public_path().'js/bootstrap-datepicker.min.js')}}"></script>
+<script type="text/javascript" src="{{url(public_path().'js/bootstrap-datepicker.pt-BR.min.js')}}"></script>
 <script type='text/javascript'>
 
 $(function () {

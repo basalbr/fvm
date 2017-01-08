@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container-fluid">
-    <img id="parallax" src="{{url('public/images/banner.jpg')}}"/>
+    <img id="parallax" src="{{url(public_path().'images/banner.jpg')}}"/>
     <div class="card" style="width: 600px; margin: 55px auto 0;  position: relative">
         <h3>Acesso ao sistema</h3>
         @if($errors->has())

@@ -34,7 +34,7 @@
                 font-size: 96px;
             }
         </style>
-        <link rel="stylesheet" href="{{ URL::asset('public/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ URL::asset(public_path().'css/bootstrap.min.css') }}">
     </head>
     <body>
         <div class="container">

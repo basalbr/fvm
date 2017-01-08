@@ -2,7 +2,7 @@
 @section('header_title', 'Home')
 @section('content')
 <div class="container-fluid">
-    <img id="parallax" src="{{url('public/images/banner.jpg')}}"/>
+    <img id="parallax" src="{{url(public_path().'images/banner.jpg')}}"/>
         <div class="card" style="width: 600px; margin: 55px auto 0;  position: relative">
             <h3>Cadastro de usuário</h3>
             <p>Olá, complete as informações abaixo para se cadastrar em nosso sistema. O cadastro é gratuito e não será cobrada nenhuma taxa por isso.</p>

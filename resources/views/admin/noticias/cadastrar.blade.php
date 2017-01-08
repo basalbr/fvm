@@ -2,10 +2,10 @@
 @section('header_title', 'Home')
 @section('js')
 @parent
-<script type="text/javascript" src="{{url('public/ckeditor/ckeditor.js')}}"></script>
-<script type="text/javascript" src="{{url('public/ckfinder/ckfinder.js')}}"></script>
-<script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.min.js')}}"></script>
-<script type="text/javascript" src="{{url('public/js/bootstrap-datepicker.pt-BR.min.js')}}"></script>
+<script type="text/javascript" src="{{url(public_path().'ckeditor/ckeditor.js')}}"></script>
+<script type="text/javascript" src="{{url(public_path().'ckfinder/ckfinder.js')}}"></script>
+<script type="text/javascript" src="{{url(public_path().'js/bootstrap-datepicker.min.js')}}"></script>
+<script type="text/javascript" src="{{url(public_path().'js/bootstrap-datepicker.pt-BR.min.js')}}"></script>
 <script type="text/javascript" language="javascript">
 $(document).ready(function () {
     $('.date-mask').on('keypress', function () {
