@@ -12,43 +12,68 @@ use Illuminate\Support\Facades\Input;
 class ProlaboreController extends Controller {
 
     public function index() {
-        $socios = Socio::where('pro_labore', '>', 0)->orderBy('id_pessoa')->paginate(10);
+        $socios = Socio::query();
+        $socios->join('pessoa', 'pessoa.id', '=', 'socio.id_pessoa')->join('pro_labore', 'socio.id', '=', 'pro_labore.id_socio');
+        $socios->where('socio.pro_labore', '>', 0);
+        $socios->where('pessoa.deleted_at', '=', null);
+        $socios->whereMonth('competencia', '=', date('m'));
+        if (Input::get('socio')) {
+            $socios->where('socio.nome', 'like', '%' . Input::get('socio') . '%');
+        }
+        if (Input::get('empresa')) {
+            $socios->where('pessoa.nome_fantasia', 'like', '%' . Input::get('empresa') . '%');
+            $socios->where('pessoa.razao_social', 'like', '%' . Input::get('empresa') . '%');
+        }
+        if (Input::get('ordenar')) {
+            if (Input::get('ordenar') == 'empresa_asc') {
+                $socios->orderBy('pessoa.nome_fantasia', 'asc');
+            }
+            if (Input::get('ordenar') == 'empresa_desc') {
+                $socios->orderBy('pessoa.nome_fantasia', 'desc');
+            }
+            if (Input::get('ordenar') == 'socio_asc') {
+                $socios->orderBy('socio.nome', 'asc');
+            }
+            if (Input::get('ordenar') == 'socio_desc') {
+                $socios->orderBy('socio.nome', 'desc');
+            }
+        } else {
+            $socios->orderBy('pessoa.nome_fantasia', 'asc');
+        }
+        $socios = $socios->select('socio.*')->paginate(10);
         return view('admin.pro_labore.index', ['socios' => $socios]);
     }
 
     public function indexCliente() {
         $pro_labores = Prolabore::query();
-        $pro_labores->join('socio', 'socio.id', '=', 'pro_labore.id_socio')->join('pessoa', 'pessoa.id', '=', 'socio.id_pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id);
-
-        if (Input::get('competencia_de')) {
-            $data = explode('/', Input::get('de'));
-            $data = $data[2] . '-' . $data[1] . '-' . '01';
-            $pro_labores->where('pro_labore.competencia', '>=', $data);
+        $pro_labores->join('socio', 'socio.id', '=', 'pro_labore.id_socio')->join('pessoa', 'pessoa.id', '=', 'socio.id_pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('pessoa.deleted_at', '=', null);
+        if (Input::get('socio')) {
+            $pro_labores->where('socio.id', '=', Input::get('socio'));
         }
-        if (Input::get('competencia_ate')) {
-            $data = explode('/', Input::get('ate'));
-            $data = $data[2] . '-' . $data[1] . '-' . '01';
-            $pro_labores->where('pro_labore.competencia', '<=', $data);
-        }
-
         if (Input::get('empresa')) {
             $pro_labores->where('pessoa.id', '=', Input::get('empresa'));
         }
-        if (Input::get('socio')) {
-            $pro_labores->where('pro_labore.id_socio', '=', Input::get('socio'));
-        }
         if (Input::get('ordenar')) {
-            if (Input::get('ordenar') == 'empresa') {
-                $pro_labores->orderBy('pessoa.nome_fantasia');
+            if (Input::get('ordenar') == 'created_at_asc') {
+                $pro_labores->orderBy('pro_labore.created_at', 'asc');
             }
-            if (Input::get('ordenar') == 'socio') {
-                $pro_labores->orderBy('socio.nome');
+            if (Input::get('ordenar') == 'created_at_desc') {
+                $pro_labores->orderBy('pro_labore.created_at', 'desc');
             }
-            if (Input::get('ordenar') == 'competencia') {
-                $pro_labores->orderBy('competencia', 'desc');
+            if (Input::get('ordenar') == 'empresa_asc') {
+                $pro_labores->orderBy('pessoa.nome_fantasia', 'asc');
+            }
+            if (Input::get('ordenar') == 'empresa_desc') {
+                $pro_labores->orderBy('pessoa.nome_fantasia', 'desc');
+            }
+            if (Input::get('ordenar') == 'socio_asc') {
+                $pro_labores->orderBy('socio.nome', 'asc');
+            }
+            if (Input::get('ordenar') == 'socio_desc') {
+                $pro_labores->orderBy('socio.nome', 'desc');
             }
         } else {
-            $pro_labores->orderBy('competencia', 'desc');
+            $pro_labores->orderBy('pessoa.nome_fantasia', 'asc');
         }
 
         $pro_labores = $pro_labores->select('pro_labore.*')->paginate(10);

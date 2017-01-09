@@ -23,7 +23,7 @@ $(function () {
 <div class="card">
     <h1>Pró-labore</h1>
     <p>Abaixo está listado o histórico de pró-labore por sócio.<br />Utilize os filtros abaixo caso queira refinar a lista de pró-labore.</p>
-    <h3>Filtros de Pesquisa <small><a href=''>mostrar</a></small></h3>
+    <h3>Filtros de Pesquisa</h3>
     <form class="form-inline form-pesquisa">
         <div class="form-group" style="width: 200px">
             <label>Empresa</label>
@@ -48,9 +48,12 @@ $(function () {
         <div class="form-group" style="width: 220px">
             <label>Ordenar por</label>
             <select name="ordenar" class="form-control">
-                <option value="competencia" {{Input::get('ordenar') == 'competencia' ? 'selected' : ''}}>Competência</option>
-                <option value="empresa" {{Input::get('ordenar') == 'empresa' ? 'selected' : ''}}>Empresa</option>
-                <option value="socio" {{Input::get('ordenar') == 'socio' ? 'selected' : ''}}>Sócio</option>
+                <option value="created_at_desc" {{Input::get('ordenar') == 'created_at_desc' ? 'selected' : ''}}>Mais novo</option>
+                <option value="created_at_asc" {{Input::get('ordenar') == 'created_at_asc' ? 'selected' : ''}}>Mais antigo</option>
+                <option value="empresa_asc" {{Input::get('ordenar') == 'empresa_asc' ? 'selected' : ''}}>Empresa - A/Z</option>
+                <option value="empresa_desc" {{Input::get('ordenar') == 'empresa_desc' ? 'selected' : ''}}>Empresa - Z/A</option>
+                <option value="socio_asc" {{Input::get('ordenar') == 'socio_asc' ? 'selected' : ''}}>Sócio - A/Z</option>
+                <option value="socio_desc" {{Input::get('ordenar') == 'socio_desc' ? 'selected' : ''}}>Sócio - Z/A</option>
             </select>
         </div>
         <div class="form-group"  style="width: 50px">

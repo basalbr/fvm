@@ -1,8 +1,8 @@
 @extends('layouts.dashboard')
 @section('header_title', $pro_labore->socio->nome .' - Competência: '. date_format(date_create($pro_labore->competencia.'T00:00:00'),'m/Y'))
 @section('main')
-<h1>Visualizar Pró-Labore <small>{{$pro_labore->socio->pessoa->nome_fantasia}} - {{$pro_labore->socio->nome}} - {{date_format(date_create($pro_labore->competencia.'T00:00:00'),'m/Y')}}</small></h1>
-<hr class="dash-title">
+<div class="card">
+<h1>Visualizar Pró-Labore</h1>
 
 @if($errors->has())
 <div class="alert alert-warning shake">
@@ -57,7 +57,11 @@
         <div class="clearfix"></div>
     </blockquote>
 </div>
+<div class="col-xs-12">
 <div class='form-group'>
     <a href='{{URL::previous()}}' class='btn btn-primary'>Voltar para listagem</a>
+</div>
+    </div>
+<div class="clearfix"></div>
 </div>
 @stop
