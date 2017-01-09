@@ -13,10 +13,12 @@ class ProlaboreController extends Controller {
 
     public function index() {
         $socios = Socio::query();
-        $socios->join('pessoa', 'pessoa.id', '=', 'socio.id_pessoa')->join('pro_labore', 'socio.id', '=', 'pro_labore.id_socio');
+        $socios->join('pessoa', 'pessoa.id', '=', 'socio.id_pessoa');
         $socios->where('socio.pro_labore', '>', 0);
         $socios->where('pessoa.deleted_at', '=', null);
-        $socios->whereMonth('competencia', '=', date('m'));
+        $socios->whereDoesntHave('pro_labores', function ($query) {
+          $query->where('competencia', '=', date('m'));
+    });
         if (Input::get('socio')) {
             $socios->where('socio.nome', 'like', '%' . Input::get('socio') . '%');
         }
