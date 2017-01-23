@@ -36,6 +36,15 @@ Route::post('/pagseguro', [
     'as' => 'pagseguro.notification',
 ]);
 
+Route::get('/empresa/{id_empresa}/alteracao/{tipo}/cadastrar', ['as' => 'cadastrar-solicitacao-alteracao', 'uses' => 'AlteracaoController@create', 'middleware' => 'auth']);
+Route::post('/empresa/{id_empresa}/alteracao/{tipo}/cadastrar', ['uses' => 'AlteracaoController@store', 'middleware' => 'auth']);
+Route::get('/empresa/{id_empresa}/alteracao/visualizar/{id_alteracao}', ['as' => 'visualizar-solicitacao-alteracao', 'uses' => 'AlteracaoController@edit', 'middleware' => 'auth']);
+Route::post('/empresa/{id_empresa}/alteracao/visualizar/{id_alteracao}', ['uses' => 'AlteracaoController@update', 'middleware' => 'auth']);
+
+Route::get('/admin/alteracao', ['as' => 'listar-alteracoes-admin', 'uses' => 'AlteracaoController@indexAdmin', 'middleware' => 'admin']);
+Route::get('/admin/alteracao/visualizar/{id}', ['as' => 'visualizar-solicitacao-alteracao-admin', 'uses' => 'AlteracaoController@editAdmin', 'middleware' => 'admin']);
+Route::post('/admin/alteracao/visualizar/{id}', ['uses' => 'AlteracaoController@updateAdmin', 'middleware' => 'admin']);
+
 Route::get('/abrir_processos', ['as' => 'testeimposto', 'uses' => 'ProcessoController@abreProcessos']);
 Route::get('/abrir_pagamentos', ['as' => 'testepagamento', 'uses' => 'MensalidadeController@abrePagamentos']);
 Route::get('/admin/chat/', ['as' => 'listar-chat', 'uses' => 'ChatController@index', 'middleware' => 'admin']);
@@ -73,6 +82,8 @@ Route::post('/empresa/{id_empresa}/socios/cadastrar', ['as' => 'cadastrar-socio'
 Route::get('/empresa/{id_empresa}/socios/editar/{id_socio}', ['as' => 'editar-socio', 'uses' => 'SocioController@edit', 'middleware' => 'auth']);
 Route::post('/empresa/{id_empresa}/socios/editar/{id_socio}', ['uses' => 'SocioController@update', 'middleware' => 'auth']);
 
+Route::get('/empresa/{id_empresa}/alteracao', ['as' => 'listar-alteracoes', 'uses' => 'AlteracaoController@index', 'middleware' => 'auth']);
+
 Route::get('/admin/imposto/{id_imposto}/informacoes-extras', ['as' => 'listar-informacao-extra', 'uses' => 'InformacaoExtraController@index', 'middleware' => 'admin']);
 Route::get('/admin/imposto/{id_imposto}/informacoes-extras/cadastrar', ['as' => 'cadastrar-informacao-extra', 'uses' => 'InformacaoExtraController@create', 'middleware' => 'admin']);
 Route::post('/admin/imposto/{id_imposto}/informacoes-extras/cadastrar', ['as' => 'cadastrar-informacao-extra', 'uses' => 'InformacaoExtraController@store', 'middleware' => 'admin']);
@@ -96,6 +107,18 @@ Route::get('/admin/faq/cadastrar', ['as' => 'cadastrar-faq', 'uses' => 'FaqContr
 Route::post('/admin/faq/cadastrar', ['as' => 'cadastrar-faq', 'uses' => 'FaqController@store', 'middleware' => 'admin']);
 Route::get('/admin/faq/editar/{id}', ['as' => 'editar-faq', 'uses' => 'FaqController@edit', 'middleware' => 'admin']);
 Route::post('/admin/faq/editar/{id}', ['as' => 'editar-faq', 'uses' => 'FaqController@update', 'middleware' => 'admin']);
+
+Route::get('/admin/tipo-alteracao/', ['as' => 'listar-tipo-alteracao', 'uses' => 'TipoAlteracaoController@index', 'middleware' => 'admin']);
+Route::get('/admin/tipo-alteracao/cadastrar', ['as' => 'cadastrar-tipo-alteracao', 'uses' => 'TipoAlteracaoController@create', 'middleware' => 'admin']);
+Route::post('/admin/tipo-alteracao/cadastrar', ['as' => 'cadastrar-tipo-alteracao', 'uses' => 'TipoAlteracaoController@store', 'middleware' => 'admin']);
+Route::get('/admin/tipo-alteracao/editar/{id}', ['as' => 'editar-tipo-alteracao', 'uses' => 'TipoAlteracaoController@edit', 'middleware' => 'admin']);
+Route::post('/admin/tipo-alteracao/editar/{id}', ['as' => 'editar-tipo-alteracao', 'uses' => 'TipoAlteracaoController@update', 'middleware' => 'admin']);
+
+Route::get('/admin/tipo-alteracao/{id}/campos', ['as' => 'listar-campo-alteracao', 'uses' => 'AlteracaoCampoController@index', 'middleware' => 'admin']);
+Route::get('/admin/tipo-alteracao/{id}/campo/cadastrar', ['as' => 'cadastrar-campo-alteracao', 'uses' => 'AlteracaoCampoController@create', 'middleware' => 'admin']);
+Route::post('/admin/tipo-alteracao/{id}/campo/cadastrar', ['uses' => 'AlteracaoCampoController@store', 'middleware' => 'admin']);
+Route::get('/admin/tipo-alteracao/{id}/campo/editar/{id_campo}', ['as' => 'editar-campo-alteracao', 'uses' => 'AlteracaoCampoController@edit', 'middleware' => 'admin']);
+Route::post('/admin/tipo-alteracao/{id}/campo/editar/{id_campo}', ['uses' => 'AlteracaoCampoController@update', 'middleware' => 'admin']);
 
 Route::get('/admin/tipo-tributacao/', ['as' => 'listar-tipo-tributacao', 'uses' => 'TipoTributacaoController@index', 'middleware' => 'admin']);
 Route::get('/admin/tipo-tributacao/cadastrar', ['as' => 'cadastrar-tipo-tributacao', 'uses' => 'TipoTributacaoController@create', 'middleware' => 'admin']);

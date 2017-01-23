@@ -95,7 +95,7 @@
         <li class='{{Request::is('abertura-empresa*') ? "active" : ""}}'>
             <a href="{{route('abertura-empresa')}}"><div class="icon"><span class="fa fa-child"></span></div>Abertura de Empresa</a>
         </li>
-        <li class='{{Request::is('empresas*') ? "active" : ""}}'>
+        <li class='{{Request::is('empresa*') ? "active" : ""}}'>
             <a href="{{route('empresas')}}"><div class="icon"><span class="fa fa-building"></span></div>Empresas</a>
         </li>
         <li class='{{Request::is('funcionarios*') ? "active" : ""}}'>

@@ -61,6 +61,9 @@
         <li class='{{Request::is('admin/mensalidades*') ? "active" : ""}}'>
             <a href="{{route('listar-mensalidades-admin')}}"><div class="icon"><span class="fa fa-book"></span></div>mensalidades ativas</a>
         </li>
+        <li class='{{Request::is('admin/alteracao*') ? "active" : ""}}'>
+            <a href="{{route('listar-alteracoes-admin')}}"><div class="icon"><span class="fa fa-edit"></span></div>Solicitações de Alter.</a>
+        </li>
         <li class='{{Request::is('admin/chamados*') ? "active" : ""}}'>
             <a href="{{route('listar-chamados')}}"><div class="icon"><span class="fa fa-envelope"></span></div>Chamados</a>
         </li>
@@ -72,6 +75,9 @@
         </li>
         <li class='{{Request::is('admin/faq*') ? "active" : ""}}'>
             <a href="{{route('listar-faq')}}"><div class="icon"><span class="fa fa-info"></span></div>F.A.Q</a>
+        </li>
+        <li class='{{Request::is('admin/tipo-alteracao*') ? "active" : ""}}'>
+            <a href="{{route('listar-tipo-alteracao')}}"><div class="icon"><span class="fa fa-archive"></span></div>Tipos de Alteração</a>
         </li>
         <li class='{{Request::is('admin/imposto*') ? "active" : ""}}'>
             <a href="{{route('listar-imposto')}}"><div class="icon"><span class="fa fa-money"></span></div>Impostos</a>

@@ -4,6 +4,16 @@
 @parent
 <script type="text/javascript">
     $(document).ready(function () {
+        $('#tipo-cadastro').on('change', function () {
+            if ($(this).val() == 1) {
+                $("#exame-admissional").show();
+                $("#exame-admissional input").prop('disabled', false)
+            } else {
+                $("#exame-admissional").hide();
+                $("#exame-admissional input").prop('disabled', true)
+            }
+        });
+
         $('#mostrar-dependente').on('click', function () {
             $('#dependente-modal').modal('show');
         });
@@ -172,7 +182,7 @@
         @endforeach
     </div>
     @endif
-    <form class="form" method="POST" action="">
+    <form class="form" method="POST" action="" enctype="multipart/form-data">
         @if(Session::has('success'))
         <div class="alert alert-success shake">
             {{ Session::get('success') }}
@@ -191,12 +201,33 @@
         <input type="text" style="display: none" />
         <input type="password" style="display: none" />
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <h3 class="text-uppercase">Tipo de Cadastro</h3>
+        <div class='col-xs-12'>
+            <div class="form-group">
+                <label class="control-label">Tipo de Cadastro</label>
+                <select name="novo_funcionario" class="form-control" id="tipo-cadastro">
+                    <option value="1" {{ Input::old('novo_funcionario') == 1 ? 'selected' : '' }}>Novo funcionário na empresa</option>
+                    <option value="0" {{ Input::old('novo_funcionario') == 0 ? 'selected' : '' }}>O funcionário já se encontra no quadro da empresa</option>
+                </select>
+            </div>
+        </div>
+        <div class='clearfix'></div>
+        <br />
+        <div id='exame-admissional' style="display: none">
+            <h3 class="text-uppercase">Exame admissional</h3>
+            <div class='col-xs-12'>
+                <label class="control-label">Anexe um arquivo contendo o exame admissional</label>
+                <input class="form-control" type="file" placeholder="Clique para anexar o exame admissional" name="exame_admissional" disabled="">
+            </div>
+            <div class='clearfix'></div>
+            <br />
+            <br />
+        </div>
         <h3 class="text-uppercase">Informações Pessoais</h3>
         <div class="col-md-6">
             <div class="form-group">
                 <label class="control-label">Nome Completo</label>
                 <input class="form-control" type="text" placeholder="Digite o nome completo do funcionário" name="nome_completo" value="{{ Input::old('nome_completo') }}" >
-
             </div>
             <div class="form-group">
                 <label class="control-label">Nome da Mãe</label>

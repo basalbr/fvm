@@ -281,5 +281,9 @@ class Pessoa extends Model {
         
         parent::delete();
     }   
+    
+    public function socio_principal(){
+        return $this->socios()->where('principal','=',true)->first();
+    }
 
 }

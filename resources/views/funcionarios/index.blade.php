@@ -45,7 +45,6 @@ $(function(){
                 <td>{{$empresa->nome_fantasia}}</td>
                 <td>{{$empresa->funcionarios()->count()}}</td>
                 <td>
-                    <!--<a class='btn btn-warning' href="{{route('editar-empresa', ['id' => $empresa->id])}}">Editar</a>-->
                     @if($empresa->status != 'Em Análise')
                     <a class='btn btn-success' href="{{route('cadastrar-funcionario', [$empresa->id])}}"><span class='fa fa-user-plus'></span> Cadastrar Funcionário</a>
                     <a class='btn btn-primary' href="{{route('listar-funcionarios', [$empresa->id])}}"><span class='fa fa-list-alt'></span> Listar Funcionários</a>

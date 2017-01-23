@@ -134,10 +134,10 @@ class AberturaEmpresa extends Model {
     }
 
     public function enviar_notificacao_criacao() {
-        $usuario = Auth::user();
+        $usuario = $this->usuario;
         $notificacao = new Notificacao;
         $notificacao->mensagem = 'Você abriu uma solicitação de abertura de empresa.';
-        $notificacao->id_usuario = Auth::user()->id;
+        $notificacao->id_usuario = $usuario->id;
         $notificacao->save();
         try {
             \Illuminate\Support\Facades\Mail::send('emails.nova-abertura-empresa', ['nome' => $usuario->nome, 'id_empresa' => $this->id], function ($m) use($usuario) {
@@ -154,10 +154,10 @@ class AberturaEmpresa extends Model {
     }
 
     public function enviar_notificacao_nova_mensagem_usuario() {
-        $usuario = \App\Usuario::where('id', '=', $this->id_usuario)->first();
+        $usuario = $this->usuario;
         $notificacao = new Notificacao;
         $notificacao->mensagem = 'Você possui uma nova mensagem em seu processo de abertura de empresa. <a href="' . route('editar-abertura-empresa', ['id' => $this->id]) . '">Visualizar.</a>';
-        $notificacao->id_usuario = Auth::user()->id;
+        $notificacao->id_usuario = $usuario->id;
         $notificacao->save();
         try {
             \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-abertura-empresa', ['nome' => $usuario->nome, 'id_empresa' => $this->id], function ($m) use($usuario) {
@@ -170,7 +170,7 @@ class AberturaEmpresa extends Model {
     }
 
     public function enviar_notificacao_nova_mensagem_admin() {
-        $usuario = Auth::user();
+        $usuario = $this->usuario;
         try {
             \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-abertura-empresa-admin', ['nome' => $usuario->nome, 'id_empresa' => $this->id], function ($m) {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
@@ -182,7 +182,7 @@ class AberturaEmpresa extends Model {
     }
 
     public function enviar_notificacao_conclusao($nome) {
-        $usuario = Auth::user();
+        $usuario = $this->usuario;
         $notificacao = new Notificacao;
         $notificacao->mensagem = 'O processo de abertura da empresa ' . $nome . ' foi concluído.';
         $notificacao->id_usuario = Auth::user()->id;

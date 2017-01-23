@@ -34,9 +34,7 @@
         <thead>
             <tr>
                 <th>Nome Fantasia</th>
-                <th class="hidden-xs hidden-sm">Razão Social</th>
                 <th class="visible-lg">CNPJ</th>
-                <th class="visible-lg">Nº de Sócios</th>
                 <th class="hidden-xs hidden-sm">Status</th>
                 <th>Opções</th>
             </tr>
@@ -46,14 +44,15 @@
             @foreach($empresas as $empresa)
             <tr>
                 <td>{{$empresa->nome_fantasia}}</td>
-                <td class="hidden-xs hidden-sm">{{$empresa->razao_social}}</td>
                 <td class="visible-lg">{{$empresa->cpf_cnpj}}</td>
-                <td class="visible-lg">{{$empresa->socios()->count()}}</td>
                 <td class="hidden-xs hidden-sm">{{$empresa->status}}</td>
                 <td>
                     @if($empresa->status != 'Em Análise')
                     <a class='btn btn-info' href="{{route('cadastrar-socio', [$empresa->id])}}"><span class="fa fa-plus"></span> Cadastrar Sócio</a>
                     <a class='btn btn-primary' href="{{route('listar-socios', [$empresa->id])}}"><span class="fa fa-list-alt"></span> Listar Sócios</a>
+                    @endif
+                    @if($empresa->status == 'Aprovado')
+                    <a class='btn btn-warning' href="{{route('listar-alteracoes', [$empresa->id])}}"><span class="fa fa-edit"></span> Alterações</a>
                     @endif
                 </td>
             </tr>

@@ -86,7 +86,6 @@ $(function () {
             </div>
             <div class="clearfix"></div>
             <div class="item-content">
-               <div class="item-content-header">Opções</div>
                 <div class="item-content-description"><a href="{{route('visualizar-chat', ['id' => $chat->id])}}" class="btn btn-primary"><span class="fa fa-search"></span> Visualizar</a>
                 <a href="{{route('remover-chat', ['id' => $chat->id])}}" class="btn btn-danger"><span class="fa fa-remove"></span> Remover</a></div>
             </div>
