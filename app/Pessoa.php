@@ -192,6 +192,28 @@ class Pessoa extends Model {
         }
     }
 
+    public function abrir_processos_contabeis() {
+        $periodo = date('Y-m-01', strtotime(date('Y-m') . " -1 month"));
+        $processo = ProcessoDocumentoContabil::where('periodo', '=', $periodo)->where('status','!=','contabilizado')->first();
+        if (!$processo instanceof ProcessoDocumentoContabil) {
+            $processo = new ProcessoDocumentoContabil;
+            $processo->create(['periodo' => $periodo, 'id_pessoa' => $this->id, 'status' => 'pendente']);
+            $notificacao = new Notificacao;
+            $notificacao->mensagem = '<a href="' . $processo->id . '">Você possui uma nova solicitação de documentos contábeis. Clique aqui para visualizar.</a>';
+            $notificacao->id_usuario = $this->id_usuario;
+            $notificacao->save();
+            $usuario = $this->usuario;
+            try {
+                \Illuminate\Support\Facades\Mail::send('emails.novo-processo-documento-contabil', ['nome' => $usuario->nome, 'id_processo' => $processo->id], function ($m) use($usuario) {
+                    $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                    $m->to($usuario->email)->subject('Você Possui Uma Nova Apuração');
+                });
+            } catch (\Exception $ex) {
+                return true;
+            }
+        }
+    }
+
     public function enviar_notificacao_status() {
         $usuario = $this->usuario;
         $notificacao = new Notificacao;
@@ -254,36 +276,45 @@ class Pessoa extends Model {
     public function processos() {
         return $this->hasMany('App\Processo', 'id_pessoa');
     }
+    
+    public function processos_documentos_contabeis() {
+        return $this->hasMany('App\ProcessoDocumentoContabil', 'id_pessoa');
+    }
 
     public function usuario() {
         return $this->belongsTo('App\Usuario', 'id_usuario');
     }
 
     public function delete() {
-        
+
         if ($this->processos->count()) {
             foreach ($this->processos as $processo) {
                 $processo->delete();
             }
         }
-        
+        if ($this->processos_documentos_contabeis->count()) {
+            foreach ($this->processos_documentos_contabeis as $processo) {
+                $processo->delete();
+            }
+        }
+
         if ($this->funcionarios->count()) {
             foreach ($this->funcionarios as $funcionarios) {
                 $funcionarios->delete();
             }
         }
-        
+
         if ($this->socios->count()) {
             foreach ($this->socios as $socios) {
                 $socios->delete();
             }
         }
-        
+
         parent::delete();
-    }   
-    
-    public function socio_principal(){
-        return $this->socios()->where('principal','=',true)->first();
+    }
+
+    public function socio_principal() {
+        return $this->socios()->where('principal', '=', true)->first();
     }
 
 }

@@ -77,17 +77,8 @@
             <a href="{{route('listar-chamados-usuario')}}"><div class="icon"><span class="fa fa-envelope"></span></div>Chamados</a>
         </li>
     </ul>
-    <ul>
-        <li class="sidebar-header">
-            Impostos
-        </li>
-        <li class='{{Request::is('apuracoes*') ? "active" : ""}}'>
-            <a href="{{route('listar-processos')}}"><div class="icon"><span class="fa fa-file"></span></div>apurações</a>
-        </li>
-        <li class='{{Route::is('calendario') ? "active" : ""}}'>
-            <a href="{{route('calendario')}}"><div class="icon"><span class="fa fa-calendar"></span></div>Calendário</a>
-        </li>
-    </ul>
+
+
     <ul>
         <li class="sidebar-header">
             Empresas e Sócios
@@ -107,7 +98,25 @@
         <li class='{{Request::is('pro-labore*') ? "active" : ""}}'>
             <a href="{{route('listar-pro-labore-cliente')}}"><div class="icon"><span class="fa fa-dollar"></span></div>pró-labore</a>
         </li>
-
+    </ul>
+    <ul>
+        <li class="sidebar-header">
+            Impostos
+        </li>
+        <li class='{{Request::is('apuracoes*') ? "active" : ""}}'>
+            <a href="{{route('listar-processos')}}"><div class="icon"><span class="fa fa-file"></span></div>apurações</a>
+        </li>
+        <li class='{{Route::is('calendario') ? "active" : ""}}'>
+            <a href="{{route('calendario')}}"><div class="icon"><span class="fa fa-calendar"></span></div>Calendário</a>
+        </li>
+    </ul>
+    <ul>
+        <li class="sidebar-header">
+            Documentos
+        </li>
+        <li class='{{Request::is('documentos-contabeis*') ? "active" : ""}}'>
+            <a href="{{route('listar-processo-documento-contabil')}}"><div class="icon"><span class="fa fa-file-code-o"></span></div>Documentos Contábeis</a>
+        </li>
     </ul>
     <ul>
         <li class="sidebar-header">

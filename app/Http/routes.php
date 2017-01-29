@@ -46,6 +46,7 @@ Route::get('/admin/alteracao/visualizar/{id}', ['as' => 'visualizar-solicitacao-
 Route::post('/admin/alteracao/visualizar/{id}', ['uses' => 'AlteracaoController@updateAdmin', 'middleware' => 'admin']);
 
 Route::get('/abrir_processos', ['as' => 'testeimposto', 'uses' => 'ProcessoController@abreProcessos']);
+Route::get('/abrir_processos_documento_contabil', ['uses' => 'ProcessoDocumentoContabilController@abreProcessos']);
 Route::get('/abrir_pagamentos', ['as' => 'testepagamento', 'uses' => 'MensalidadeController@abrePagamentos']);
 Route::get('/admin/chat/', ['as' => 'listar-chat', 'uses' => 'ChatController@index', 'middleware' => 'admin']);
 Route::get('/admin/chat/remover/{id}', ['as' => 'remover-chat', 'uses' => 'ChatController@delete', 'middleware' => 'admin']);
@@ -126,6 +127,12 @@ Route::post('/admin/tipo-tributacao/cadastrar', ['as' => 'cadastrar-tipo-tributa
 Route::get('/admin/tipo-tributacao/editar/{id}', ['as' => 'editar-tipo-tributacao', 'uses' => 'TipoTributacaoController@edit', 'middleware' => 'admin']);
 Route::post('/admin/tipo-tributacao/editar/{id}', ['as' => 'editar-tipo-tributacao', 'uses' => 'TipoTributacaoController@update', 'middleware' => 'admin']);
 
+Route::get('/admin/tipo-documento-contabil/', ['as' => 'listar-tipo-documento-contabil', 'uses' => 'TipoDocumentoContabilController@index', 'middleware' => 'admin']);
+Route::get('/admin/tipo-documento-contabil/cadastrar', ['as' => 'cadastrar-tipo-documento-contabil', 'uses' => 'TipoDocumentoContabilController@create', 'middleware' => 'admin']);
+Route::post('/admin/tipo-documento-contabil/cadastrar', ['as' => 'cadastrar-tipo-documento-contabil', 'uses' => 'TipoDocumentoContabilController@store', 'middleware' => 'admin']);
+Route::get('/admin/tipo-documento-contabil/editar/{id}', ['as' => 'editar-tipo-documento-contabil', 'uses' => 'TipoDocumentoContabilController@edit', 'middleware' => 'admin']);
+Route::post('/admin/tipo-documento-contabil/editar/{id}', ['as' => 'editar-tipo-documento-contabil', 'uses' => 'TipoDocumentoContabilController@update', 'middleware' => 'admin']);
+
 Route::get('/admin/natureza-juridica/', ['as' => 'listar-natureza-juridica', 'uses' => 'NaturezaJuridicaController@index', 'middleware' => 'admin']);
 Route::get('/admin/natureza-juridica/cadastrar', ['as' => 'cadastrar-natureza-juridica', 'uses' => 'NaturezaJuridicaController@create', 'middleware' => 'admin']);
 Route::post('/admin/natureza-juridica/cadastrar', ['as' => 'cadastrar-natureza-juridica', 'uses' => 'NaturezaJuridicaController@store', 'middleware' => 'admin']);
@@ -178,6 +185,17 @@ Route::post('/apuracoes/cadastrar', ['as' => 'criar-processo', 'uses' => 'Proces
 Route::post('/apuracoes/enviar_informacoes/{id}', ['as' => 'enviar-informacoes-processo', 'uses' => 'ProcessoController@store', 'middleware' => 'auth']);
 Route::get('/apuracoes/responder/{id}', ['as' => 'responder-processo-usuario', 'uses' => 'ProcessoController@editUsuario', 'middleware' => 'auth']);
 Route::post('/apuracoes/responder/{id}', ['as' => 'responder-processo-usuario', 'uses' => 'ProcessoController@update', 'middleware' => 'auth']);
+
+Route::get('/documentos-contabeis', ['as' => 'listar-processo-documento-contabil', 'uses' => 'ProcessoDocumentoContabilController@index', 'middleware' => 'auth']);
+Route::get('/documentos-contabeis/documentos/{id}/enviar', ['as' => 'enviar-documento-contabil', 'uses' => 'DocumentoContabilController@create', 'middleware' => 'auth']);
+Route::post('/documentos-contabeis/documentos/{id}/enviar', ['uses' => 'DocumentoContabilController@store', 'middleware' => 'auth']);
+Route::post('/documentos-contabeis/documentos/{id}/upload', ['as'=>'upload-documento-contabil', 'uses' => 'DocumentoContabilController@upload', 'middleware' => 'auth']);
+Route::get('/documentos-contabeis/documentos/{id}', ['as' => 'listar-documento-contabil', 'uses' => 'DocumentoContabilController@index', 'middleware' => 'auth']);
+Route::get('/documentos-contabeis/documentos/{id}/sem-movimento', ['as' => 'sem-movimento-documento-contabil', 'uses' => 'ProcessoDocumentoContabilController@semMovimento', 'middleware' => 'auth']);
+
+Route::get('/admin/documentos-contabeis', ['as' => 'listar-processo-documento-contabil-admin', 'uses' => 'ProcessoDocumentoContabilController@indexAdmin', 'middleware' => 'admin']);
+Route::get('/admin/documentos-contabeis/documentos/{id}/mudar-status', ['as'=>'mudar-status-documento-contabil-admin', 'uses' => 'ProcessoDocumentoContabilController@mudarStatus', 'middleware' => 'admin']);
+Route::get('/admin/documentos-contabeis/documentos/{id}', ['as' => 'listar-documento-contabil-admin', 'uses' => 'DocumentoContabilController@indexAdmin', 'middleware' => 'admin']);
 
 Route::get('/usuario', ['as' => 'editar-usuario', 'uses' => 'UsuarioController@edit', 'middleware' => 'auth']);
 Route::post('/usuario', ['uses' => 'UsuarioController@update', 'middleware' => 'auth']);

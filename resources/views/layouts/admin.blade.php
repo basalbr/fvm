@@ -67,6 +67,9 @@
         <li class='{{Request::is('admin/chamados*') ? "active" : ""}}'>
             <a href="{{route('listar-chamados')}}"><div class="icon"><span class="fa fa-envelope"></span></div>Chamados</a>
         </li>
+        <li class='{{Request::is('admin/documentos-contabeis*') ? "active" : ""}}'>
+            <a href="{{route('listar-processo-documento-contabil-admin')}}"><div class="icon"><span class="fa fa-file-code-o"></span></div>Documentos Contábeis</a>
+        </li>
         <li class='{{Request::is('admin/chat*') ? "active" : ""}}'>
             <a href="{{route('listar-chat')}}"><div class="icon"><span class="fa fa-comment"></span></div>Chat</a>
         </li>
@@ -99,6 +102,9 @@
         </li>
         <li class='{{Request::is('admin/tipo-tributacao*') ? "active" : ""}}'>
             <a href="{{route('listar-tipo-tributacao')}}"><div class="icon"><span class="fa fa-sitemap"></span></div>Tip. Tributação</a>
+        </li>
+        <li class='{{Request::is('admin/tipo-documento-contabil*') ? "active" : ""}}'>
+            <a href="{{route('listar-tipo-documento-contabil')}}"><div class="icon"><span class="fa fa-file-archive-o"></span></div>Tip. Doc. Contábeis</a>
         </li>
         <li class='{{Request::is('admin/noticias*') ? "active" : ""}}'>
             <a href="{{route('listar-noticias')}}"><div class="icon"><span class="fa fa-newspaper-o"></span></div>Notícias</a>
