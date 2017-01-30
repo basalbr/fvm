@@ -11,7 +11,6 @@ class Socio extends Model {
     use SoftDeletes;
 
     protected $rules = [
-        'id_pessoa' => 'required',
         'nome' => 'required',
         'principal' => 'required',
         'cpf' => 'required|size:14|unique:socio,cpf',
@@ -46,6 +45,23 @@ class Socio extends Model {
         'pis' => 'PIS',
         'data_nascimento' => 'Data de Nascimento',
     ];
+      protected $niceNamesPrincipal = [
+        'nome' => 'Nome do Responsável',
+        'principal' => 'Sócio Principal',
+        'cpf' => 'CPF do Responsável',
+        'rg' => 'RG do Responsável',
+        'titulo_eleitor' => 'Nº Título de Eleitor do Responsável',
+        'endereco' => 'Endereço do Responsável',
+        'bairro' => 'Bairro do Responsável',
+        'cep' => 'CEP do Responsável',
+        'cidade' => 'Cidade do Responsável',
+        'numero' => 'Número',
+        'id_uf' => 'Estado do Responsável',
+        'pro_labore' => 'Pró-Labore',
+        'orgao_expedidor' => 'Órgão Expedidor do RG (Ex: SSP/SC) ',
+        'pis' => 'PIS',
+        'data_nascimento' => 'Data de Nascimento',
+    ];
 
     /**
      * The database table used by the model.
@@ -77,10 +93,11 @@ class Socio extends Model {
         'pro_labore',
         'orgao_expedidor',
         'telefone',
+        'data_nascimento'
     ];
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'data_nascimento'];
 
-    public function validate($data, $update = false) {
+    public function validate($data, $update = false, $cadastro_empresa = false) {
         // make a new validator object
         if ($update) {
             $this->rules['cpf'] = 'required|unique:socio,cpf,' . $data['id'];
@@ -89,7 +106,12 @@ class Socio extends Model {
             $this->rules['principal'] = '';
         }
         $v = Validator::make($data, $this->rules);
-        $v->setAttributeNames($this->niceNames);
+        if($cadastro_empresa){
+            $v->setAttributeNames($this->niceNamesPrincipal);
+        }else{
+            $v->setAttributeNames($this->niceNames);
+        }
+        
         // check for failure
         if ($v->fails()) {
             // set errors and return false

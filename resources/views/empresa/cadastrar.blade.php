@@ -511,7 +511,7 @@
                     <thead>
                         <tr>
                             <th>Descrição</th>
-                            <th>Código</th>
+                            <th style="min-width: 100px;">Código</th>
                             <th></th>
                         </tr>
                     </thead>

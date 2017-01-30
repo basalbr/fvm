@@ -1432,7 +1432,7 @@ ul.lista-impostos li:hover{
 }
 
 th,td{
-    white-space: nowrap;
+    /*white-space: nowrap;*/
     vertical-align: middle;
 }
 

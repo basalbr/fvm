@@ -94,6 +94,8 @@ class EmpresaController extends Controller {
                     return redirect(route('cadastrar-empresa'))->withInput()->withErrors(['Não foi possível cadastrar sua empresa pois um de seus CNAEs não está apto para o Simples Nacional.\nNesse momento só trabalhamos com Simples Nacional.']);
                 }
             }
+        } else {
+            return redirect(route('cadastrar-empresa'))->withInput()->withErrors(['É necessário escolher pelo menos um CNAE, caso tenha dúvidas abra um chamado. Ficaremos felizes em ajudar.']);
         }
         //atencao, arrumar telefone!!!!!!!!!!!!!!!!!!!!
         $request->merge([
@@ -108,12 +110,19 @@ class EmpresaController extends Controller {
                 $socio = new \App\Socio;
                 $socioData = $request->get('socio');
                 $socioData['id_pessoa'] = $empresa->id;
-                $old_date = explode('/', $socioData['data_nascimento']);
-                $new_date = $old_date[2] . '-' . $old_date[1] . '-' . $old_date[0];
-                $socioData['data_nascimento'] = $new_date;
+                if ($socioData['data_nascimento']) {
+                    $old_date = explode('/', $socioData['data_nascimento']);
+                    $new_date = $old_date[2] . '-' . $old_date[1] . '-' . $old_date[0];
+                    $socioData['data_nascimento'] = $new_date;
+                }
                 if ($request->get('socio')['pro_labore']) {
                     $socioData['pro_labore'] = str_replace(',', '.', preg_replace('#[^\d\,]#is', '', $request->get('socio')['pro_labore']));
                 }
+                if (!$socio->validate($socioData, false, true)) {
+                    $empresa->delete();
+                    return redirect(route('cadastrar-empresa'))->withInput()->withErrors($socio->errors());
+                }
+                
                 $request->merge([
                     'socio' => $socioData
                 ]);
