@@ -141,7 +141,6 @@ class Pessoa extends Model {
 
     public function iniciar_periodo_gratis() {
         $mensalidade = Mensalidade::where('id_pessoa', '=', $this->id)->first();
-
         $pagamento = new \App\Pagamento;
         $pagamento->tipo = 'mensalidade';
         $pagamento->id_mensalidade = $mensalidade->id;
@@ -194,7 +193,7 @@ class Pessoa extends Model {
 
     public function abrir_processos_contabeis() {
         $periodo = date('Y-m-01', strtotime(date('Y-m') . " -1 month"));
-        $processo = ProcessoDocumentoContabil::where('periodo', '=', $periodo)->where('status','!=','contabilizado')->first();
+        $processo = ProcessoDocumentoContabil::where('periodo', '=', $periodo)->where('id_pessoa','=',$this->id)->first();
         if (!$processo instanceof ProcessoDocumentoContabil) {
             $processo = new ProcessoDocumentoContabil;
             $processo->create(['periodo' => $periodo, 'id_pessoa' => $this->id, 'status' => 'pendente']);
@@ -209,6 +208,7 @@ class Pessoa extends Model {
                     $m->to($usuario->email)->subject('Você Possui Uma Nova Apuração');
                 });
             } catch (\Exception $ex) {
+                
                 return true;
             }
         }
