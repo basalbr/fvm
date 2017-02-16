@@ -9,16 +9,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
-class ProlaboreController extends Controller {
+class ProlaboreController extends Controller
+{
 
-    public function index() {
+    public function index()
+    {
         $socios = Socio::query();
         $socios->join('pessoa', 'pessoa.id', '=', 'socio.id_pessoa');
         $socios->where('socio.pro_labore', '>', 0);
         $socios->where('pessoa.deleted_at', '=', null);
         $socios->whereDoesntHave('pro_labores', function ($query) {
-          $query->where('competencia', '=', date('m'));
-    });
+            $query->where('competencia', '=', date('m', strtotime(date('Y-m') . " -1 month")));
+        });
         if (Input::get('socio')) {
             $socios->where('socio.nome', 'like', '%' . Input::get('socio') . '%');
         }
@@ -46,7 +48,8 @@ class ProlaboreController extends Controller {
         return view('admin.pro_labore.index', ['socios' => $socios]);
     }
 
-    public function indexCliente() {
+    public function indexCliente()
+    {
         $pro_labores = Prolabore::query();
         $pro_labores->join('socio', 'socio.id', '=', 'pro_labore.id_socio')->join('pessoa', 'pessoa.id', '=', 'socio.id_pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('pessoa.deleted_at', '=', null);
         if (Input::get('socio')) {
@@ -83,22 +86,26 @@ class ProlaboreController extends Controller {
         return view('pro_labore.index', ['pro_labores' => $pro_labores]);
     }
 
-    public function socio($id) {
+    public function socio($id)
+    {
         $socio = Socio::where('id', '=', $id)->first();
         return view('pro_labore.index-socio', ['socio' => $socio]);
     }
 
-    public function historico() {
+    public function historico()
+    {
         $pro_labores = Prolabore::orderBy('updated_at', 'desc')->get();
         return view('admin.pro_labore.historico', ['pro_labores' => $pro_labores]);
     }
 
-    public function create($id) {
+    public function create($id)
+    {
         $socio = Socio::where('id', '=', $id)->first();
         return view('admin.pro_labore.cadastrar', ['socio' => $socio]);
     }
 
-    public function store($id, Request $request) {
+    public function store($id, Request $request)
+    {
         $pro_labore = new Prolabore;
         if ($pro_labore->validate($request->all())) {
 
@@ -118,24 +125,27 @@ class ProlaboreController extends Controller {
                 $irrf_anexo->move(getcwd() . '/uploads/irrf/', $irrf_nome);
                 $request->merge(['irrf' => $irrf_nome]);
             }
-            $pro_labore->create(['competencia' => date('Y-m-d'), 'valor_pro_labore' => $request->get('valor_pro_labore'), 'id_socio' => $id, 'irrf' => $irrf_nome, 'inss' => $inss_nome, 'pro_labore' => $pro_labore_nome]);
+            $pro_labore->create(['competencia' => date('Y-m-d', strtotime(date('Y-m') . " -1 month")), 'valor_pro_labore' => $request->get('valor_pro_labore'), 'id_socio' => $id, 'irrf' => $irrf_nome, 'inss' => $inss_nome, 'pro_labore' => $pro_labore_nome]);
             return redirect(route('listar-pro-labore'));
         } else {
             return redirect(route('cadastrar-pro-labore', [$id]))->withInput()->withErrors($pro_labore->errors());
         }
     }
 
-    public function edit($id, $id_pro_labore) {
+    public function edit($id, $id_pro_labore)
+    {
         $pro_labore = Prolabore::where('id', '=', $id_pro_labore)->first();
         return view('admin.pro_labore.editar', ['pro_labore' => $pro_labore]);
     }
 
-    public function socioEdit($id, $id_pro_labore) {
+    public function socioEdit($id, $id_pro_labore)
+    {
         $pro_labore = Prolabore::where('id', '=', $id_pro_labore)->where('id_socio', '=', $id)->first();
         return view('pro_labore.visualizar', ['pro_labore' => $pro_labore]);
     }
 
-    public function update($id, $id_pro_labore, Request $request) {
+    public function update($id, $id_pro_labore, Request $request)
+    {
         $pro_labore = Prolabore::where('id_socio', '=', $id)->where('id', '=', $id_pro_labore)->first();
         if ($request->file('pro_labore')) {
             $pro_labore_anexo = $request->file('pro_labore');

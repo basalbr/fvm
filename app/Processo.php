@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
 
-class Processo extends Model {
+class Processo extends Model
+{
 
     use SoftDeletes;
 
@@ -28,7 +29,8 @@ class Processo extends Model {
      */
     protected $fillable = ['id_pessoa', 'competencia', 'id_imposto', 'vencimento', 'status'];
 
-    public function validate($data) {
+    public function validate($data)
+    {
         // make a new validator object
         $v = Validator::make($data, $this->rules);
         $v->setAttributeNames($this->niceNames);
@@ -43,31 +45,82 @@ class Processo extends Model {
         return true;
     }
 
-    public function errors() {
+    public function enviarNotificacaoNovaMensagemUsuario()
+    {
+        $usuario = $this->pessoa->usuario;
+        try {
+            \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-apuracao-usuario', ['apuracao'=>$this->imposto->nome, 'nome' => $usuario->nome, 'id_processo' => $this->id], function ($m) use ($usuario) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to($usuario->email)->subject('Nova Mensagem em Apuração');
+            });
+        } catch (\Exception $ex) {
+            return true;
+        }
+    }
+
+    public function enviarNotificacaoNovaMensagemAdmin()
+    {
+        $empresa = $this->pessoa;
+        try {
+            \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-apuracao-admin', ['apuracao'=>$this->imposto->nome, 'nome_fantasia' => $empresa->nome_fantasia, 'id_processo' => $this->id], function ($m) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to('admin@webcontabilidade.com')->subject('Nova Mensagem em Apuração');
+            });
+        } catch (\Exception $ex) {
+            return true;
+        }
+    }
+
+    public function enviarNotificacaoMudancaStatus($status = null)
+    {
+        if (!$status) {
+            $status = $this->status;
+        }
+        $usuario = $this->pessoa->usuario;
+        $imposto = $this->imposto;
+        try {
+            \Illuminate\Support\Facades\Mail::send('emails.novo-status-apuracao', ['nome' => $usuario->nome, 'id_processo' => $this->id, 'imposto' => $imposto->nome, 'status' => $status], function ($m) use ($usuario) {
+                $m->from('site@webcontabilidade.com', 'WEBContabilidade');
+                $m->to($usuario->email)->subject('Mudança de Status em Apuração');
+            });
+        } catch (\Exception $ex) {
+            echo $ex->getMessage();
+            return true;
+        }
+    }
+
+    public function errors()
+    {
         return $this->errors;
     }
 
-    public function processo_respostas() {
+    public function processo_respostas()
+    {
         return $this->hasMany('App\ProcessoResposta', 'id_processo');
     }
 
-    public function imposto() {
+    public function imposto()
+    {
         return $this->belongsTo('App\Imposto', 'id_imposto');
     }
 
-    public function pessoa() {
+    public function pessoa()
+    {
         return $this->belongsTo('App\Pessoa', 'id_pessoa');
     }
 
-    public function informacoes_extras() {
+    public function informacoes_extras()
+    {
         return $this->hasMany('App\ProcessoInformacaoExtra', 'id_processo');
     }
 
-    public function competencia_formatado() {
+    public function competencia_formatado()
+    {
         return date_format(date_create($this->competencia), 'm/Y');
     }
 
-    public function vencimento_formatado() {
+    public function vencimento_formatado()
+    {
         return date_format(date_create($this->vencimento), 'd/m/Y');
     }
 

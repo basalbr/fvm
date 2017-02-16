@@ -10,17 +10,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 
-class ProcessoController extends Controller {
+class ProcessoController extends Controller
+{
 
-    public function abreProcessos() {
+    public function abreProcessos()
+    {
         $pessoas = \App\Pessoa::all();
         foreach ($pessoas as $pessoa) {
             $pessoa->abrir_processos();
         }
     }
 
-    public function index() {
-          $processos = Processo::query();
+    public function index()
+    {
+        $processos = Processo::query();
 
 
         if (Input::get('competencia_de')) {
@@ -69,7 +72,8 @@ class ProcessoController extends Controller {
         return view('admin.processos.index', ['processos' => $processos]);
     }
 
-    public function indexUsuario() {
+    public function indexUsuario()
+    {
 
         $processos = Processo::query();
 
@@ -121,13 +125,15 @@ class ProcessoController extends Controller {
         return view('processos.index', ['processos' => $processos]);
     }
 
-    public function create($competencia, $id_imposto, $cnpj, $vencimento, Request $request) {
+    public function create($competencia, $id_imposto, $cnpj, $vencimento, Request $request)
+    {
         $imposto = \App\Imposto::where('id', '=', $id_imposto)->first();
         $empresa = \App\Pessoa::where('cpf_cnpj', '=', $cnpj)->where('id_usuario', '=', Auth::user()->id)->first();
         return view('processos.cadastrar', ['competencia' => $competencia, 'empresa' => $empresa, 'vencimento' => $vencimento, 'imposto' => $imposto]);
     }
 
-    public function store($id, Request $request) {
+    public function store($id, Request $request)
+    {
         $processo = Processo::join('pessoa', 'processo.id_pessoa', '=', 'pessoa.id')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.id', '=', $id)->select('processo.*')->first();
         $erros = [];
         if ($request->get('informacao_adicional')) {
@@ -144,9 +150,9 @@ class ProcessoController extends Controller {
                 $extensoes = '';
                 foreach ($informacao_extra->extensoes as $x => $extensao) {
                     if ($x > 0) {
-                        $extensoes.=',';
+                        $extensoes .= ',';
                     }
-                    $extensoes.=$extensao->extensao;
+                    $extensoes .= $extensao->extensao;
                 }
                 $rules = ['informacao' => 'required|max:' . $informacao_extra->tamanho_maximo . '|mimes:' . $extensoes];
                 // make a new validator object
@@ -177,17 +183,20 @@ class ProcessoController extends Controller {
         return redirect(route('responder-processo-usuario', [$id]));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $processo = Processo::where('id', '=', $id)->first();
         return view('admin.processos.visualizar', ['processo' => $processo]);
     }
 
-    public function editUsuario($id) {
+    public function editUsuario($id)
+    {
         $processo = Processo::join('pessoa', 'processo.id_pessoa', '=', 'pessoa.id')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.id', '=', $id)->select('processo.*')->with('pessoa')->first();
         return view('processos.visualizar', ['processo' => $processo]);
     }
 
-    public function update($id, Request $request) {
+    public function update($id, Request $request)
+    {
         if ($request->is('admin/*')) {
             $processo = Processo::where('id', '=', $id)->first();
         } else {
@@ -212,13 +221,23 @@ class ProcessoController extends Controller {
         }
         if ($resposta->validate($request->all())) {
             $resposta->create($request->all());
+
             if ($request->get('status')) {
+                if ($processo->status != $request->get('status')) {
+                    $processo->enviarNotificacaoMudancaStatus($request->get('status'));
+                }
                 $processo->status = $request->get('status');
                 $processo->save();
             }
             if ($request->is('admin/*')) {
+                $processo->enviarNotificacaoNovaMensagemUsuario();
+            } else {
+                $processo->enviarNotificacaoNovaMensagemAdmin();
+            }
+            if ($request->is('admin/*')) {
                 return redirect(route('visualizar-processo-admin', $id));
             }
+
             return redirect(route('responder-processo-usuario', $id));
         } else {
             if ($request->is('admin/*')) {
@@ -228,7 +247,8 @@ class ProcessoController extends Controller {
         }
     }
 
-    public function ajax(Request $request) {
+    public function ajax(Request $request)
+    {
         $lista = Processo::where('descricao', 'ilike', '%' . $request->get('search') . '%')->orWhere('codigo', 'ilike', '%' . $request->get('search') . '%')->orderBy('descricao')->take(5)->get(['descricao', 'codigo']);
         return response()->json($lista);
     }

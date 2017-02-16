@@ -24,7 +24,7 @@
             </div>
             <div class="pull-left">
                 <div class="titulo">Pró-labore</div>
-                <div class="info">{{$socio->pro_labore}}</div>
+                <div class="info">{{$socio->pro_labore_formatado()}}</div>
             </div>
             <div class="clearfix"></div>
             <div class="pull-left">
@@ -33,7 +33,7 @@
             </div>
             <div class="pull-left">
                 <div class="titulo">Competência</div>
-                <div class="info">{{date('m/Y')}}</div>
+                <div class="info">{{date('m/Y', strtotime(date('Y-m') . " -1 month"))}}</div>
             </div>
             <div class="pull-left">
                 <div class="titulo">Telefone</div>

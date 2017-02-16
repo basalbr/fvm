@@ -20,7 +20,9 @@ class ProcessoDocumentoContabilController extends Controller {
 
     public function index() {
         $processos = ProcessoDocumentoContabil::query();
-        $processos = $processos->paginate(10);
+        $processos->join('pessoa','pessoa.id','=','processo_documento_contabil.id_pessoa');
+        $processos->where('pessoa.id_usuario','=',Auth::user()->id);
+        $processos = $processos->select('processo_documento_contabil.*')->paginate(10);
 
         return view('documentos_contabeis.index', ['processos' => $processos]);
     }

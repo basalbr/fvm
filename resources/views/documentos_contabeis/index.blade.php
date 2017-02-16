@@ -42,7 +42,7 @@ $(function () {
                 <td>{{$processo->pessoa->nome_fantasia}}</td>
                 <td>{{$processo->status_formatado()}}</td>
                 <td>
-                    @if($processo->status == 'sem_movimento')
+                    @if($processo->status != 'sem_movimento')
                     <a class='btn btn-primary' href="{{route('listar-documento-contabil',[$processo->id])}}"><span class="fa fa-search"></span> Visualizar</a>
                     @endif
                 </td>
