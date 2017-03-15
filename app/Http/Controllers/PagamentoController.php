@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class PagamentoController extends Controller {
 
     public function index() {
-        $pagamentos = Pagamento::join('mensalidade','mensalidade.id','=','pagamento.id_mensalidade')->where('mensalidade.id_usuario','=', Auth::user()->id)->where('pagamento.status','!=','Paga')->where('pagamento.status','!=','Concluída')->orderBy('pagamento.created_at', 'desc')->select('pagamento.*')->paginate(5);
+        $pagamentos = Pagamento::join('mensalidade', 'mensalidade.id', '=', 'pagamento.id_mensalidade')->where('mensalidade.id_usuario', '=', Auth::user()->id)->orderBy('pagamento.created_at', 'desc')->select('pagamento.*')->paginate(5);
         return view('pagamentos.index', ['pagamentos' => $pagamentos]);
     }
 

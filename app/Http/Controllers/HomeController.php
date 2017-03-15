@@ -39,6 +39,7 @@ class HomeController extends Controller {
         if (date('w') <= 5 && date('w') >= 1 && (($horario1 <= $horario_atual && $horario2 >= $horario_atual) || ($horario3 <= $horario_atual && $horario4 >= $horario_atual))) {
             $atendimento = true;
         }
+        $atendimento = false;
 
         return view('index', ['atendimento'=>$atendimento]);
     }

@@ -88,7 +88,6 @@ class Socio extends Model {
         'bairro',
         'cep',
         'cidade',
-        'numero',
         'id_uf',
         'pro_labore',
         'orgao_expedidor',

@@ -407,7 +407,7 @@
             <input type='hidden' name='socio[{{$socio->id}}][email]' value="{{$socio->email}}" data-id="{{$socio->id}}"/>
             <input type='hidden' name='socio[{{$socio->id}}][nome_mae]' value="{{$socio->nome_mae}}" data-id="{{$socio->id}}"/>
             <input type='hidden' name='socio[{{$socio->id}}][nome_pai]' value="{{$socio->nome_pai}}" data-id="{{$socio->id}}"/>
-            <input type='hidden' name='socio[{{$socio->id}}][data_nascimento]' value="{{$socio->data_nascimento}}" data-id="{{$socio->id}}"/>
+            <input type='hidden' name='socio[{{$socio->id}}][data_nascimento]' value="{{$socio->data_nascimento->format('d/m/Y')}}" data-id="{{$socio->id}}"/>
             <input type='hidden' name='socio[{{$socio->id}}][estado_civil]' value="{{$socio->estado_civil}}" data-id="{{$socio->id}}"/>
             <input type='hidden' name='socio[{{$socio->id}}][regime_casamento]' value="{{$socio->regime_casamento}}" data-id="{{$socio->id}}"/>
             <input type='hidden' name='socio[{{$socio->id}}][telefone]' value="{{$socio->telefone}}" data-id="{{$socio->id}}"/>
@@ -420,7 +420,6 @@
             <input type='hidden' name='socio[{{$socio->id}}][cidade]' value="{{$socio->cidade}}" data-id="{{$socio->id}}"/>
             <input type='hidden' name='socio[{{$socio->id}}][bairro]' value="{{$socio->bairro}}" data-id="{{$socio->id}}"/>
             <input type='hidden' name='socio[{{$socio->id}}][endereco]' value="{{$socio->endereco}}" data-id="{{$socio->id}}"/>
-            <input type='hidden' name='socio[{{$socio->id}}][numero]' value="{{$socio->numero}}" data-id="{{$socio->id}}"/>
             <input type='hidden' name='socio[{{$socio->id}}][complemento]' value="{{$socio->complemento}}" data-id="{{$socio->id}}"/>
             <input type='hidden' name='socio[{{$socio->id}}][principal]' value="{{$socio->principal}}" data-id="{{$socio->id}}"/>
             @endforeach
@@ -628,8 +627,11 @@
                         <input type='text' class='form-control' name='recibo_ir' value=""/>
                     </div>
                     <div class='form-group'>
-                        <label>Título de Eleitor</label>
+                        <label>Título de Eleitor *</label>
                         <input type='text' class='form-control' name='titulo_eleitor' value=""/>
+                    </div><div class='form-group'>
+                        <label>Data de Nascimento *</label>
+                        <input type='text' class='form-control date-mask' name='data_nascimento' value=""/>
                     </div>
                     <div class='form-group'>
                         <label>PIS</label>
@@ -678,11 +680,6 @@
                         <label>Endereço *</label>
                         <input type='text' class='form-control' name='endereco' value=""/>
                     </div>
-                    <div class='form-group'>
-                        <label>Número *</label>
-                        <input type='text' class='form-control numero-mask' name='numero' value=""/>
-                    </div>
-
                     <div class="form-group">
                         <label>É o sócio principal? *</label>
                         <div class="clearfix"></div>

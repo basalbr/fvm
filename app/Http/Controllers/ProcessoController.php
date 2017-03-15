@@ -77,7 +77,7 @@ class ProcessoController extends Controller
 
         $processos = Processo::query();
 
-        $processos->join('pessoa', 'pessoa.id', '=', 'processo.id_pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.status', '<>', 'concluido');
+        $processos->join('pessoa', 'pessoa.id', '=', 'processo.id_pessoa')->where('pessoa.id_usuario', '=', Auth::user()->id);
 
         if (Input::get('competencia_de')) {
             $data = explode('/', Input::get('competencia_de'));

@@ -60,7 +60,7 @@ class Mensalidade extends Model {
     public function proximo_pagamento($formato = 'Y-m-d') {
         try {
             $data_vencimento = $this->created_at->format('d');
-            $ultimo_pagamento = date_format($this->pagamentos()->where('tipo', '=', 'mensalidade')->orderBy('created_at', 'desc')->first()->created_at, 'Y-m');
+            $ultimo_pagamento = date_format($this->pagamentos()->where('tipo', '=', 'mensalidade')->where('status','=','Paga')->orderBy('created_at', 'desc')->first()->created_at, 'Y-m');
             $date = strtotime("+1 month", strtotime($ultimo_pagamento . '-' . $data_vencimento));
             $vencimento = date($formato, strtotime("+5 days", $date));
             return $vencimento;
@@ -72,10 +72,10 @@ class Mensalidade extends Model {
     public function abrir_ordem_pagamento() {
         try {
             $data_vencimento = $this->created_at->format('d');
-            $ultimo_pagamento = date_format($this->pagamentos()->where('tipo', '=', 'mensalidade')->orderBy('created_at', 'desc')->first()->created_at, 'Y-m');
+            $ultimo_pagamento = $this->pagamentos()->where('tipo', '=', 'mensalidade')->orderBy('created_at', 'desc')->first()->created_at->format('Y-m');
             $date = strtotime("+1 month", strtotime($ultimo_pagamento . '-' . $data_vencimento));
             $vencimento = date('Y-m-d', strtotime("+5 days", $date));
-            if (date('Ymd') == date('Ymd', $date)) {
+            if ((string)date('Y-m') != $ultimo_pagamento) {
 
                 if ($this->empresa->status == 'Aprovado' && !$this->empresa->trashed()) {
                     $pagamento = new \App\Pagamento;
@@ -89,7 +89,7 @@ class Mensalidade extends Model {
             }
             return true;
         } catch (Exception $ex) {
-            return false;
+            Logger::error($ex->getMessage());
         }
     }
 

@@ -76,6 +76,7 @@
                 @endif
                 @if($processo->guia)
                     <div class="clearfix"></div>
+                    <hr class="dash-title">
                     <h4>Download da guia do processo</h4>
                     <div class="clearfix"></div>
                     <div class="pull-left">
