@@ -315,7 +315,7 @@
             <div class='form-group'>
                 <label>Nome Fantasia</label>
                 <input type='hidden' name='tipo' value="J"/>
-                <input type='text' class='form-control' name='nome_fantasia' value="{{$empresa->nome_empresarial1}}"/>
+                <input type='text' class='form-control' name='nome_fantasia' value="{{Input::old('nome_fantasia') ? Input::old('nome_fantasia') : $empresa->nome_empresarial1}}"/>
             </div>
             <div class='form-group'>
                 <label>Razão Social</label>
@@ -333,23 +333,23 @@
 
             <div class='form-group'>
                 <label>CNPJ</label>
-                <input type='text' class='form-control cnpj-mask' name='cpf_cnpj' value=""/>
+                <input type='text' class='form-control cnpj-mask' name='cpf_cnpj' value="{{Input::old('cpf_cnpj')}}"/>
             </div>
 
             <div class='form-group'>
                 <label>Inscrição Estadual</label>
-                <input type='text' class='form-control' name='inscricao_estadual'  value=""/>
+                <input type='text' class='form-control' name='inscricao_estadual'  value="{{Input::old('inscricao_estadual')}}"/>
             </div>
 
         </div>
         <div class='col-md-6'>
             <div class='form-group'>
                 <label>Inscrição Municipal</label>
-                <input type='text' class='form-control' name='inscricao_municipal' value="" />
+                <input type='text' class='form-control' name='inscricao_municipal' value="{{Input::old('inscricao_municipal')}}" />
             </div>
             <div class='form-group'>
                 <label>IPTU</label>
-                <input type='text' class='form-control' name='iptu'  value="{{$empresa->iptu}}"/>
+                <input type='text' class='form-control' name='iptu'  value="{{Input::old('iptu') ? Input::old('iptu') : $empresa->iptu}}"/>
             </div>
             <div class='form-group'>
                 <label>Quantidade de Funcionários</label>
@@ -357,7 +357,7 @@
             </div>
             <div class='form-group'>
                 <label>Código de Acesso do Simples Nacional</label>
-                <input type='text' class='form-control' name='codigo_acesso_simples_nacional' value=""/>
+                <input type='text' class='form-control' name='codigo_acesso_simples_nacional' value="{{Input::old('codigo_acesso_simples_nacional')}}"/>
             </div>
         </div>
         <div class='clearfix'></div>

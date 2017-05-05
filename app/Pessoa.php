@@ -239,7 +239,7 @@ class Pessoa extends Model {
             });
             \Illuminate\Support\Facades\Mail::send('emails.nova-empresa-admin', ['nome' => $usuario->nome, 'empresa' => $this], function ($m) use ($usuario) {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
-                $m->to('admin@webcontabilidade.com')->subject('Novo usuário cadastrado');
+                $m->to('admin@webcontabilidade.com')->subject('Nova migração de empresa');
             });
         } catch (\Exception $ex) {
             return true;

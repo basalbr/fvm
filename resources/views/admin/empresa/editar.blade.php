@@ -16,7 +16,7 @@
                     try {
                         $('.cnae-search-box .result').empty();
                         if (data.length) {
-                            for (i in data) {
+                            for (var i in data) {
                                 html += '<div class="cnae-item" data-descricao="' + data[i].descricao + '" data-val="' + data[i].codigo + '" data-id="' + data[i].id + '">';
                                 html += '<b>Nome: ' + data[i].descricao + '</b><br />Código: ' + ' ' + data[i].codigo;
                                 html += '</div>';
@@ -59,14 +59,6 @@
             if ($('#lista-cnaes tr').length == 1) {
                 $('.nenhum-cnae').show();
             }
-        });
-
-        $('.cnae-search-box .result').on('click', '.cnae-item', function () {
-            $('.cnae-search').after('<input type="hidden" value="' + $(this).data('id') + '" name="cnaes[]"/>');
-            $('.cnae-search').after('<div class="col-xs-12"><a data-id="' + $(this).data('id') + '" class="remove-cnae">' + $(this).data('val') + '</a></div>');
-            $('.cnae-search').val('');
-            $('.cnae-search-box .result').empty();
-            $('.cnae-search-box').hide();
         });
 
         $("#abrir-modal-cnae").on('click', function () {

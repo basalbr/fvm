@@ -506,7 +506,7 @@ $(function () {
                         <label>Regime de casamento *</label>
                         <select class="form-control" name='regime_casamento'>
                             <option value="">Selecione uma opção</option>
-                            <option value="">Nenhuma das opções</option>
+                            <option value="nenhum">Nenhuma das opções</option>
                             <option value="parcial">Separação Parcial dos Bens</option>
                             <option value="total">Separação Total dos Bens</option>
                             <option value="universal">Separação Universal dos Bens</option>

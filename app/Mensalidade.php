@@ -94,11 +94,11 @@ class Mensalidade extends Model {
     }
 
     public function enviar_notificacao_cobranca() {
-        $usuario = Auth::user();
+        $usuario = $this->empresa->usuario->id;
         $notificacao = new Notificacao;
         $valor = number_format($this->valor, 2, ',', '.');
         $notificacao->mensagem = '<a href="' . route('listar-pagamentos-pendentes') . '">Você possui uma nova cobrança de R$' . $valor . '. Clique aqui para visualizar seus pagamentos pendentes.</a>';
-        $notificacao->id_usuario = Auth::user()->id;
+        $notificacao->id_usuario = $this->id_usuario;
         $notificacao->save();
         try {
             \Illuminate\Support\Facades\Mail::send('emails.nova-cobranca', ['nome' => $usuario->nome, 'empresa' => $this->empresa->nome_fantasia, 'valor' => $valor], function ($m) use($usuario) {

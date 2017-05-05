@@ -30,7 +30,7 @@
     </div>
   
       <div class='col-md-4'>
-        <a href='{{route('listar-chamados')}}' class='shortcut blue'>
+        <a href='{{route('listar-chamados-usuario')}}' class='shortcut blue'>
             <div class='big-icon'><span class='fa fa-envelope'></span></div>
             <div class='contador'>{{$qtde_chamados}}</div>
             <h3 class='text-center'>Chamados</h3>

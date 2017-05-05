@@ -3,15 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/fvm/resources/views/admin/noticias/index.blade.php</file>
-            <file>file:/C:/xampp/htdocs/fvm/public/css/custom.css</file>
-            <file>file:/C:/xampp/htdocs/fvm/app/Http/routes.php</file>
-            <file>file:/C:/xampp/htdocs/fvm/app/Noticia.php</file>
-            <file>file:/C:/xampp/htdocs/fvm/app/Http/Controllers/NoticiaController.php</file>
-            <file>file:/C:/xampp/htdocs/fvm/resources/views/admin/processos/index.blade.php</file>
-            <file>file:/C:/xampp/htdocs/fvm/resources/views/index.blade.php</file>
-            <file>file:/C:/xampp/htdocs/fvm/resources/views/admin/noticias/cadastrar.blade.php</file>
-            <file>file:/C:/xampp/htdocs/fvm/resources/views/layouts/admin.blade.php</file>
+            <file>file:/D:/Projetos/fvm/app/Pessoa.php</file>
+            <file>file:/D:/Projetos/fvm/app/Http/Controllers/AlteracaoController.php</file>
+            <file>file:/D:/Projetos/fvm/resources/views/layouts/dashboard.blade.php</file>
+            <file>file:/D:/Projetos/fvm/app/AlteracaoMensagem.php</file>
+            <file>file:/D:/Projetos/fvm/app/Alteracao.php</file>
+            <file>file:/D:/Projetos/fvm/resources/views/funcionarios/index.blade.php</file>
+            <file>file:/D:/Projetos/fvm/app/Http/Controllers/FuncionarioController.php</file>
+            <file>file:/D:/Projetos/fvm/database/migrations/2017_01_19_204529_create_alteracao_mensagem_table.php</file>
+            <file>file:/D:/Projetos/fvm/resources/views/index.blade.php</file>
+            <file>file:/D:/Projetos/fvm/app/Http/routes.php</file>
+            <file>file:/D:/Projetos/fvm/resources/views/empresa/alteracoes/index.blade.php</file>
+            <file>file:/D:/Projetos/fvm/app/Chamado.php</file>
         </group>
     </open-files>
 </project-private>

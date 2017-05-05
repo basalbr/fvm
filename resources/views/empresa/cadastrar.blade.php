@@ -111,6 +111,7 @@
             $("#principal-form").append('<input type="hidden" value="' + id + '" name="cnaes[]"></input>');
             $('.nenhum-cnae').hide();
         });
+
         $("#lista-cnaes").on('click', '.remover-cnae', function () {
             var id = parseInt($(this).data('id'));
             $(this).parent().parent().remove();
@@ -122,14 +123,6 @@
             if ($('#lista-cnaes tr').length == 1) {
                 $('.nenhum-cnae').show();
             }
-        });
-
-        $('.cnae-search-box .result').on('click', '.cnae-item', function () {
-            $('.cnae-search').after('<input type="hidden" value="' + $(this).data('id') + '" name="cnaes[]"/>');
-            $('.cnae-search').after('<div class="col-xs-12"><a data-id="' + $(this).data('id') + '" class="remove-cnae">' + $(this).data('val') + '</a></div>');
-            $('.cnae-search').val('');
-            $('.cnae-search-box .result').empty();
-            $('.cnae-search-box').hide();
         });
 
         $("#abrir-modal-cnae").on('click', function () {

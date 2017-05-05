@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use laravel\pagseguro\Platform\Laravel5\PagSeguro;
 
@@ -75,16 +76,9 @@ class Pagamento extends Model {
                 'notificationURL' => 'http://www.webcontabilidade.com/pagseguro',
                 'reference' => $this->id,
                 'sender' => [
-                    'email' => 'c88672221307210906171@sandbox.pagseguro.com.br',
-                    'name' => 'Aldir Junior',
-                    'documents' => [
-                        [
-                            'number' => '06873589900',
-                            'type' => 'CPF'
-                        ]
-                    ],
-                    'phone' => '(47)9617-2512',
-                    'bornDate' => '1989-03-10',
+                    'email' => Auth::user()->email,
+                    'name' => Auth::user()->nome,
+                    'phone' => Auth::user()->telefone
                 ]
             ];
             $checkout = Pagseguro::checkout()->createFromArray($data);
