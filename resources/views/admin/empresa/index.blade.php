@@ -53,6 +53,7 @@
                 <th>Razão Social</th>
                 <th>CNPJ</th>
                 <th>Usuário</th>
+                <th>Mensalidade</th>
                 <th></th>
             </tr>
         </thead>
@@ -65,6 +66,7 @@
                 <td>{{$empresa->razao_social}}</td>
                 <td>{{$empresa->cpf_cnpj}}</td>
                 <td>{{$empresa->usuario->nome}}</td>
+                <td>{{$empresa->mensalidade->valor_formatado()}}</td>
                 <td>
                     @if($empresa->status != 'Aprovado')
                     <a class='btn btn-success' href="{{route('ativar-empresa-admin', ['id' => $empresa->id])}}">Ativar Empresa</a>

@@ -59,7 +59,7 @@ class AberturaEmpresaController extends Controller
         } else {
             $empresas->orderBy('abertura_empresa.updated_at', 'desc');
         }
-        $empresas = $empresas->select('abertura_empresa.*')->paginate(5);
+        $empresas = $empresas->select('abertura_empresa.*')->paginate(50);
         return view('admin.abertura_empresa.index', ['empresas' => $empresas]);
     }
 

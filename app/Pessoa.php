@@ -276,6 +276,10 @@ class Pessoa extends Model {
     public function processos() {
         return $this->hasMany('App\Processo', 'id_pessoa');
     }
+
+    public function mensalidade() {
+        return $this->hasOne('App\Mensalidade', 'id_pessoa');
+    }
     
     public function processos_documentos_contabeis() {
         return $this->hasMany('App\ProcessoDocumentoContabil', 'id_pessoa');

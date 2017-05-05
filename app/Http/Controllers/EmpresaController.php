@@ -60,13 +60,14 @@ class EmpresaController extends Controller
         } else {
             $empresas->orderBy('pessoa.nome_fantasia', 'asc');
         }
-        $empresas = $empresas->select('pessoa.*')->paginate(5);
+        $empresas = $empresas->select('pessoa.*')->paginate(50);
         return view('admin.empresa.index', ['empresas' => $empresas]);
     }
 
     public function ativar($id)
     {
         $empresa = \App\Pessoa::where('id', '=', $id)->first();
+        /** @var Pessoa $empresa */
         $empresa->status = 'Aprovado';
         $empresa->save();
         $empresa->iniciar_periodo_gratis();
