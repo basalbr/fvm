@@ -158,7 +158,6 @@ class EmpresaController extends Controller
                     }
                 }
                 $empresa->enviar_notificacao_nova_empresa();
-                $empresa->abrir_processos();
                 $empresa->criar_mensalidade($request);
                 DB::commit();
                 return redirect(route('empresas'));

@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Monolog\Logger;
 
 class Mensalidade extends Model {
 
@@ -72,13 +75,17 @@ class Mensalidade extends Model {
     public function abrir_ordem_pagamento() {
         try {
             $data_vencimento = $this->created_at->format('d');
-            $ultimo_pagamento = $this->pagamentos()->where('tipo', '=', 'mensalidade')->orderBy('created_at', 'desc')->first()->created_at->format('Y-m');
+            $pagamento = $this->pagamentos()->where('tipo', '=', 'mensalidade')->orderBy('created_at', 'desc')->first();
+            if(!$pagamento instanceof Pagamento){
+                return false;
+            }
+            $ultimo_pagamento = $pagamento->created_at->format('Y-m');
             $date = strtotime("+1 month", strtotime($ultimo_pagamento . '-' . $data_vencimento));
             $vencimento = date('Y-m-d', strtotime("+5 days", $date));
             if ((string)date('Y-m') != $ultimo_pagamento) {
 
                 if ($this->empresa->status == 'Aprovado' && !$this->empresa->trashed()) {
-                    $pagamento = new \App\Pagamento;
+                    $pagamento = new Pagamento;
                     $pagamento->id_mensalidade = $this->id;
                     $pagamento->status = 'Pendente';
                     $pagamento->valor = $this->valor;
@@ -89,7 +96,7 @@ class Mensalidade extends Model {
             }
             return true;
         } catch (Exception $ex) {
-            Logger::error($ex->getMessage());
+            Log::error($ex->getMessage());
         }
     }
 
@@ -110,7 +117,6 @@ class Mensalidade extends Model {
                 $m->to('admin@webcontabilidade.com')->subject('Uma nova cobrança foi gerada.');
             });
         } catch (\Exception $ex) {
-            var_dump($ex);
             return true;
         }
     }
