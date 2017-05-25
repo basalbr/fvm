@@ -31,7 +31,9 @@
             @endif
         </tbody>
     </table>
-    <a class='btn btn-success' href="{{route('cadastrar-funcionario', [$empresa])}}"><span class='fa fa-user-plus'></span> Cadastrar Funcionário</a>
+    @if($empresa->canRegisterFuncionario())
+        <a class='btn btn-success' href="{{route('cadastrar-funcionario', [$empresa])}}"><span class='fa fa-user-plus'></span> Cadastrar Funcionário</a>
+    @endif
     <a href="{{URL::previous()}}" class="btn btn-primary"><span class='fa fa-history'></span> Voltar</a>
 </div>
 @stop

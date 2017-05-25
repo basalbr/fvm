@@ -34,7 +34,8 @@ $(function(){
         <thead>
             <tr>
                 <th>Nome Fantasia</th>
-                <th>Nº de Funcionários</th>
+                <th>Qtde de funcionários</th>
+                <th>Limite de funcionários</th>
                 <th></th>
             </tr>
         </thead>
@@ -44,10 +45,15 @@ $(function(){
             <tr>
                 <td>{{$empresa->nome_fantasia}}</td>
                 <td>{{$empresa->funcionarios()->count()}}</td>
+                <td>{{$empresa->mensalidade->funcionarios}}</td>
                 <td>
                     @if($empresa->status != 'Em Análise')
+                        @if($empresa->canRegisterFuncionario())
                     <a class='btn btn-success' href="{{route('cadastrar-funcionario', [$empresa->id])}}"><span class='fa fa-user-plus'></span> Cadastrar Funcionário</a>
+                        @endif
+                    @if($empresa->funcionarios->count())
                     <a class='btn btn-primary' href="{{route('listar-funcionarios', [$empresa->id])}}"><span class='fa fa-list-alt'></span> Listar Funcionários</a>
+                        @endif
                     @endif
                 </td>
             </tr>

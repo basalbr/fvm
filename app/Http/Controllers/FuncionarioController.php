@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Noticia;
+use App\Pessoa;
+use App\Uf;
 use Illuminate\Support\Facades\Auth;
 use App\Funcionario;
 use App\FuncionarioDeficiencia;
@@ -10,17 +13,22 @@ use App\HorarioTrabalho;
 use App\ContratoTrabalho;
 use App\FuncionarioDependente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Validator;
 
-class FuncionarioController extends Controller {
+class FuncionarioController extends Controller
+{
 
-    public function index() {
-        $empresas = \App\Pessoa::where('id_usuario', '=', Auth::user()->id)->orderBy('nome_fantasia')->get();
+    public function index()
+    {
+        $empresas = Pessoa::where('id_usuario', '=', Auth::user()->id)->orderBy('nome_fantasia')->get();
         return view('funcionarios.index', ['empresas' => $empresas]);
     }
 
-    public function validateHorario($data) {
+    public function validateHorario($data)
+    {
         $validator = Validator::make([], []);
         $dow = array('Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado');
         $total_minutos = 0;
@@ -31,7 +39,7 @@ class FuncionarioController extends Controller {
                 if ($hora2 <= $hora1) {
                     $validator->errors()->add('horario[' . $k . '][0]', $dow[$k] . ' - O horário de entrada do 1° turno deve ser menor que o horário de saída do 1° turno');
                 }
-                $total_minutos+=round(abs($hora2 - $hora1) / 60, 2);
+                $total_minutos += round(abs($hora2 - $hora1) / 60, 2);
             }
             if (isset($hora[2]) && isset($hora[3]) && !empty($hora[2]) && !empty($hora[3]) && $hora[2] != '' && $hora[3] != '') {
                 $hora1 = strtotime($hora[2]);
@@ -39,7 +47,7 @@ class FuncionarioController extends Controller {
                 if ($hora2 <= $hora1) {
                     $validator->errors()->add('horario[' . $k . '][2]', $dow[$k] . ' - O horário de entrada do 2° turno deve ser menor que o horário de saída do 2° turno');
                 }
-                $total_minutos+=round(abs($hora2 - $hora1) / 60, 2);
+                $total_minutos += round(abs($hora2 - $hora1) / 60, 2);
             }
             if (isset($hora[1]) && isset($hora[2]) && !empty($hora[1]) && !empty($hora[2]) && $hora[1] != '' && $hora[2] != '') {
                 $hora1 = strtotime($hora[1]);
@@ -61,98 +69,123 @@ class FuncionarioController extends Controller {
         return $validator;
     }
 
-    public function index2($id) {
+    public function index2($id)
+    {
         $funcionarios = Funcionario::join('pessoa', 'pessoa.id', '=', 'funcionario.id_pessoa')->where('funcionario.id_pessoa', '=', $id)->where('pessoa.id_usuario', '=', Auth::user()->id)->orderBy('funcionario.nome_completo')->select('funcionario.*')->get();
-        return view('funcionarios.index2', ['funcionarios' => $funcionarios,'empresa'=>$id]);
+        return view('funcionarios.index2', ['funcionarios' => $funcionarios, 'empresa' => $id]);
     }
 
-    public function ler($id) {
-        $noticia = Noticia::find($id);
-        return view('noticias.ler', ['noticia' => $noticia]);
-    }
-
-    public function create() {
+    public function create()
+    {
         $usuario = Auth::user();
         $dow = array('Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado');
-        $estados = \App\Uf::orderBy('nome', 'asc')->get();
-//        $cargos = Cargo::orderBy('descricao', 'asc')->get();
+        $estados = Uf::orderBy('nome', 'asc')->get();
         return view('funcionarios.cadastrar', ['usuario' => $usuario, 'dow' => $dow, 'estados' => $estados]);
     }
 
-    public function store($id, Request $request) {
-        $pessoa = \App\Pessoa::where('id_usuario', '=', Auth::user()->id)->where('id', '=', $id)->first();
+    public function store($id, Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $pessoa = Pessoa::where('id_usuario', '=', Auth::user()->id)->where('id', '=', $id)->first();
+            if ($request->get('data_nascimento')) {
+                $old_date = explode('/', $request->get('data_nascimento'));
+                $new_date = $old_date[2] . '-' . $old_date[1] . '-' . $old_date[0];
+                $request->merge(['data_nascimento' => $new_date]);
+            }
+            if (!$pessoa instanceof Pessoa) {
+                return redirect(route('cadastrar-funcionario', [$id]))
+                    ->withErrors(['Ocorreu um erro ao tentar cadastrar o funcionário, verifique se você está logado e tente novamente.'])
+                    ->withInput();
+            }
 
-        if (!$pessoa instanceof \App\Pessoa) {
-            return redirect(route('cadastrar-funcionario', [$id]))
-                            ->withErrors(['Ocorreu um erro ao tentar cadastrar o funcionário, verifique se você está logado e tente novamente.'])
+            $request->merge(['id_pessoa' => $id]);
+
+            $funcionario = new Funcionario;
+            $contrato = new ContratoTrabalho;
+
+            if ($funcionario->validate($request->all(), false) && $contrato->validate($request->all(), false)) {
+                if (count($request->get('horario'))) {
+                    $validator = $this->validateHorario($request->all());
+
+                    if ($validator->fails()) {
+                        if ($request->get('data_nascimento')) {
+                            $old_date = explode('-', $request->get('data_nascimento'));
+                            $new_date = $old_date[2] . '/' . $old_date[1] . '/' . $old_date[0];
+                            $request->merge(['data_nascimento' => $new_date]);
+                        }
+                        return redirect(route('funcionario-novo'))
+                            ->withErrors($validator->errors()->all())
                             ->withInput();
-        }
-
-        $request->merge(['id_pessoa' => $id, 'id_uf' => 1, 'id_uf_ctps' => 1]);
-
-        $funcionario = new Funcionario;
-        $contrato = new \App\ContratoTrabalho;
-
-        if ($funcionario->validate($request->all(), false) && $contrato->validate($request->all(), false)) {
-            if (count($request->get('horario'))) {
-                $validator = $this->validateHorario($request->all());
-
-                if ($validator->fails()) {
-                    return redirect(route('funcionario-novo'))
-                                    ->withErrors($validator->errors()->all())
-                                    ->withInput();
+                    }
                 }
-            }
-            $funcionario = $funcionario->create($request->all());
+                $funcionario = $funcionario->create($request->all());
 
-            $request->merge(['id_funcionario' => $funcionario->id]);
-            $contrato = $contrato->create($request->all());
+                $request->merge(['id_funcionario' => $funcionario->id]);
+                $contrato = $contrato->create($request->all());
 
-            if (count($request->get('deficiencia'))) {
-                foreach ($request->get('deficiencia') as $i) {
-                    $deficiencia = new FuncionarioDeficiencia;
-                    $deficiencia->id_funcionario = $funcionario->id;
-                    $deficiencia->deficiencia = $i;
-                    $deficiencia->save();
+                if (count($request->get('deficiencia'))) {
+                    foreach ($request->get('deficiencia') as $i) {
+                        $deficiencia = new FuncionarioDeficiencia;
+                        $deficiencia->id_funcionario = $funcionario->id;
+                        $deficiencia->deficiencia = $i;
+                        $deficiencia->save();
+                    }
                 }
-            }
 
-            if (count($request->get('dependente'))) {
-                foreach ($request->get('dependente') as $dep) {
-                    $dependente = new FuncionarioDependente;
-                    $dep['id_funcionario'] = $funcionario->id;
-                    $dependente->create($dep);
+                if (count($request->get('dependente'))) {
+                    foreach ($request->get('dependente') as $dep) {
+                        $dependente = new FuncionarioDependente;
+                        $dep['id_funcionario'] = $funcionario->id;
+                        $dependente->create($dep);
+                    }
                 }
-            }
 
-            if (count($request->get('horario'))) {
-                foreach ($request->get('horario') as $dia => $hora) {
-                    $horario = new HorarioTrabalho;
-                    $horario->id_contrato_trabalho = $contrato->id;
-                    $horario->hora1 = $hora[0] ? $hora[0] : null;
-                    $horario->hora2 = $hora[1] ? $hora[1] : null;
-                    $horario->hora3 = $hora[2] ? $hora[2] : null;
-                    $horario->hora4 = $hora[3] ? $hora[3] : null;
-                    $horario->dia = $dia;
-                    $horario->save();
+                if (count($request->get('horario'))) {
+                    foreach ($request->get('horario') as $dia => $hora) {
+                        $horario = new HorarioTrabalho;
+                        $horario->id_contrato_trabalho = $contrato->id;
+                        $horario->hora1 = $hora[0] ? $hora[0] : null;
+                        $horario->hora2 = $hora[1] ? $hora[1] : null;
+                        $horario->hora3 = $hora[2] ? $hora[2] : null;
+                        $horario->hora4 = $hora[3] ? $hora[3] : null;
+                        $horario->dia = $dia;
+                        $horario->save();
+                    }
                 }
+                DB::commit();
+                return redirect(route('funcionarios'))->with('alertModal', ['message' => 'Funcionário cadastrado com sucesso!', 'title' => 'Sucesso!']);
+            } else {
+                if ($request->get('data_nascimento')) {
+                    $old_date = explode('-', $request->get('data_nascimento'));
+                    $new_date = $old_date[2] . '/' . $old_date[1] . '/' . $old_date[0];
+                    $request->merge(['data_nascimento' => $new_date]);
+                }
+                return redirect(route('cadastrar-funcionario', [$id]))
+                    ->withErrors(array_merge($funcionario->errors(), $contrato->errors()))
+                    ->withInput();
             }
-            return redirect(route('funcionarios'))->with('alertModal', ['message' => 'Funcionário cadastrado com sucesso!', 'title' => 'Sucesso!']);
-        } else {
-            return array_merge($funcionario->errors(), $contrato->errors());
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::critical($e);
+            return redirect(route('cadastrar-funcionario', [$id]))
+                ->withErrors(['Ocorreu um erro interno, por favor tente novamente mais tarde.'])
+                ->withInput();
         }
     }
 
-    public function edit($id_empresa, $id_funcionario) {
+    public function edit($id_empresa, $id_funcionario)
+    {
         $usuario = Auth::user();
         $dow = array('Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado');
-        $funcionario = Funcionario::join('pessoa','pessoa.id','=','funcionario.id_pessoa')->where('funcionario.id_pessoa', '=', $id_empresa)->where('funcionario.id', '=', $id_funcionario)->where('pessoa.id_usuario','=',$usuario->id)->first();
+        $funcionario = Funcionario::join('pessoa', 'pessoa.id', '=', 'funcionario.id_pessoa')->where('funcionario.id_pessoa', '=', $id_empresa)->where('funcionario.id', '=', $id_funcionario)->where('pessoa.id_usuario', '=', $usuario->id)->first();
         $contrato = ContratoTrabalho::where('id_funcionario', '=', $id_funcionario)->orderBy('updated_at', 'desc')->first();
         $estados = \App\Uf::orderBy('nome', 'asc')->get();
-        return view('funcionarios.editar', ['usuario' => $usuario, 'funcionario' => $funcionario, 'dow' => $dow, 'contrato' => $contrato,'estados'=>$estados]);
+        return view('funcionarios.editar', ['usuario' => $usuario, 'funcionario' => $funcionario, 'dow' => $dow, 'contrato' => $contrato, 'estados' => $estados]);
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $data = Input::all();
         $rules = ['nome' => 'required', 'senha' => 'min:4|max:4', 'cpf' => 'required|min:14|max:14|unique:funcionario,cpf,' . $id, 'pis' => 'required', 'ctps' => 'required', 'salario' => 'required', 'dsr' => 'required', 'horario' => 'required'];
         $niceNames = array(
@@ -170,7 +203,7 @@ class FuncionarioController extends Controller {
         $validator = Validator::make(Input::all(), $rules);
         $validator->setAttributeNames($niceNames);
 
-        $validator->after(function($validator) {
+        $validator->after(function ($validator) {
             $dow = array('Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado');
             $data = Input::all();
             $total_minutos = 0;
@@ -181,7 +214,7 @@ class FuncionarioController extends Controller {
                     if ($hora2 <= $hora1) {
                         $validator->errors()->add('horario[' . $k . '][0]', $dow[$k] . ' - O horário de entrada do 1° turno deve ser menor que o horário de saída do 1° turno');
                     }
-                    $total_minutos+=round(abs($hora2 - $hora1) / 60, 2);
+                    $total_minutos += round(abs($hora2 - $hora1) / 60, 2);
                 }
                 if (isset($hora[2]) && isset($hora[3]) && !empty($hora[2]) && !empty($hora[3]) && $hora[2] != '' && $hora[3] != '') {
                     $hora1 = strtotime($hora[2]);
@@ -189,7 +222,7 @@ class FuncionarioController extends Controller {
                     if ($hora2 <= $hora1) {
                         $validator->errors()->add('horario[' . $k . '][2]', $dow[$k] . ' - O horário de entrada do 2° turno deve ser menor que o horário de saída do 2° turno');
                     }
-                    $total_minutos+=round(abs($hora2 - $hora1) / 60, 2);
+                    $total_minutos += round(abs($hora2 - $hora1) / 60, 2);
                 }
                 if (isset($hora[1]) && isset($hora[2]) && !empty($hora[1]) && !empty($hora[2]) && $hora[1] != '' && $hora[2] != '') {
                     $hora1 = strtotime($hora[1]);
@@ -211,8 +244,8 @@ class FuncionarioController extends Controller {
         });
         if ($validator->fails()) {
             return redirect(route('funcionario-editar', ['id' => $id]))
-                            ->withErrors($validator->errors()->all())
-                            ->withInput();
+                ->withErrors($validator->errors()->all())
+                ->withInput();
         }
 
         $usuario = Auth::user();
@@ -254,7 +287,8 @@ class FuncionarioController extends Controller {
         return redirect(route('funcionarios'))->with('alertModal', ['message' => 'Funcionário alterado com sucesso!', 'title' => 'Sucesso!']);
     }
 
-    public function validateDependente(Request $request) {
+    public function validateDependente(Request $request)
+    {
 //        $dependente = new \App\FuncionarioDependente;
 //        if ($request->get('data_nascimento')) {
 //            $old_date = explode('/', $request->get('data_nascimento'));

@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
-class Pessoa extends Model {
+class Pessoa extends Model
+{
 
     use SoftDeletes;
 
@@ -91,7 +92,8 @@ class Pessoa extends Model {
         'crc'
     ];
 
-    public function validate($data, $update = false) {
+    public function validate($data, $update = false)
+    {
         // make a new validator object
         if ($update) {
             $this->rules['cpf_cnpj'] = 'required|unique:pessoa,cpf_cnpj,' . $data['id'];
@@ -116,7 +118,8 @@ class Pessoa extends Model {
         return true;
     }
 
-    public function criar_mensalidade($request) {
+    public function criar_mensalidade($request)
+    {
         $plano = \App\Plano::where('total_documentos', '>=', $request->get('total_documentos'))->where('total_documentos_contabeis', '>=', $request->get('total_contabeis'))->where('pro_labores', '>=', $request->get('pro_labores'))->orderBy('valor', 'asc')->first();
         $valor = $plano->valor;
         if ($request->get('funcionarios')) {
@@ -139,7 +142,8 @@ class Pessoa extends Model {
         $mensalidade->save();
     }
 
-    public function iniciar_periodo_gratis() {
+    public function iniciar_periodo_gratis()
+    {
         $mensalidade = Mensalidade::where('id_pessoa', '=', $this->id)->first();
         $pagamento = new \App\Pagamento;
         $pagamento->tipo = 'mensalidade';
@@ -153,7 +157,8 @@ class Pessoa extends Model {
         $mensalidade->save();
     }
 
-    public function abrir_processos() {
+    public function abrir_processos()
+    {
         $impostos_mes = \App\ImpostoMes::where('mes', '=', (date('n') - 1))->get();
         $competencia = date('Y-m-d', strtotime(date('Y-m') . " -1 month"));
         if (count($impostos_mes)) {
@@ -175,7 +180,7 @@ class Pessoa extends Model {
                     $notificacao->id_usuario = $this->id_usuario;
                     $notificacao->save();
                     try {
-                        \Illuminate\Support\Facades\Mail::send('emails.novo-processo', ['nome' => $usuario->nome, 'id_processo' => $processo->id], function ($m) use($usuario) {
+                        \Illuminate\Support\Facades\Mail::send('emails.novo-processo', ['nome' => $usuario->nome, 'id_processo' => $processo->id], function ($m) use ($usuario) {
                             $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                             $m->to($usuario->email)->subject('Você Possui Uma Nova Apuração');
                         });
@@ -191,9 +196,10 @@ class Pessoa extends Model {
         }
     }
 
-    public function abrir_processos_contabeis() {
+    public function abrir_processos_contabeis()
+    {
         $periodo = date('Y-m-01', strtotime(date('Y-m') . " -1 month"));
-        $processo = ProcessoDocumentoContabil::where('periodo', '=', $periodo)->where('id_pessoa','=',$this->id)->first();
+        $processo = ProcessoDocumentoContabil::where('periodo', '=', $periodo)->where('id_pessoa', '=', $this->id)->first();
         if (!$processo instanceof ProcessoDocumentoContabil) {
             $processo = new ProcessoDocumentoContabil;
             $processo->create(['periodo' => $periodo, 'id_pessoa' => $this->id, 'status' => 'pendente']);
@@ -203,25 +209,26 @@ class Pessoa extends Model {
             $notificacao->save();
             $usuario = $this->usuario;
             try {
-                \Illuminate\Support\Facades\Mail::send('emails.novo-processo-documento-contabil', ['nome' => $usuario->nome, 'id_processo' => $processo->id], function ($m) use($usuario) {
+                \Illuminate\Support\Facades\Mail::send('emails.novo-processo-documento-contabil', ['nome' => $usuario->nome, 'id_processo' => $processo->id], function ($m) use ($usuario) {
                     $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                     $m->to($usuario->email)->subject('Você Possui Uma Nova Apuração');
                 });
             } catch (\Exception $ex) {
-                
+
                 return true;
             }
         }
     }
 
-    public function enviar_notificacao_status() {
+    public function enviar_notificacao_status()
+    {
         $usuario = $this->usuario;
         $notificacao = new Notificacao;
         $notificacao->mensagem = '<a href="' . route('editar-empresa', [$this->id]) . '">A empresa ' . $this->nome_fantasia . ' mudou seu status para ' . $this->status . '. Clique aqui para visualizar a empresa.</a>';
         $notificacao->id_usuario = $usuario->id;
         $notificacao->save();
         try {
-            \Illuminate\Support\Facades\Mail::send('emails.status-empresa', ['nome' => $usuario->nome, 'id_empresa' => $this->id, 'nome_empresa' => $this->nome_fantasia, 'status' => $this->status], function ($m) use($usuario) {
+            \Illuminate\Support\Facades\Mail::send('emails.status-empresa', ['nome' => $usuario->nome, 'id_empresa' => $this->id, 'nome_empresa' => $this->nome_fantasia, 'status' => $this->status], function ($m) use ($usuario) {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                 $m->to($usuario->email)->subject('Mudança de Status em Empresa');
             });
@@ -230,7 +237,8 @@ class Pessoa extends Model {
         }
     }
 
-    public function enviar_notificacao_nova_empresa() {
+    public function enviar_notificacao_nova_empresa()
+    {
         $usuario = Auth::user();
         try {
             \Illuminate\Support\Facades\Mail::send('emails.nova-empresa', ['nome' => $usuario->nome, 'empresa' => $this], function ($m) use ($usuario) {
@@ -246,7 +254,8 @@ class Pessoa extends Model {
         }
     }
 
-    public function isSimplesNacional() {
+    public function isSimplesNacional()
+    {
         if ($this->cnaes->count() > 0) {
             foreach ($this->cnaes as $cnae) {
                 if ($cnae->cnae->id_tabela_simples_nacional == null) {
@@ -257,39 +266,48 @@ class Pessoa extends Model {
         }
     }
 
-    public function errors() {
+    public function errors()
+    {
         return $this->errors;
     }
 
-    public function cnaes() {
+    public function cnaes()
+    {
         return $this->hasMany('App\PessoaCnae', 'id_pessoa');
     }
 
-    public function socios() {
+    public function socios()
+    {
         return $this->hasMany('App\Socio', 'id_pessoa');
     }
 
-    public function funcionarios() {
+    public function funcionarios()
+    {
         return $this->hasMany('App\Funcionario', 'id_pessoa');
     }
 
-    public function processos() {
+    public function processos()
+    {
         return $this->hasMany('App\Processo', 'id_pessoa');
     }
 
-    public function mensalidade() {
+    public function mensalidade()
+    {
         return $this->hasOne('App\Mensalidade', 'id_pessoa');
     }
-    
-    public function processos_documentos_contabeis() {
+
+    public function processos_documentos_contabeis()
+    {
         return $this->hasMany('App\ProcessoDocumentoContabil', 'id_pessoa');
     }
 
-    public function usuario() {
+    public function usuario()
+    {
         return $this->belongsTo('App\Usuario', 'id_usuario');
     }
 
-    public function delete() {
+    public function delete()
+    {
 
         if ($this->processos->count()) {
             foreach ($this->processos as $processo) {
@@ -317,8 +335,15 @@ class Pessoa extends Model {
         parent::delete();
     }
 
-    public function socio_principal() {
+    public function socio_principal()
+    {
         return $this->socios()->where('principal', '=', true)->first();
     }
+
+    public function canRegisterFuncionario()
+    {
+        return $this->funcionarios->count() < $this->mensalidade->funcionarios;
+    }
+
 
 }
