@@ -175,7 +175,7 @@ class ProcessoController extends Controller
         if ($request->file('anexo')) {
             foreach ($request->file('anexo') as $k => $anexo) {
                 $informacao_extra = new \App\ProcessoInformacaoExtra;
-                $anexo_nome = 'processo_anexo' . str_shuffle(date('dmyhis')) . '.' . $anexo->getClientOriginalExtension()();
+                $anexo_nome = 'processo_anexo' . str_shuffle(date('dmyhis')) . '.' . $anexo->getClientOriginalExtension();
                 $anexo->move(getcwd() . '/uploads/processos/', $anexo_nome);
                 $informacao_extra->create(['informacao' => $anexo_nome, 'id_processo' => $processo->id, 'id_informacao_extra' => $k]);
             }
