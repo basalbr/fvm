@@ -6,9 +6,6 @@
 <script type="text/javascript" src="{{url(public_path().'js/bootstrap-datepicker.pt-BR.min.js')}}"></script>
 <script type="text/javascript" language="javascript">
 $(function () {
-    $('.date-mask').on('keypress', function () {
-        return false;
-    });
     $('.date-mask').datepicker({
         language: 'pt-BR',
         autoclose: true,

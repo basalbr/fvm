@@ -18,9 +18,6 @@ class ProlaboreController extends Controller
         $socios->join('pessoa', 'pessoa.id', '=', 'socio.id_pessoa');
         $socios->where('socio.pro_labore', '>', 0);
         $socios->where('pessoa.deleted_at', '=', null);
-        $socios->whereDoesntHave('pro_labores', function ($query) {
-            $query->where('competencia', '=', date('m', strtotime(date('Y-m') . " -1 month")));
-        });
         if (Input::get('socio')) {
             $socios->where('socio.nome', 'like', '%' . Input::get('socio') . '%');
         }
@@ -44,7 +41,7 @@ class ProlaboreController extends Controller
         } else {
             $socios->orderBy('pessoa.nome_fantasia', 'asc');
         }
-        $socios = $socios->select('socio.*')->paginate(10);
+        $socios = $socios->select('socio.*')->paginate(20);
         return view('admin.pro_labore.index', ['socios' => $socios]);
     }
 
@@ -110,18 +107,18 @@ class ProlaboreController extends Controller
         if ($pro_labore->validate($request->all())) {
 
             $pro_labore_anexo = $request->file('pro_labore');
-            $pro_labore_nome = 'pro_labore' . str_shuffle(date('dmyhis')) . '.' . $pro_labore_anexo->guessClientExtension();
+            $pro_labore_nome = 'pro_labore' . str_shuffle(date('dmyhis')) . '.' . $pro_labore_anexo->getClientOriginalExtension();
             $pro_labore_anexo->move(getcwd() . '/uploads/pro_labore/', $pro_labore_nome);
 
             $inss_anexo = $request->file('inss');
-            $inss_nome = 'pro_labore' . str_shuffle(date('dmyhis')) . '.' . $inss_anexo->guessClientExtension();
+            $inss_nome = 'pro_labore' . str_shuffle(date('dmyhis')) . '.' . $inss_anexo->getClientOriginalExtension();
             $inss_anexo->move(getcwd() . '/uploads/inss/', $inss_nome);
 
             $irrf_nome = '';
 
             if ($request->file('irrf')) {
                 $irrf_anexo = $request->file('irrf');
-                $irrf_nome = 'pro_labore' . str_shuffle(date('dmyhis')) . '.' . $irrf_anexo->guessClientExtension();
+                $irrf_nome = 'pro_labore' . str_shuffle(date('dmyhis')) . '.' . $irrf_anexo->getClientOriginalExtension();
                 $irrf_anexo->move(getcwd() . '/uploads/irrf/', $irrf_nome);
                 $request->merge(['irrf' => $irrf_nome]);
             }
@@ -149,21 +146,21 @@ class ProlaboreController extends Controller
         $pro_labore = Prolabore::where('id_socio', '=', $id)->where('id', '=', $id_pro_labore)->first();
         if ($request->file('pro_labore')) {
             $pro_labore_anexo = $request->file('pro_labore');
-            $pro_labore_nome = 'pro_labore' . str_shuffle(date('dmyhis')) . '.' . $pro_labore_anexo->guessClientExtension();
+            $pro_labore_nome = 'pro_labore' . str_shuffle(date('dmyhis')) . '.' . $pro_labore_anexo->getClientOriginalExtension();
             $pro_labore_anexo->move(getcwd() . '/uploads/pro_labore/', $pro_labore_nome);
             $pro_labore->pro_labore = $pro_labore_nome;
         }
 
         if ($request->file('inss')) {
             $inss_anexo = $request->file('inss');
-            $inss_nome = 'pro_labore' . str_shuffle(date('dmyhis')) . '.' . $inss_anexo->guessClientExtension();
+            $inss_nome = 'pro_labore' . str_shuffle(date('dmyhis')) . '.' . $inss_anexo->getClientOriginalExtension();
             $inss_anexo->move(getcwd() . '/uploads/inss/', $inss_nome);
             $pro_labore->inss = inss;
         }
 
         if ($request->file('irrf')) {
             $irrf_anexo = $request->file('irrf');
-            $irrf_nome = 'pro_labore' . str_shuffle(date('dmyhis')) . '.' . $irrf_anexo->guessClientExtension();
+            $irrf_nome = 'pro_labore' . str_shuffle(date('dmyhis')) . '.' . $irrf_anexo->getClientOriginalExtension();
             $irrf_anexo->move(getcwd() . '/uploads/irrf/', $irrf_nome);
             $pro_labore->irrf = irrf;
         }

@@ -14,6 +14,7 @@
         </div>
         @endif
 
+        @if($chamado->status == 'Concluído')
         <form method="POST" action="" enctype="multipart/form-data">
             <div class="col-md-12">
             {{ csrf_field() }}
@@ -33,6 +34,7 @@
             </div>
         </form>
         <div class="clearfix"></div>
+        @endif
         <br />
         <h3>Últimas mensagens:</h3>
         @if($chamado->chamado_respostas->count())

@@ -14,6 +14,8 @@ class Processo extends Model
     protected $rules = ['id_pessoa' => 'required', 'competencia' => 'required', 'id_imposto' => 'required', 'vencimento' => 'required|date'];
     protected $errors;
     protected $niceNames = ['competencia' => 'Competência'];
+    protected $statusNiceNames = ['novo' => 'Novo', 'atencao' => 'Atenção', 'concluido' => 'Concluído', 'cancelado' => 'Cancelado', 'pendente', 'Pendente'];
+
 
     /**
      * The database table used by the model.
@@ -49,7 +51,7 @@ class Processo extends Model
     {
         $usuario = $this->pessoa->usuario;
         try {
-            \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-apuracao-usuario', ['apuracao'=>$this->imposto->nome, 'nome' => $usuario->nome, 'id_processo' => $this->id], function ($m) use ($usuario) {
+            \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-apuracao-usuario', ['apuracao' => $this->imposto->nome, 'nome' => $usuario->nome, 'id_processo' => $this->id], function ($m) use ($usuario) {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                 $m->to($usuario->email)->subject('Nova Mensagem em Apuração');
             });
@@ -62,7 +64,7 @@ class Processo extends Model
     {
         $empresa = $this->pessoa;
         try {
-            \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-apuracao-admin', ['apuracao'=>$this->imposto->nome, 'nome_fantasia' => $empresa->nome_fantasia, 'id_processo' => $this->id], function ($m) {
+            \Illuminate\Support\Facades\Mail::send('emails.nova-mensagem-apuracao-admin', ['apuracao' => $this->imposto->nome, 'nome_fantasia' => $empresa->nome_fantasia, 'id_processo' => $this->id], function ($m) {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                 $m->to('admin@webcontabilidade.com')->subject('Nova Mensagem em Apuração');
             });
@@ -87,6 +89,10 @@ class Processo extends Model
             echo $ex->getMessage();
             return true;
         }
+    }
+
+    public function getStatus(){
+        return $this->statusNiceNames[$this->status];
     }
 
     public function errors()

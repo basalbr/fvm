@@ -15,7 +15,7 @@
     <h3>Informações</h3>
     <form method="POST" action="" enctype="multipart/form-data">
         <div class="col-md-12">
-            <p>Preencha os campos abaixo e cliquem em "Enviar Solicitação".</p>
+            <p>Preencha os campos abaixo e clique em "Enviar Solicitação".</p>
             {{ csrf_field() }}
             @foreach($alteracao->campos as $campo)
             @if($campo->tipo == 'string')

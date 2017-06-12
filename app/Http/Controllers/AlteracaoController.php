@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use App\Alteracao;
 use App\TipoAlteracao;
@@ -108,7 +109,7 @@ class AlteracaoController extends Controller {
         }
         if ($mensagem->validate($request->all())) {
             if ($request->file('anexo')) {
-                $anexo = date('dmyhis') . '.' . $request->file('anexo')->guessClientExtension();
+                $anexo = date('dmyhis') . '.' . $request->file('anexo')->getClientOriginalExtension();
                 $request->file('anexo')->move(getcwd() . '/uploads/alteracao/', $anexo);
                 $request->merge(['anexo' => $anexo]);
                 $mensagem->anexo = $anexo;

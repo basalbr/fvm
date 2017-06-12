@@ -34,7 +34,7 @@ class NoticiaController extends Controller {
 
             list($day, $month, $year) = explode("/", $request->created_at);
             $request->merge(['created_at' => $year . '-' . $month . '-' . $day]);
-            $imagem = date('dmyhis') . '.' . $request->file('imagem')->guessClientExtension();
+            $imagem = date('dmyhis') . '.' . $request->file('imagem')->getClientOriginalExtension();
             $request->file('imagem')->move(getcwd() . '/uploads/noticias/', $imagem);
             $request->merge(['imagem' => $imagem]);
             $img = Image::make(getcwd() . '/uploads/noticias/' . $imagem);
@@ -64,7 +64,7 @@ class NoticiaController extends Controller {
             list($day, $month, $year) = explode("/", $request->created_at);
             $request->merge(['created_at' => $year . '-' . $month . '-' . $day]);
             if ($request->file('imagem')) {
-                $imagem = date('dmyhis') . '.' . $request->file('imagem')->guessClientExtension();
+                $imagem = date('dmyhis') . '.' . $request->file('imagem')->getClientOriginalExtension();
                 $request->file('imagem')->move(getcwd() . '/uploads/noticias/', $imagem);
                 $request->merge(['imagem' => $imagem]);
                 $img = Image::make(getcwd() . '/uploads/noticias/' . $imagem);

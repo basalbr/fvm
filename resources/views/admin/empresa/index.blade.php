@@ -62,11 +62,11 @@
             @foreach($empresas as $empresa)
             <tr>
 
-                <td>{{$empresa->nome_fantasia}}</td>
-                <td>{{$empresa->razao_social}}</td>
+                <td><a href="{{route('editar-empresa-admin', $empresa->id)}}">{{$empresa->nome_fantasia}}</a></td>
+                <td><a href="{{route('editar-empresa-admin', $empresa->id)}}">{{$empresa->razao_social}}</a></td>
                 <td>{{$empresa->cpf_cnpj}}</td>
-                <td>{{$empresa->usuario->nome}}</td>
-                <td>{{$empresa->mensalidade->valor_formatado()}}</td>
+                <td><a href="{{route('visualizar-usuario-admin', $empresa->usuario->id)}}">{{$empresa->usuario->nome}}</a></td>
+                <td>R$ {{$empresa->mensalidade->valor_formatado()}}</td>
                 <td>
                     @if($empresa->status != 'Aprovado')
                     <a class='btn btn-success' href="{{route('ativar-empresa-admin', ['id' => $empresa->id])}}">Ativar Empresa</a>

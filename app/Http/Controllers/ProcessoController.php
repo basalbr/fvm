@@ -67,7 +67,7 @@ class ProcessoController extends Controller
             $processos->orderBy('processo.competencia', 'desc');
         }
 
-        $processos = $processos->select('processo.*')->paginate(10);
+        $processos = $processos->select('processo.*')->paginate(20);
 
         return view('admin.processos.index', ['processos' => $processos]);
     }
@@ -136,13 +136,13 @@ class ProcessoController extends Controller
     {
         $processo = Processo::join('pessoa', 'processo.id_pessoa', '=', 'pessoa.id')->where('pessoa.id_usuario', '=', Auth::user()->id)->where('processo.id', '=', $id)->select('processo.*')->first();
         $erros = [];
-        if ($request->get('informacao_adicional')) {
+       /* if ($request->get('informacao_adicional')) {
             foreach ($request->get('informacao_adicional') as $k => $informacao_adicional) {
                 if (!$informacao_adicional) {
                     $erros[] = 'É necessário preencher o campo ' . \App\InformacaoExtra::where('id', '=', $k)->first()->nome;
                 }
             }
-        }
+        }*/
         if ($request->file('anexo')) {
             foreach ($request->file('anexo') as $k => $anexo) {
                 $informacao_extra = \App\InformacaoExtra::where('id', '=', $k)->first();
@@ -154,7 +154,7 @@ class ProcessoController extends Controller
                     }
                     $extensoes .= $extensao->extensao;
                 }
-                $rules = ['informacao' => 'required|max:' . $informacao_extra->tamanho_maximo . '|mimes:' . $extensoes];
+                $rules = ['informacao' => 'max:' . $informacao_extra->tamanho_maximo . '|mimes:' . $extensoes];
                 // make a new validator object
                 $v = Validator::make(['informacao' => $anexo], $rules);
                 $v->setAttributeNames($nome_bonito);
@@ -175,7 +175,7 @@ class ProcessoController extends Controller
         if ($request->file('anexo')) {
             foreach ($request->file('anexo') as $k => $anexo) {
                 $informacao_extra = new \App\ProcessoInformacaoExtra;
-                $anexo_nome = 'processo_anexo' . str_shuffle(date('dmyhis')) . '.' . $anexo->guessClientExtension();
+                $anexo_nome = 'processo_anexo' . str_shuffle(date('dmyhis')) . '.' . $anexo->getClientOriginalExtension()();
                 $anexo->move(getcwd() . '/uploads/processos/', $anexo_nome);
                 $informacao_extra->create(['informacao' => $anexo_nome, 'id_processo' => $processo->id, 'id_informacao_extra' => $k]);
             }
@@ -207,7 +207,7 @@ class ProcessoController extends Controller
         $request->merge(['id_usuario' => Auth::user()->id, 'id_processo' => $id]);
         if ($request->file('guia')) {
             $guia = $request->file('guia');
-            $guia_nome = 'processo_guia' . str_shuffle(date('dmyhis')) . '.' . $guia->guessClientExtension();
+            $guia_nome = 'processo_guia' . str_shuffle(date('dmyhis')) . '.' . $guia->getClientOriginalExtension();
             $guia->move(getcwd() . '/uploads/guias/', $guia_nome);
             $request->merge(['guia' => $guia_nome]);
             $processo->guia = $guia_nome;
@@ -215,7 +215,7 @@ class ProcessoController extends Controller
         }
         if ($request->file('anexo')) {
             $anexo = $request->file('anexo');
-            $anexo_nome = 'processo_anexo' . str_shuffle(date('dmyhis')) . '.' . $anexo->guessClientExtension();
+            $anexo_nome = 'processo_anexo' . str_shuffle(date('dmyhis')) . '.' . $anexo->getClientOriginalExtension();
             $anexo->move(getcwd() . '/uploads/processos/', $anexo_nome);
             $request->merge(['anexo' => $anexo_nome]);
         }

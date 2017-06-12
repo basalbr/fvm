@@ -105,7 +105,7 @@ class ChamadosController extends Controller {
             $chamado_resposta->id_usuario = Auth::user()->id;
             $chamado_resposta->mensagem = $request->get('mensagem');
             if ($request->file('anexo')) {
-                $anexo = date('dmyhis') . '.' . $request->file('anexo')->guessClientExtension();
+                $anexo = date('dmyhis') . '.' . $request->file('anexo')->getClientOriginalExtension();
                 $request->file('anexo')->move(getcwd() . '/uploads/chamados/', $anexo);
                 $chamado_resposta->anexo = $anexo;
             }
@@ -133,7 +133,7 @@ class ChamadosController extends Controller {
         $request->merge(['id_chamado' => $id]);
         if ($resposta->validate($request->all())) {
             if ($request->file('arquivo')) {
-                $anexo = date('dmyhis') . '.' . $request->file('arquivo')->guessClientExtension();
+                $anexo = date('dmyhis') . '.' . $request->file('arquivo')->getClientOriginalExtension();
                 $request->file('arquivo')->move(getcwd() . '/uploads/chamados/', $anexo);
                 $request->merge(['anexo'=>$anexo]);
             }

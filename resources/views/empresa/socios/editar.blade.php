@@ -79,7 +79,7 @@
             </div>
             <div class='form-group'>
                 <label>Pró-Labore (Deixe em branco caso não receba pró-labore)</label>
-                <input type='text' class='form-control dinheiro-mask' name='pro_labore' value="{{$socio->pro_labore}}"/>
+                <input type='text' class='form-control dinheiro-mask' name='pro_labore' value="{{$socio->pro_labore_formatado()}}"/>
             </div>
         </div>
         <div class="clearfix"></div>

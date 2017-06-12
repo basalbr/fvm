@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use laravel\pagseguro\Platform\Laravel5\PagSeguro;
 
-class Alteracao extends Model {
+class Alteracao extends Model
+{
 
     use SoftDeletes;
 
@@ -31,7 +32,8 @@ class Alteracao extends Model {
      */
     protected $fillable = ['id_pessoa', 'descricao', 'status', 'id_tipo_alteracao'];
 
-    public function validate($data, $rules, $niceNames) {
+    public function validate($data, $rules, $niceNames)
+    {
         // make a new validator object
         $v = Validator::make($data, $rules);
         $v->setAttributeNames($niceNames);
@@ -46,20 +48,22 @@ class Alteracao extends Model {
         return true;
     }
 
-    public function validateMeiMe($data) {
+    public function validateMeiMe($data)
+    {
         $rules = ['id_pessoa' => 'required', 'titulo_eleitor' => 'required', 'recibo_ir' => 'sometimes'];
         $niceNames = ['id_pessoa' => 'Empresa', 'titulo_eleitor' => 'Título de Eleitor', 'recibo_ir' => 'Número do Recibo do Último Imposto de Renda'];
         return $this->validate($data, $rules, $niceNames);
     }
 
-    public function enviar_notificacao_nova_alteracao() {
+    public function enviar_notificacao_nova_alteracao()
+    {
         $usuario = $this->empresa->usuario;
         try {
-            \Illuminate\Support\Facades\Mail::send('emails.nova-alteracao', ['nome' => $usuario->nome, 'id_alteracao' => $this->id, 'id_empresa'=> $this->id_empresa, 'tipo_alteracao'=>$this->tipo->descricao], function ($m) use($usuario) {
+            \Illuminate\Support\Facades\Mail::send('emails.nova-alteracao', ['nome' => $usuario->nome, 'id_alteracao' => $this->id, 'id_empresa' => $this->id_empresa, 'tipo_alteracao' => $this->tipo->descricao], function ($m) use ($usuario) {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                 $m->to($usuario->email)->subject('Nova Solicitação de  Alteração');
             });
-            \Illuminate\Support\Facades\Mail::send('emails.nova-alteracao-admin', ['nome' => $usuario->nome, 'id_alteracao' => $this->id, 'tipo_alteracao'=>$this->tipo->descricao], function ($m) {
+            \Illuminate\Support\Facades\Mail::send('emails.nova-alteracao-admin', ['nome' => $usuario->nome, 'id_alteracao' => $this->id, 'tipo_alteracao' => $this->tipo->descricao], function ($m) {
                 $m->from('site@webcontabilidade.com', 'WEBContabilidade');
                 $m->to('admin@webcontabilidade.com')->subject('Nova Solicitação de Alteração');
             });
@@ -68,7 +72,8 @@ class Alteracao extends Model {
         }
     }
 
-    public function abrir_ordem_pagamento() {
+    public function abrir_ordem_pagamento()
+    {
         $pagamento = new \App\Pagamento;
         $pagamento->tipo = 'alteracao';
         $pagamento->codigo = $this->id;
@@ -78,16 +83,23 @@ class Alteracao extends Model {
         $pagamento->save();
     }
 
-    public function botao_pagamento() {
+    public function botao_pagamento()
+    {
         if (
-                ($this->status == 'Pendente' ||
+            ($this->status == 'Pendente' ||
                 $this->status == 'Em Processamento' ||
                 $this->status == 'Novo') &&
-                ($this->pagamento->status == 'Devolvida' ||
+            ($this->pagamento->status == 'Devolvida' ||
                 $this->pagamento->status == 'Cancelada' ||
                 $this->pagamento->status == 'Pendente' ||
                 $this->pagamento->status == 'Aguardando pagamento')
         ) {
+
+            $name = Auth::user()->nome;
+            if (!strpos(trim($name), ' ')) {
+                $name = $name . ' ' . $name;
+
+            }
             $data = [
                 'items' => [
                     [
@@ -98,11 +110,12 @@ class Alteracao extends Model {
                     ],
                 ],
                 'notificationURL' => 'http://www.webcontabilidade.com/pagseguro',
-                'reference' => $this->pagamento->id,
+                'reference' => $this->id,
                 'sender' => [
-                    'email' => $this->empresa->usuario->email,
-                    'name' => $this->empresa->usuario->nome,
-                    'phone' => $this->empresa->usuario->telefone
+
+                    'name' => $name,
+                    'email' => Auth::user()->email,
+                    'phone' => Auth::user()->telefone
                 ]
             ];
             $checkout = Pagseguro::checkout()->createFromArray($data);
@@ -116,27 +129,33 @@ class Alteracao extends Model {
         return null;
     }
 
-    public function errors() {
+    public function errors()
+    {
         return $this->errors;
     }
 
-    public function empresa() {
+    public function empresa()
+    {
         return $this->belongsTo('App\Pessoa', 'id_pessoa');
     }
 
-    public function tipo() {
+    public function tipo()
+    {
         return $this->belongsTo('App\TipoAlteracao', 'id_tipo_alteracao');
     }
 
-    public function informacoes() {
+    public function informacoes()
+    {
         return $this->hasMany('App\AlteracaoInformacao', 'id_alteracao');
     }
 
-    public function mensagens() {
+    public function mensagens()
+    {
         return $this->hasMany('App\AlteracaoMensagem', 'id_alteracao');
     }
 
-    public function pagamento() {
+    public function pagamento()
+    {
         return $this->hasOne('App\Pagamento', 'codigo')->where('tipo', '=', 'alteracao');
     }
 

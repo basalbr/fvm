@@ -2,15 +2,15 @@
 
 return [
     /* DEFINE SE SERÁ UTILIZADO O AMBIENTE DE TESTES */
-    'use-sandbox' => true,
+    'use-sandbox' => false,
     /*
      * Coloque abaixo as informações do seu cadastro no PagSeguro
      */
     'credentials' => [//INFORME AS CREDENCIAIS PADRÕES DE SUA LOJA, MAS PORDERÁ SER ALTERADA EM RUNTIME
+//        'email' => 'basal_@hotmail.com',
+//        'token' => '37CE7107B5F847949DB7A11F55A56688',
         'email' => 'basal_@hotmail.com',
-        'token' => '37CE7107B5F847949DB7A11F55A56688',
-    /* 'email' => 'basal_@hotmail.com',
-      'token' => '1D4E695F42DA42F3B0AF62DA30DC7D57', */
+        'token' => '1D4E695F42DA42F3B0AF62DA30DC7D57',
     ],
     /*
      * Informe abaixo o nome / url das rotas de aplicação para notificações
@@ -46,8 +46,8 @@ return [
         'adapter' => [
             'type' => 'curl',
             'options' => [
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_0,
-            //CURLOPT_PROXY => 'http://user:pass@host:port', // PROXY OPTION
+                84 => 1,
+                //CURLOPT_PROXY => 'http://user:pass@host:port', // PROXY OPTION
             ]
         ],
     ],

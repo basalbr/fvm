@@ -176,7 +176,7 @@ class Pessoa extends Model
                     ]);
                     $usuario = $this->usuario;
                     $notificacao = new Notificacao;
-                    $notificacao->mensagem = '<a href="' . $processo->id . '">Você possui uma nova apuração. Clique aqui para visualizar.</a>';
+                    $notificacao->mensagem = '<a href="' . route('responder-processo-usuario', $processo->id) . '">Você possui uma nova apuração. Clique aqui para visualizar.</a>';
                     $notificacao->id_usuario = $this->id_usuario;
                     $notificacao->save();
                     try {
@@ -209,9 +209,9 @@ class Pessoa extends Model
             $notificacao->save();
             $usuario = $this->usuario;
             try {
-                \Illuminate\Support\Facades\Mail::send('emails.novo-processo-documento-contabil', ['nome' => $usuario->nome, 'id_processo' => $processo->id], function ($m) use ($usuario) {
+                \Illuminate\Support\Facades\Mail::send('emails.novo-documento-contabil', ['nome' => $usuario->nome, 'id_processo' => $processo->id], function ($m) use ($usuario) {
                     $m->from('site@webcontabilidade.com', 'WEBContabilidade');
-                    $m->to($usuario->email)->subject('Você Possui Uma Nova Apuração');
+                    $m->to($usuario->email)->subject('Envio de documentos contábeis');
                 });
             } catch (\Exception $ex) {
 

@@ -238,7 +238,7 @@ class AberturaEmpresaController extends Controller
         $empresa = \App\AberturaEmpresa::where('id', '=', $id)->where('id_usuario')->first();
         if ($mensagem->validate($request->all())) {
             if ($request->file('anexo')) {
-                $anexo = date('dmyhis') . '.' . $request->file('anexo')->guessClientExtension();
+                $anexo = date('dmyhis') . '.' . $request->file('anexo')->getClientOriginalExtension();
                 $request->file('anexo')->move(getcwd() . '/uploads/abertura_empresa/', $anexo);
                 $request->merge(['anexo' => $anexo]);
                 $mensagem->anexo = $anexo;
@@ -259,7 +259,7 @@ class AberturaEmpresaController extends Controller
         $empresa = \App\AberturaEmpresa::where('id', '=', $id)->first();
         if ($mensagem->validate($request->all())) {
             if ($request->file('anexo')) {
-                $anexo = date('dmyhis') . '.' . $request->file('anexo')->guessClientExtension();
+                $anexo = date('dmyhis') . '.' . $request->file('anexo')->getClientOriginalExtension();
                 $request->file('anexo')->move(getcwd() . '/uploads/abertura_empresa/', $anexo);
                 $request->merge(['anexo' => $anexo]);
                 $mensagem->anexo = $anexo;

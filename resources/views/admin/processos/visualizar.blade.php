@@ -98,6 +98,9 @@
         <div class="mensagem {{$resposta->usuario->id == Auth::user()->id ? 'mensagem-usuario':'mensagem-admin'}}">
             <p class='title'>{{$resposta->usuario->nome}} em {{date_format($resposta->updated_at, 'd/m/Y')}} às {{date_format($resposta->updated_at, 'H:i')}}</p>
             {{$resposta->mensagem}}
+            @if($resposta->anexo)
+                <div class="anexo"><span class="fa fa-file-o"></span> <a download href='{{asset('/uploads/chamados/'.$resposta->anexo)}}' target="_blank">Anexo</a></div>
+            @endif
         </div>
     </div>
     @endforeach
